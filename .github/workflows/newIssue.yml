@@ -19,4 +19,4 @@ jobs:
             -X POST \
             -H "Content-Type: application/json" \
             -d '{"labels": ["new"]}' \
-            "https://api.github.com/repos/testing-project-automation/issues/${{ github.event.issue.number }}/labels"
+            "https://api.github.com/repos/JonahJackson1/testing-project-automation/issues/${{ github.event.issue.number }}/labels"
