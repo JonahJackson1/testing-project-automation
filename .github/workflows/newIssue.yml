@@ -11,7 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-
       - name: Run a one-line script
-        run: echo You opened a ticket!
+        run: |
+          curl -sSL \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"labels": ["new"]}' \
+            "https://api.github.com/repos/testing-project-automation/issues/${{ github.event.issue.number }}/labels"
