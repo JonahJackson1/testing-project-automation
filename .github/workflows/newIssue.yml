@@ -14,7 +14,7 @@ jobs:
       - name: Run a one-line script
         run: |
           curl -sSL \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
             -X POST \
             -H "Content-Type: application/json" \
