@@ -18,5 +18,5 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -X POST \
             -H "Content-Type: application/json" \
-            -d '{"name":"new","description":"this is a new feature","color":"89d99d"}' \
+            -d '{"labels": ["test"]}'  \
             "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels"
