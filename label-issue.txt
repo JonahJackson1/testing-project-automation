@@ -1,0 +1,27 @@
+# name of the workflow as it will appear in the "Actions" tab
+name: label-issue
+# (optional) name for workflow runs generated from the workflow
+run-name: ${{ github.actor }} created a new issue
+# trigger for the workflow
+on:
+  issues:
+    types: [opened]
+
+# Groups together all the jobs that are to be ran
+jobs:
+  label-issue:
+    runs-on: ubuntu-latest
+    name: Labels an issue as test
+    steps:
+      # To use this repository's private action,
+      # you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Hello world action step
+        uses: ./ # Uses an action in the root directory
+        id: hello
+        with:
+          who-to-greet: "Mona the Octocat"
+      # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.time }}"
