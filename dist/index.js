@@ -9800,16 +9800,62 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__nccwpck_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__nccwpck_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
-const core = __nccwpck_require__(3722);
-const github = __nccwpck_require__(8408);
+"use strict";
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(3722);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(8408);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+
+
 
 const main = async () => {
   try {
@@ -9817,10 +9863,10 @@ const main = async () => {
      * We need to fetch all the inputs that were provided to our action
      * and store them in variables for us to use.
      **/
-    const owner = core.getInput("owner", { required: true });
-    const repo = core.getInput("repo", { required: true });
-    const pr_number = core.getInput("pr_number", { required: true });
-    const token = core.getInput("token", { required: true });
+    const owner = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput("owner", { required: true });
+    const repo = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput("repo", { required: true });
+    const issue_number = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput("issue_number", { required: true });
+    const token = _actions_core__WEBPACK_IMPORTED_MODULE_0___default().getInput("token", { required: true });
 
     /**
      * Now we need to create an instance of Octokit which will use to call
@@ -9830,98 +9876,16 @@ const main = async () => {
      * You can find all the information about how to use Octokit here:
      * https://octokit.github.io/rest.js/v18
      **/
-    const octokit = new github.getOctokit(token);
+    const octokit = new (_actions_github__WEBPACK_IMPORTED_MODULE_1___default().getOctokit)(token);
 
-    /**
-     * We need to fetch the list of files that were changes in the Pull Request
-     * and store them in a variable.
-     * We use octokit.paginate() to automatically loop over all the pages of the
-     * results.
-     * Reference: https://octokit.github.io/rest.js/v18#pulls-list-files
-     */
-    const { data: changedFiles } = await octokit.rest.pulls.listFiles({
+    octokit.rest.issues.addLabels({
       owner,
       repo,
-      pull_number: pr_number,
-    });
-
-    /**
-     * Contains the sum of all the additions, deletions, and changes
-     * in all the files in the Pull Request.
-     **/
-    let diffData = {
-      additions: 0,
-      deletions: 0,
-      changes: 0,
-    };
-
-    // Reference for how to use Array.reduce():
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
-    diffData = changedFiles.reduce((acc, file) => {
-      acc.additions += file.additions;
-      acc.deletions += file.deletions;
-      acc.changes += file.changes;
-      return acc;
-    }, diffData);
-
-    /**
-     * Loop over all the files changed in the PR and add labels according
-     * to files types.
-     **/
-    for (const file of changedFiles) {
-      /**
-       * Add labels according to file types.
-       */
-      const fileExtension = file.filename.split(".").pop();
-      switch (fileExtension) {
-        case "md":
-          await octokit.rest.issues.addLabels({
-            owner,
-            repo,
-            issue_number: pr_number,
-            labels: ["markdown"],
-          });
-        case "js":
-          await octokit.rest.issues.addLabels({
-            owner,
-            repo,
-            issue_number: pr_number,
-            labels: ["javascript"],
-          });
-        case "yml":
-          await octokit.rest.issues.addLabels({
-            owner,
-            repo,
-            issue_number: pr_number,
-            labels: ["yaml"],
-          });
-        case "yaml":
-          await octokit.rest.issues.addLabels({
-            owner,
-            repo,
-            issue_number: pr_number,
-            labels: ["yaml"],
-          });
-      }
-    }
-
-    /**
-     * Create a comment on the PR with the information we compiled from the
-     * list of changed files.
-     */
-    await octokit.rest.issues.createComment({
-      owner,
-      repo,
-      issue_number: pr_number,
-      body: `
-        Pull Request #${pr_number} has been updated with: \n
-        - ${diffData.changes} changes \n
-        - ${diffData.additions} additions \n
-        - ${diffData.deletions} deletions \n
-      `,
+      issue_number,
+      labels: ["test"],
     });
   } catch (error) {
-    core.setFailed(error.message);
+    _actions_core__WEBPACK_IMPORTED_MODULE_0___default().setFailed(error.message);
   }
 };
 
