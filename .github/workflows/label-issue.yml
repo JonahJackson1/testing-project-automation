@@ -33,7 +33,7 @@ jobs:
         run: npm run bundle
 
       - name: Label issue
-        uses: ./dist/index.js
+        uses: ./
         with:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
