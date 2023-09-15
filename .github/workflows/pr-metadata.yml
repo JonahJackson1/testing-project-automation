@@ -13,6 +13,7 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Annotate PR
         uses: ./
         with:
