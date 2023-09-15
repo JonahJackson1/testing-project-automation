@@ -1,7 +1,7 @@
 # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
 
-name: 'PR Metadata Action'
-description: 'Adds pull request file changes as a comment to a newly opened PR'
+name: 'label issue'
+description: 'labels an issue as test'
 inputs:
   owner:
     description: 'The owner of the repository'
