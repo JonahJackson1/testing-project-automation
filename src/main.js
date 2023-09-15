@@ -1,3 +1,6 @@
+// https://github.com/actions/javascript-action#update-the-action-code
+// https://github.com/actions/toolkit/blob/master/README.md
+
 const core = require('@actions/core')
 const { wait } = require('./wait')
 
