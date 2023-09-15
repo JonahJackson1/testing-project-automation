@@ -2725,6 +2725,9 @@ exports["default"] = _default;
 /***/ 713:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
+// https://github.com/actions/javascript-action#update-the-action-code
+// https://github.com/actions/toolkit/blob/master/README.md
+
 const core = __nccwpck_require__(186)
 const { wait } = __nccwpck_require__(312)
 
