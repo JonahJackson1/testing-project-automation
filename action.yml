@@ -21,12 +21,12 @@ inputs:
     description: 'The number of the issue'
     required: true
 
-  project: 'https://github.com/users/JonahJackson1/projects/1'
-    description: 'The url of the associated project'
-    required: true
-  column_name: 'Ready'
-    description: 'The column name to move the issue to'
-    required: true
+  # project: 'https://github.com/users/JonahJackson1/projects/1'
+  #   description: 'The url of the associated project'
+  #   required: true
+  # column_name: 'Ready'
+  #   description: 'The column name to move the issue to'
+  #   required: true
 
   token:
     description: 'The token to use to access the GitHub API'
