@@ -1,4 +1,5 @@
-// https://github.com/actions/javascript-action#update-the-action-code
+// https://github.com/actions/javascript-action
+// https://octokit.github.io/rest.js/v20#usage
 // https://github.com/actions/toolkit/blob/master/README.md
 
 const core = require('@actions/core')
