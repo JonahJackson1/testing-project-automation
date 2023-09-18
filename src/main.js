@@ -2,6 +2,8 @@
 // https://github.com/actions/toolkit/blob/master/README.md
 
 const core = require('@actions/core')
+const github = require('@actions/github')
+
 const { wait } = require('./wait')
 
 /**
