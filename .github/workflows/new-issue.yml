@@ -1,4 +1,7 @@
-name: Label new issues
+# https://docs.github.com/en/actions/learn-github-actions/contexts
+# https://docs.github.com/en/webhooks/webhook-events-and-payloads
+
+name: Label and move new issues
 run-name: ${{ github.actor }} opened a new issue
 
 on:
@@ -38,9 +41,10 @@ jobs:
         id: npm-ci-test
         run: npm run ci-test
 
-  label-issue:
+  initialize-new-issue:
     runs-on: ubuntu-latest
-    name: Labels an issue as test
+    name: initialize new issue
+
     steps:
       # To use this repository's private action,
       # you must check out the repository
@@ -48,8 +52,8 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      - name: Label issue
-        id: label-issue
+      - name: initialize new issue
+        id: initialize-new-issue
         uses: ./
         with:
           owner: ${{ github.repository_owner }}

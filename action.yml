@@ -1,6 +1,7 @@
 # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
-name: 'label issue'
-description: 'labels an issue as test'
+name: 'initialize issue'
+description:
+  'Labels an issue as test and moves it to the "Ready" column in a project'
 author: 'jonah jackson'
 
 # Define your inputs here.
@@ -19,6 +20,14 @@ inputs:
   issue_number:
     description: 'The number of the issue'
     required: true
+
+  project: 'https://github.com/users/JonahJackson1/projects/1'
+    description: 'The url of the associated project'
+    required: true
+  column_name: 'Ready'
+    description: 'The column name to move the issue to'
+    required: true
+
   token:
     description: 'The token to use to access the GitHub API'
     required: true
