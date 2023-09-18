@@ -1,5 +1,7 @@
 # https://docs.github.com/en/actions/learn-github-actions/contexts
 # https://docs.github.com/en/webhooks/webhook-events-and-payloads
+# https://github.com/alex-page/github-project-automation-plus
+# https://github.com/actions/add-to-project
 
 name: Label and move new issues
 run-name: ${{ github.actor }} opened a new issue
@@ -60,6 +62,13 @@ jobs:
           repo: ${{ github.event.repository.name }}
           issue_number: ${{ github.event.issue.number }}
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      # - name: Add issue to project
+      #   uses: actions/add-to-project@v0.5.0
+      #   with:
+      #     project-url: https://github.com/user/JonahJackson1/projects/1
+      #     github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      #     labeled: needs-review
 
       - name: Print Output
         id: output

@@ -28,6 +28,7 @@ async function run() {
     // Set outputs for other workflow steps to use
     core.setOutput('time', new Date().toTimeString());
 
+    // call label-issue.js
     labelIssue();
   } catch (error) {
     // Fail the workflow run if an error occurs

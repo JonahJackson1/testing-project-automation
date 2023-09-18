@@ -2,6 +2,17 @@
 // https://octokit.github.io/rest.js/v20#usage
 // https://github.com/actions/toolkit/blob/master/README.md
 
+// https://docs.github.com/en/graphql/guides/forming-calls-with-graphql#working-with-variables
+// https://docs.github.com/en/graphql/reference
+
+/*
+ **********************************************
+ **********************************************
+ *This will have to been done soley in graphQL*
+ **********************************************
+ **********************************************
+ */
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 
@@ -9,15 +20,15 @@ const github = require('@actions/github');
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function labelIssue() {
+async function moveIssue() {
   try {
     /**
      * We need to fetch all the inputs that were provided to our action
      * and store them in variables for us to use.
      **/
-    const project = core.getInput('project', { required: true });
-    const column_name = core.getInput('column_name', { required: true });
-    const issue_number = core.getInput('issue_number', { required: true });
+    // const project = core.getInput('project', { required: true });
+    // const columnName = core.getInput('column_name', { required: true });
+    // const issueNumber = core.getInput('issue_number', { required: true });
     const token = core.getInput('token', { required: true });
 
     /**
@@ -30,11 +41,41 @@ async function labelIssue() {
      **/
     const octokit = new github.getOctokit(token);
 
-    //
+    const issue = github.context.payload.issue;
 
-    //
+    // First, use the GraphQL API to request the project's node ID.
+    const idResp = await octokit.graphql(
+      `query getProject{
+        user(login: JonahJackson1) {
+        projectV2(number: 1) {
+          id
+        }
+      }
+    }`
+    );
 
-    //
+    const projectId = idResp[ownerTypeQuery]?.projectV2.id;
+    const contentId = issue?.node_id;
+
+    // Next, use the GraphQL API to add the issue to the project.
+    // If the issue has the same owner as the project, we can directly
+    // add a project item. Otherwise, we add a draft issue.
+
+    await octokit.graphql(
+      `mutation updateProjectV2ItemFieldValue($input: AddProjectV2ItemByIdInput!) {
+        addProjectV2ItemById(input: $input) {
+          item {
+            id
+          }
+        }
+      }`,
+      {
+        input: {
+          projectId,
+          contentId
+        }
+      }
+    );
 
     //
   } catch (error) {
@@ -43,4 +84,4 @@ async function labelIssue() {
   }
 }
 
-module.exports = { labelIssue };
+module.exports = { moveIssue };
