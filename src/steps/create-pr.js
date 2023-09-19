@@ -33,7 +33,7 @@ async function createPR() {
       owner,
       repo,
       head: `heads/feature-${issueTitle.split(' ').join('-')}`,
-      issue: issue_number,
+      issue: Number(issue_number),
       base: 'head/development'
     });
   } catch (error) {
