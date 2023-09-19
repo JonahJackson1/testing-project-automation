@@ -1,3 +1,5 @@
+// https://docs.github.com/graphql
+
 // packages
 const core = require('@actions/core');
 
@@ -7,6 +9,16 @@ const { labelIssue } = require('./steps/label-issue');
 const { createBranch } = require('./steps/create-branch');
 const { createPR } = require('./steps/create-pr');
 
+/* TODO: */
+/* 
+- read up on graphQL in order to do the more advanced automations not possible with the REST api
+
+  - should be able:
+    - to move items/issues in a project
+    - assign a pull request to an issue ticket
+    - assign an issue ticket to a pull request / repo
+    - 
+*/
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.

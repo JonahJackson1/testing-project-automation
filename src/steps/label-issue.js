@@ -2,6 +2,9 @@
 // https://octokit.github.io/rest.js/v20#usage
 // https://github.com/actions/toolkit/blob/master/README.md
 
+// https://docs.github.com/en/graphql/reference/objects#issue
+// https://docs.github.com/en/graphql/reference/mutations#createissue
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 

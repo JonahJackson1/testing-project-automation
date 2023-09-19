@@ -2,12 +2,16 @@
 // https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
 // update a pull request's branch
 // https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#update-a-pull-request-branch
+
+// https://docs.github.com/en/graphql/reference/objects#pullrequest
+// https://docs.github.com/en/graphql/reference/mutations#createpullrequest
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 
 /* TODO:
 
-- figure out a way to immediately open a pull request w/o any changes being made
+- figure out a way to immediately open a pull request w/o any changes being made (staging branch?)
 - figure out a way to link the pull request and original issue ticket to one another
 
 */

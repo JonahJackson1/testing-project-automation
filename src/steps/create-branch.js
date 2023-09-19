@@ -1,6 +1,8 @@
 // create a branch
 // https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28
 
+// https://docs.github.com/en/graphql/reference/objects#ref
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 
