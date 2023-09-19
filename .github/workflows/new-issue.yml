@@ -54,22 +54,22 @@ jobs:
         id: checkout
         uses: actions/checkout@v4
 
-      # - name: Label issue
-      #   id: initialize-new-issue
-      #   uses: ./
-      #   with:
-      #     owner: ${{ github.repository_owner }}
-      #     repo: ${{ github.event.repository.name }}
-      #     issue_number: ${{ github.event.issue.number }}
-      #     token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-
-      - name: create a branch
-        id: create-a-branch
+      - name: Label issue
+        id: initialize-new-issue
         uses: ./
         with:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
+          issue_number: ${{ github.event.issue.number }}
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+      # - name: create a branch
+      #   id: create-a-branch
+      #   uses: ./
+      #   with:
+      #     owner: ${{ github.repository_owner }}
+      #     repo: ${{ github.event.repository.name }}
+      #     token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
       # - name: Add issue to project
       #   uses: actions/add-to-project@v0.5.0

@@ -9631,11 +9631,12 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 5986:
+/***/ 3020:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-// create a branch
-// https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28
+// https://github.com/actions/javascript-action
+// https://octokit.github.io/rest.js/v20#usage
+// https://github.com/actions/toolkit/blob/master/README.md
 
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
@@ -9644,7 +9645,7 @@ const github = __nccwpck_require__(5438);
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function createBranch() {
+async function labelIssue() {
   try {
     /**
      * We need to fetch all the inputs that were provided to our action
@@ -9652,7 +9653,7 @@ async function createBranch() {
      **/
     const owner = core.getInput('owner', { required: true });
     const repo = core.getInput('repo', { required: true });
-    // const issue_number = core.getInput('issue_number', { required: true });
+    const issue_number = core.getInput('issue_number', { required: true });
     const token = core.getInput('token', { required: true });
 
     /**
@@ -9665,59 +9666,19 @@ async function createBranch() {
      **/
     const octokit = new github.getOctokit(token);
 
-    const ref = 'development';
-
-    /* 
-    {
-      "ref": "refs/heads/featureA",
-      "node_id": "MDM6UmVmcmVmcy9oZWFkcy9mZWF0dXJlQQ==",
-      "url": "https://api.github.com/repos/octocat/Hello-World/git/refs/heads/featureA",
-      "object": {
-        "type": "commit",
-        "sha": "aa218f56b14c9653891f9e74264a383fa43fefbd",
-        "url": "https://api.github.com/repos/octocat/Hello-World/git/commits/aa218f56b14c9653891f9e74264a383fa43fefbd"
-      }
-    }
-    
-    */
-
-    const devBranch = await octokit.request(
-      `GET /repos/${owner}/${repo}/git/ref/${ref}`,
-      {
-        owner,
-        repo,
-        ref,
-        headers: {
-          'X-GitHub-Api-Version': '2022-11-28'
-        }
-      }
-    );
-
-    const sha = await devBranch?.object?.sha;
-
-    await octokit.request(`POST /repos/${owner}/${repo}/git/refs`, {
+    octokit.rest.issues.addLabels({
       owner,
       repo,
-      ref: 'refs/heads/featureA',
-      sha,
-      headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
+      issue_number,
+      labels: ['test']
     });
-
-    // octokit.rest.issues.addLabels({
-    //   owner,
-    //   repo,
-    //   issue_number,
-    //   labels: ['test']
-    // });
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
   }
 }
 
-module.exports = { createBranch };
+module.exports = { labelIssue };
 
 
 /***/ }),
@@ -9730,8 +9691,8 @@ const core = __nccwpck_require__(2186);
 
 // files
 const { wait } = __nccwpck_require__(1312);
-// const { labelIssue } = require('./label-issue');
-const { createBranch } = __nccwpck_require__(5986);
+const { labelIssue } = __nccwpck_require__(3020);
+// const { createBranch } = require('./create-branch');
 
 /**
  * The main function for the action.
@@ -9753,8 +9714,8 @@ async function run() {
     core.setOutput('time', new Date().toTimeString());
 
     // call label-issue.js
-    // labelIssue();
-    createBranch();
+    labelIssue();
+    // createBranch();
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
