@@ -53,7 +53,9 @@ async function createBranch() {
 
     console.log(devBranch);
 
-    const sha = await devBranch?.object?.sha;
+    const sha = await devBranch?.data?.object?.sha;
+
+    console.log(sha);
 
     const newRef = 'refs/heads/featureA';
 
