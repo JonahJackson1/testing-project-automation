@@ -16,7 +16,6 @@ async function createBranch() {
      **/
     const owner = core.getInput('owner', { required: true });
     const repo = core.getInput('repo', { required: true });
-    // const issue_number = core.getInput('issue_number', { required: true });
     const token = core.getInput('token', { required: true });
 
     /**
@@ -28,8 +27,6 @@ async function createBranch() {
      * https://octokit.github.io/rest.js/v18
      **/
     const octokit = new github.getOctokit(token);
-
-    const ref = 'development';
 
     /* 
     {
@@ -44,6 +41,8 @@ async function createBranch() {
     }
     
     */
+
+    const ref = 'development';
 
     const devBranch = await octokit.request(
       `GET /repos/${owner}/${repo}/git/ref/${ref}`,
