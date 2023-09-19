@@ -9631,12 +9631,11 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 3020:
+/***/ 5986:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-// https://github.com/actions/javascript-action
-// https://octokit.github.io/rest.js/v20#usage
-// https://github.com/actions/toolkit/blob/master/README.md
+// create a branch
+// https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28
 
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
@@ -9645,7 +9644,7 @@ const github = __nccwpck_require__(5438);
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function labelIssue() {
+async function createBranch() {
   try {
     /**
      * We need to fetch all the inputs that were provided to our action
@@ -9653,7 +9652,7 @@ async function labelIssue() {
      **/
     const owner = core.getInput('owner', { required: true });
     const repo = core.getInput('repo', { required: true });
-    const issue_number = core.getInput('issue_number', { required: true });
+    // const issue_number = core.getInput('issue_number', { required: true });
     const token = core.getInput('token', { required: true });
 
     /**
@@ -9666,19 +9665,29 @@ async function labelIssue() {
      **/
     const octokit = new github.getOctokit(token);
 
-    octokit.rest.issues.addLabels({
+    await octokit.request(`POST /repos/${owner}/${repo}/git/refs`, {
       owner,
       repo,
-      issue_number,
-      labels: ['test']
+      ref: 'refs/heads/featureA',
+      sha: 'aa218f56b14c9653891f9e74264a383fa43fefbd',
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
     });
+
+    // octokit.rest.issues.addLabels({
+    //   owner,
+    //   repo,
+    //   issue_number,
+    //   labels: ['test']
+    // });
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
   }
 }
 
-module.exports = { labelIssue };
+module.exports = { createBranch };
 
 
 /***/ }),
@@ -9686,16 +9695,12 @@ module.exports = { labelIssue };
 /***/ 1713:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-// https://github.com/actions/javascript-action
-// https://octokit.github.io/rest.js/v20#usage
-// https://github.com/actions/toolkit/blob/master/README.md
-
 // packages
 const core = __nccwpck_require__(2186);
 
 // files
-const { labelIssue } = __nccwpck_require__(3020);
-const { wait } = __nccwpck_require__(1312);
+// const { labelIssue } = require('./label-issue');
+const { createBranch } = __nccwpck_require__(5986);
 
 /**
  * The main function for the action.
@@ -9703,20 +9708,9 @@ const { wait } = __nccwpck_require__(1312);
  */
 async function run() {
   try {
-    const ms = core.getInput('milliseconds', { required: true });
-
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`);
-
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString());
-    await wait(parseInt(ms, 10));
-    core.debug(new Date().toTimeString());
-
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString());
-
-    labelIssue();
+    // call label-issue.js
+    // labelIssue();
+    createBranch();
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
@@ -9726,30 +9720,6 @@ async function run() {
 module.exports = {
   run
 };
-
-
-/***/ }),
-
-/***/ 1312:
-/***/ ((module) => {
-
-/**
- * Wait for a number of milliseconds.
- *
- * @param {number} milliseconds The number of milliseconds to wait.
- * @returns {Promise<string>} Resolves with 'done!' after the wait is over.
- */
-async function wait(milliseconds) {
-  return new Promise(resolve => {
-    if (isNaN(milliseconds)) {
-      throw new Error('milliseconds not a number');
-    }
-
-    setTimeout(() => resolve('done!'), milliseconds);
-  });
-}
-
-module.exports = { wait };
 
 
 /***/ }),
