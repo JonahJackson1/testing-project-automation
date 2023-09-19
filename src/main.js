@@ -3,8 +3,8 @@ const core = require('@actions/core');
 
 // files
 const { wait } = require('./wait');
-// const { labelIssue } = require('./label-issue');
-const { createBranch } = require('./create-branch');
+// const { labelIssue } = require('./steps/label-issue');
+const { createBranch } = require('./steps/create-branch');
 
 /**
  * The main function for the action.
@@ -29,6 +29,7 @@ async function run() {
     // labelIssue();
 
     // call create-branch.js
+    // creates a branch from the most recent commit to the development branch
     createBranch();
   } catch (error) {
     // Fail the workflow run if an error occurs
