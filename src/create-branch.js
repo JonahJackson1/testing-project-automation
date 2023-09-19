@@ -44,34 +44,24 @@ async function createBranch() {
     // The :ref in the URL must be formatted as heads/<branch name>
     const ref = 'heads/development';
 
+    // https://octokit.github.io/rest.js/v20#git-get-ref
     await octokit.rest.git.getRef({
       owner,
       repo,
       ref
     });
 
-    /*  await octokit.request(`GET /repos/${owner}/${repo}/git/ref/${ref}`, {
+    const sha = await devBranch?.object?.sha;
+
+    const newRef = 'refs/heads/featureA';
+
+    // https://octokit.github.io/rest.js/v20#git-create-ref
+    await octokit.rest.git.createRef({
       owner,
       repo,
-      ref,
-      headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
+      newRef,
+      sha
     });
- */
-    core.setOutput('branch', 'successfully got the dev branch');
-
-    // const sha = await devBranch?.object?.sha;
-
-    // await octokit.request(`POST /repos/${owner}/${repo}/git/refs`, {
-    //   owner,
-    //   repo,
-    //   ref: 'refs/heads/featureA',
-    //   sha,
-    //   headers: {
-    //     'X-GitHub-Api-Version': '2022-11-28'
-    //   }
-    // });
 
     // octokit.rest.issues.addLabels({
     //   owner,
