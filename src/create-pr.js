@@ -1,9 +1,8 @@
-// https://github.com/actions/javascript-action
-// https://octokit.github.io/rest.js/v20#usage
-// https://github.com/actions/toolkit/blob/master/README.md
+// create a pull request
+// https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
 
-const core = require('@actions/core');
-const github = require('@actions/github');
+// const core = require('@actions/core');
+// const github = require('@actions/github');
 
 /**
  * The main function for the action.
@@ -40,4 +39,4 @@ async function createPR() {
   }
 }
 
-module.exports = { createPR };
+// module.exports = { createPR };

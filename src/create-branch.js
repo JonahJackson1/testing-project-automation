@@ -1,6 +1,5 @@
-// https://github.com/actions/javascript-action
-// https://octokit.github.io/rest.js/v20#usage
-// https://github.com/actions/toolkit/blob/master/README.md
+// create a branch
+// https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28
 
 const core = require('@actions/core');
 const github = require('@actions/github');
@@ -15,10 +14,11 @@ async function createBranch() {
      * We need to fetch all the inputs that were provided to our action
      * and store them in variables for us to use.
      **/
-    // const owner = core.getInput('owner', { required: true });
-    // const repo = core.getInput('repo', { required: true });
+    const owner = core.getInput('owner', { required: true });
+    const repo = core.getInput('repo', { required: true });
     // const issue_number = core.getInput('issue_number', { required: true });
-    // const token = core.getInput('token', { required: true });
+    const token = core.getInput('token', { required: true });
+
     /**
      * Now we need to create an instance of Octokit which will use to call
      * GitHub's REST API endpoints.
@@ -27,7 +27,18 @@ async function createBranch() {
      * You can find all the information about how to use Octokit here:
      * https://octokit.github.io/rest.js/v18
      **/
-    // const octokit = new github.getOctokit(token);
+    const octokit = new github.getOctokit(token);
+
+    await octokit.request(`POST /repos/${owner}/${repo}/git/refs`, {
+      owner,
+      repo,
+      ref: 'refs/heads/featureA',
+      sha: 'aa218f56b14c9653891f9e74264a383fa43fefbd',
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    });
+
     // octokit.rest.issues.addLabels({
     //   owner,
     //   repo,

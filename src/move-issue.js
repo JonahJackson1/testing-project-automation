@@ -1,9 +1,11 @@
-// https://github.com/actions/javascript-action
-// https://octokit.github.io/rest.js/v20#usage
-// https://github.com/actions/toolkit/blob/master/README.md
-
 // https://docs.github.com/en/graphql/guides/forming-calls-with-graphql#working-with-variables
 // https://docs.github.com/en/graphql/reference
+
+// will probably use this to trigger a webhook to move the item in a project
+// https://octokit.github.io/rest.js/v20#repos-create-dispatch-event
+
+// i guess this could be used to keep it in JS?
+// https://octokit.github.io/rest.js/v20#repos-create-webhook
 
 /*
  **********************************************

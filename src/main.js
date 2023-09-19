@@ -1,12 +1,9 @@
-// https://github.com/actions/javascript-action
-// https://octokit.github.io/rest.js/v20#usage
-// https://github.com/actions/toolkit/blob/master/README.md
-
 // packages
 const core = require('@actions/core');
 
 // files
-const { labelIssue } = require('./label-issue');
+// const { labelIssue } = require('./label-issue');
+const { createBranch } = require('./create-branch');
 const { wait } = require('./wait');
 
 /**
@@ -29,7 +26,8 @@ async function run() {
     core.setOutput('time', new Date().toTimeString());
 
     // call label-issue.js
-    labelIssue();
+    // labelIssue();
+    createBranch();
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
