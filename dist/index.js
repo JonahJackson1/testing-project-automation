@@ -9680,7 +9680,13 @@ async function createBranch() {
 
     const ref = 'development';
 
-    await octokit.request(`GET /repos/${owner}/${repo}/git/ref/${ref}`, {
+    await octokit.rest.git.getRef({
+      owner,
+      repo,
+      ref
+    });
+
+    /*  await octokit.request(`GET /repos/${owner}/${repo}/git/ref/${ref}`, {
       owner,
       repo,
       ref,
@@ -9688,7 +9694,7 @@ async function createBranch() {
         'X-GitHub-Api-Version': '2022-11-28'
       }
     });
-
+ */
     core.setOutput('branch', 'successfully got the dev branch');
 
     // const sha = await devBranch?.object?.sha;
