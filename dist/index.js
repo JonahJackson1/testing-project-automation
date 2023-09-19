@@ -9681,7 +9681,7 @@ async function createBranch() {
     const ref = 'heads/development';
 
     // https://octokit.github.io/rest.js/v20#git-get-ref
-    await octokit.rest.git.getRef({
+    const devBranch = await octokit.rest.git.getRef({
       owner,
       repo,
       ref
