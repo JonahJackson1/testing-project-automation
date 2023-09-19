@@ -5,6 +5,7 @@ const core = require('@actions/core');
 const { wait } = require('./wait');
 const { labelIssue } = require('./steps/label-issue');
 const { createBranch } = require('./steps/create-branch');
+const { createPr } = require('./steps/create-pr');
 
 /**
  * The main function for the action.
@@ -29,7 +30,10 @@ async function run() {
     labelIssue();
 
     // creates a branch from the most recent commit to the development branch
-    createBranch();
+    await createBranch();
+
+    // creates a pull request from the most recent commit and links it to the newly created branch
+    await createPr();
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);

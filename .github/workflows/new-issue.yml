@@ -2,6 +2,7 @@
 # https://docs.github.com/en/webhooks/webhook-events-and-payloads
 # https://github.com/alex-page/github-project-automation-plus
 # https://github.com/actions/add-to-project
+# https://docs.github.com/en/rest/overview/github-event-types?apiVersion=2022-11-28#issuesevent
 
 name: Init new issue tickets
 run-name: ${{ github.actor }} opened a new issue

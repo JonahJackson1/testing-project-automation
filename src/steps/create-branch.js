@@ -4,6 +4,12 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
+/* TODO: 
+
+- Attach the branch to the issue ticket
+
+*/
+
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
