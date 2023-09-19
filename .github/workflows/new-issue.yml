@@ -65,7 +65,7 @@ jobs:
 
       - name: create a branch
         id: create-a-branch
-        uses: ./action.yml
+        uses: ./
         with:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
