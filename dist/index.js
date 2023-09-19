@@ -9762,6 +9762,12 @@ module.exports = { createBranch };
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 
+/* TODO:
+
+- figure out a way to immediately open a pull request w/o any changes being made
+
+*/
+
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -9794,7 +9800,7 @@ async function createPR() {
       repo,
       head: `feature-${issueTitle.split(' ').join('-')}`,
       issue: Number(issue_number),
-      base: 'development'
+      base: 'staging'
     });
   } catch (error) {
     // Fail the workflow run if an error occurs

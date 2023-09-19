@@ -4,6 +4,12 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
+/* TODO:
+
+- figure out a way to immediately open a pull request w/o any changes being made
+
+*/
+
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -36,7 +42,7 @@ async function createPR() {
       repo,
       head: `feature-${issueTitle.split(' ').join('-')}`,
       issue: Number(issue_number),
-      base: 'development'
+      base: 'staging'
     });
   } catch (error) {
     // Fail the workflow run if an error occurs
