@@ -9677,8 +9677,8 @@ async function createBranch() {
     }
     
     */
-
-    const ref = 'development';
+    // The :ref in the URL must be formatted as heads/<branch name>
+    const ref = 'heads/development';
 
     await octokit.rest.git.getRef({
       owner,
