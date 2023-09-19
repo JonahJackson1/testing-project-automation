@@ -64,17 +64,17 @@ inputs:
   repo:
     description: 'The name of the repository'
     required: true
-  issue_number:
-    description: 'The number of the issue'
-    required: true
+  # issue_number:
+  #   description: 'The number of the issue'
+  #   required: true
   token:
     description: 'The token to use to access the GitHub API'
     required: true
 
 # Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  success:
+    description: 'branch was successfully created'
 
 runs:
   using: node20
