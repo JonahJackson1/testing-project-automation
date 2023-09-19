@@ -39,7 +39,6 @@ async function createBranch() {
         "url": "https://api.github.com/repos/octocat/Hello-World/git/commits/aa218f56b14c9653891f9e74264a383fa43fefbd"
       }
     }
-    
     */
     // The :ref in the URL must be formatted as heads/<branch name>
     const ref = 'heads/development';
@@ -51,13 +50,10 @@ async function createBranch() {
       ref
     });
 
-    console.log(devBranch);
-
     const sha = await devBranch?.data?.object?.sha;
 
-    console.log(sha);
-
-    const newRef = 'refs/heads/featureB';
+    const randomNum = Math.trunc(Math.random() * 9999);
+    const newRef = `refs/heads/feature${randomNum}`;
 
     // https://octokit.github.io/rest.js/v20#git-create-ref
     await octokit.rest.git.createRef({
@@ -66,13 +62,6 @@ async function createBranch() {
       ref: newRef,
       sha
     });
-
-    // octokit.rest.issues.addLabels({
-    //   owner,
-    //   repo,
-    //   issue_number,
-    //   labels: ['test']
-    // });
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
