@@ -9641,7 +9641,7 @@ const core = __nccwpck_require__(2186);
 const { wait } = __nccwpck_require__(1312);
 const { labelIssue } = __nccwpck_require__(3184);
 const { createBranch } = __nccwpck_require__(343);
-const { createPr } = __nccwpck_require__(4011);
+const { createPR } = __nccwpck_require__(4011);
 
 /**
  * The main function for the action.
@@ -9669,7 +9669,7 @@ async function run() {
     await createBranch();
 
     // creates a pull request from the most recent commit and links it to the newly created branch
-    await createPr();
+    await createPR();
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
