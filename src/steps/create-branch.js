@@ -45,7 +45,7 @@ async function createBranch() {
     await octokit.rest.git.createRef({
       owner,
       repo,
-      ref: `refs/heads/feature-${issueTitle}`,
+      ref: `refs/heads/feature-${issueTitle.split(' ').join('-')}`,
       sha
     });
   } catch (error) {
