@@ -31,6 +31,8 @@ inputs:
 outputs:
   time:
     description: 'Your output description here'
+  branch:
+    description: 'branch was successfully created'
 
 runs:
   using: node20

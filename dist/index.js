@@ -9680,20 +9680,16 @@ async function createBranch() {
 
     const ref = 'development';
 
-    try {
-      await octokit.request(`GET /repos/${owner}/${repo}/git/ref/${ref}`, {
-        owner,
-        repo,
-        ref,
-        headers: {
-          'X-GitHub-Api-Version': '2022-11-28'
-        }
-      });
+    await octokit.request(`GET /repos/${owner}/${repo}/git/ref/${ref}`, {
+      owner,
+      repo,
+      ref,
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    });
 
-      return 'successfully got the dev branch';
-    } catch (error) {
-      return 'failed to get devbranch';
-    }
+    core.setOutput('branch', 'successfully got the dev branch');
 
     // const sha = await devBranch?.object?.sha;
 
