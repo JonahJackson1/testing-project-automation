@@ -9693,7 +9693,7 @@ async function createBranch() {
 
     console.log(sha);
 
-    const newRef = 'refs/heads/featureA';
+    const newRef = 'refs/heads/featureB';
 
     // https://octokit.github.io/rest.js/v20#git-create-ref
     await octokit.rest.git.createRef({
