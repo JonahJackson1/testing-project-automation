@@ -3,7 +3,7 @@ const core = require('@actions/core');
 
 // files
 const { wait } = require('./wait');
-// const { labelIssue } = require('./steps/label-issue');
+const { labelIssue } = require('./steps/label-issue');
 const { createBranch } = require('./steps/create-branch');
 
 /**
@@ -25,10 +25,9 @@ async function run() {
     // Set outputs for other workflow steps to use
     core.setOutput('time', new Date().toTimeString());
 
-    // call label-issue.js
-    // labelIssue();
+    // labels the ticket "test"
+    labelIssue();
 
-    // call create-branch.js
     // creates a branch from the most recent commit to the development branch
     createBranch();
   } catch (error) {

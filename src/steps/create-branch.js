@@ -16,6 +16,7 @@ async function createBranch() {
      **/
     const owner = core.getInput('owner', { required: true });
     const repo = core.getInput('repo', { required: true });
+    const issueTitle = core.getInput('issue_title', { required: true });
     const token = core.getInput('token', { required: true });
 
     /**
@@ -28,18 +29,6 @@ async function createBranch() {
      **/
     const octokit = new github.getOctokit(token);
 
-    /* 
-    {
-      "ref": "refs/heads/featureA",
-      "node_id": "MDM6UmVmcmVmcy9oZWFkcy9mZWF0dXJlQQ==",
-      "url": "https://api.github.com/repos/octocat/Hello-World/git/refs/heads/featureA",
-      "object": {
-        "type": "commit",
-        "sha": "aa218f56b14c9653891f9e74264a383fa43fefbd",
-        "url": "https://api.github.com/repos/octocat/Hello-World/git/commits/aa218f56b14c9653891f9e74264a383fa43fefbd"
-      }
-    }
-    */
     // The :ref in the URL must be formatted as heads/<branch name>
     const ref = 'heads/development';
 
@@ -52,14 +41,11 @@ async function createBranch() {
 
     const sha = await devBranch?.data?.object?.sha;
 
-    const randomNum = Math.trunc(Math.random() * 9999);
-    const newRef = `refs/heads/feature${randomNum}`;
-
     // https://octokit.github.io/rest.js/v20#git-create-ref
     await octokit.rest.git.createRef({
       owner,
       repo,
-      ref: newRef,
+      ref: `refs/heads/feature-${issueTitle}`,
       sha
     });
   } catch (error) {

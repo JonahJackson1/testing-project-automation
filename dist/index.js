@@ -9631,84 +9631,6 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 5986:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-// create a branch
-// https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28
-
-const core = __nccwpck_require__(2186);
-const github = __nccwpck_require__(5438);
-
-/**
- * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
- */
-async function createBranch() {
-  try {
-    /**
-     * We need to fetch all the inputs that were provided to our action
-     * and store them in variables for us to use.
-     **/
-    const owner = core.getInput('owner', { required: true });
-    const repo = core.getInput('repo', { required: true });
-    const token = core.getInput('token', { required: true });
-
-    /**
-     * Now we need to create an instance of Octokit which will use to call
-     * GitHub's REST API endpoints.
-     * We will pass the token as an argument to the constructor. This token
-     * will be used to authenticate our requests.
-     * You can find all the information about how to use Octokit here:
-     * https://octokit.github.io/rest.js/v18
-     **/
-    const octokit = new github.getOctokit(token);
-
-    /* 
-    {
-      "ref": "refs/heads/featureA",
-      "node_id": "MDM6UmVmcmVmcy9oZWFkcy9mZWF0dXJlQQ==",
-      "url": "https://api.github.com/repos/octocat/Hello-World/git/refs/heads/featureA",
-      "object": {
-        "type": "commit",
-        "sha": "aa218f56b14c9653891f9e74264a383fa43fefbd",
-        "url": "https://api.github.com/repos/octocat/Hello-World/git/commits/aa218f56b14c9653891f9e74264a383fa43fefbd"
-      }
-    }
-    */
-    // The :ref in the URL must be formatted as heads/<branch name>
-    const ref = 'heads/development';
-
-    // https://octokit.github.io/rest.js/v20#git-get-ref
-    const devBranch = await octokit.rest.git.getRef({
-      owner,
-      repo,
-      ref
-    });
-
-    const sha = await devBranch?.data?.object?.sha;
-
-    const randomNum = Math.trunc(Math.random() * 9999);
-    const newRef = `refs/heads/feature${randomNum}`;
-
-    // https://octokit.github.io/rest.js/v20#git-create-ref
-    await octokit.rest.git.createRef({
-      owner,
-      repo,
-      ref: newRef,
-      sha
-    });
-  } catch (error) {
-    // Fail the workflow run if an error occurs
-    core.setFailed(error.message);
-  }
-}
-
-module.exports = { createBranch };
-
-
-/***/ }),
-
 /***/ 1713:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -9717,8 +9639,8 @@ const core = __nccwpck_require__(2186);
 
 // files
 const { wait } = __nccwpck_require__(1312);
-// const { labelIssue } = require('./label-issue');
-const { createBranch } = __nccwpck_require__(5986);
+const { labelIssue } = __nccwpck_require__(3184);
+const { createBranch } = __nccwpck_require__(343);
 
 /**
  * The main function for the action.
@@ -9739,10 +9661,10 @@ async function run() {
     // Set outputs for other workflow steps to use
     core.setOutput('time', new Date().toTimeString());
 
-    // call label-issue.js
-    // labelIssue();
+    // labels the ticket "test"
+    labelIssue();
 
-    // call create-branch.js
+    // creates a branch from the most recent commit to the development branch
     createBranch();
   } catch (error) {
     // Fail the workflow run if an error occurs
@@ -9753,6 +9675,122 @@ async function run() {
 module.exports = {
   run
 };
+
+
+/***/ }),
+
+/***/ 343:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+// create a branch
+// https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28
+
+const core = __nccwpck_require__(2186);
+const github = __nccwpck_require__(5438);
+
+/**
+ * The main function for the action.
+ * @returns {Promise<void>} Resolves when the action is complete.
+ */
+async function createBranch() {
+  try {
+    /**
+     * We need to fetch all the inputs that were provided to our action
+     * and store them in variables for us to use.
+     **/
+    const owner = core.getInput('owner', { required: true });
+    const repo = core.getInput('repo', { required: true });
+    const issueTitle = core.getInput('issue_title', { required: true });
+    const token = core.getInput('token', { required: true });
+
+    /**
+     * Now we need to create an instance of Octokit which will use to call
+     * GitHub's REST API endpoints.
+     * We will pass the token as an argument to the constructor. This token
+     * will be used to authenticate our requests.
+     * You can find all the information about how to use Octokit here:
+     * https://octokit.github.io/rest.js/v18
+     **/
+    const octokit = new github.getOctokit(token);
+
+    // The :ref in the URL must be formatted as heads/<branch name>
+    const ref = 'heads/development';
+
+    // https://octokit.github.io/rest.js/v20#git-get-ref
+    const devBranch = await octokit.rest.git.getRef({
+      owner,
+      repo,
+      ref
+    });
+
+    const sha = await devBranch?.data?.object?.sha;
+
+    // https://octokit.github.io/rest.js/v20#git-create-ref
+    await octokit.rest.git.createRef({
+      owner,
+      repo,
+      ref: `refs/heads/feature-${issueTitle}`,
+      sha
+    });
+  } catch (error) {
+    // Fail the workflow run if an error occurs
+    core.setFailed(error.message);
+  }
+}
+
+module.exports = { createBranch };
+
+
+/***/ }),
+
+/***/ 3184:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+// https://github.com/actions/javascript-action
+// https://octokit.github.io/rest.js/v20#usage
+// https://github.com/actions/toolkit/blob/master/README.md
+
+const core = __nccwpck_require__(2186);
+const github = __nccwpck_require__(5438);
+
+/**
+ * The main function for the action.
+ * @returns {Promise<void>} Resolves when the action is complete.
+ */
+async function labelIssue() {
+  try {
+    /**
+     * We need to fetch all the inputs that were provided to our action
+     * and store them in variables for us to use.
+     **/
+    const owner = core.getInput('owner', { required: true });
+    const repo = core.getInput('repo', { required: true });
+    const issue_number = core.getInput('issue_number', { required: true });
+    const token = core.getInput('token', { required: true });
+
+    /**
+     * Now we need to create an instance of Octokit which will use to call
+     * GitHub's REST API endpoints.
+     * We will pass the token as an argument to the constructor. This token
+     * will be used to authenticate our requests.
+     * You can find all the information about how to use Octokit here:
+     * https://octokit.github.io/rest.js/v18
+     **/
+    const octokit = new github.getOctokit(token);
+
+    octokit.rest.issues.addLabels({
+      owner,
+      repo,
+      issue_number,
+      labels: ['test']
+    });
+  } catch (error) {
+    // Fail the workflow run if an error occurs
+    core.setFailed(error.message);
+  }
+}
+
+module.exports = { labelIssue };
 
 
 /***/ }),

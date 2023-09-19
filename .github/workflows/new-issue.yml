@@ -3,7 +3,7 @@
 # https://github.com/alex-page/github-project-automation-plus
 # https://github.com/actions/add-to-project
 
-name: Label and move new issues
+name: Init new issue tickets
 run-name: ${{ github.actor }} opened a new issue
 
 on:
@@ -43,6 +43,28 @@ jobs:
         id: npm-ci-test
         run: npm run ci-test
 
+  initialize-new-issue:
+    runs-on: ubuntu-latest
+    name: initialize an issue ticket
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: run local script
+        id: run-local-script
+        uses: ./
+        with:
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          issue_number: ${{ github.event.issue.number }}
+          issue_title: ${{ github.event.issue.title }}
+
+      - name: Print Output
+        id: output
+        run: echo "completed function call"
+
   # label-new-issue:
   #   runs-on: ubuntu-latest
   #   name: label new issue
@@ -67,28 +89,28 @@ jobs:
   #       id: output
   #       run: echo "completed function call"
 
-  create-a-branch:
-    runs-on: ubuntu-latest
-    name: initialize new issue
+  # create-a-branch:
+  #   runs-on: ubuntu-latest
+  #   name: initialize new issue
 
-    steps:
-      # To use this repository's private action,
-      # you must check out the repository
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
+  #   steps:
+  #     # To use this repository's private action,
+  #     # you must check out the repository
+  #     - name: Checkout
+  #       id: checkout
+  #       uses: actions/checkout@v4
 
-      - name: create a branch
-        id: create-a-branch
-        uses: ./
-        with:
-          owner: ${{ github.repository_owner }}
-          repo: ${{ github.event.repository.name }}
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+  #     - name: create a branch
+  #       id: create-a-branch
+  #       uses: ./
+  #       with:
+  #         owner: ${{ github.repository_owner }}
+  #         repo: ${{ github.event.repository.name }}
+  #         token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
-      - name: Print Output
-        id: output
-        run: echo "completed function call"
+  #     - name: Print Output
+  #       id: output
+  #       run: echo "completed function call"
 
   # - name: Add issue to project
   #   uses: actions/add-to-project@v0.5.0
