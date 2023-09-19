@@ -44,29 +44,32 @@ async function createBranch() {
 
     const ref = 'development';
 
-    const devBranch = await octokit.request(
-      `GET /repos/${owner}/${repo}/git/ref/${ref}`,
-      {
+    try {
+      await octokit.request(`GET /repos/${owner}/${repo}/git/ref/${ref}`, {
         owner,
         repo,
         ref,
         headers: {
           'X-GitHub-Api-Version': '2022-11-28'
         }
-      }
-    );
+      });
 
-    const sha = await devBranch?.object?.sha;
+      return 'successfully got the dev branch';
+    } catch (error) {
+      return 'failed to get devbranch';
+    }
 
-    await octokit.request(`POST /repos/${owner}/${repo}/git/refs`, {
-      owner,
-      repo,
-      ref: 'refs/heads/featureA',
-      sha,
-      headers: {
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
-    });
+    // const sha = await devBranch?.object?.sha;
+
+    // await octokit.request(`POST /repos/${owner}/${repo}/git/refs`, {
+    //   owner,
+    //   repo,
+    //   ref: 'refs/heads/featureA',
+    //   sha,
+    //   headers: {
+    //     'X-GitHub-Api-Version': '2022-11-28'
+    //   }
+    // });
 
     // octokit.rest.issues.addLabels({
     //   owner,
