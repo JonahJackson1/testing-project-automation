@@ -9687,6 +9687,8 @@ async function createBranch() {
       ref
     });
 
+    console.log(devBranch);
+
     const sha = await devBranch?.object?.sha;
 
     const newRef = 'refs/heads/featureA';
@@ -9695,7 +9697,7 @@ async function createBranch() {
     await octokit.rest.git.createRef({
       owner,
       repo,
-      newRef,
+      ref: newRef,
       sha
     });
 
