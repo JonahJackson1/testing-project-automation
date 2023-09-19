@@ -1,12 +1,14 @@
 // create a pull request
 // https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
-
+// update a pull request's branch
+// https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#update-a-pull-request-branch
 const core = require('@actions/core');
 const github = require('@actions/github');
 
 /* TODO:
 
 - figure out a way to immediately open a pull request w/o any changes being made
+- figure out a way to link the pull request and original issue ticket to one another
 
 */
 
@@ -22,7 +24,6 @@ async function createPR() {
      **/
     const owner = core.getInput('owner', { required: true });
     const repo = core.getInput('repo', { required: true });
-    const issue_number = core.getInput('issue_number', { required: true });
     const issueTitle = core.getInput('issue_title', { required: true });
     const token = core.getInput('token', { required: true });
     /**
@@ -41,7 +42,7 @@ async function createPR() {
       owner,
       repo,
       head: `feature-${issueTitle.split(' ').join('-')}`,
-      issue: Number(issue_number),
+      title: `Feature ${issueTitle}`,
       base: 'staging'
     });
   } catch (error) {
