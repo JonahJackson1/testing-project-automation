@@ -9787,12 +9787,14 @@ async function createPR() {
      **/
     const octokit = new github.getOctokit(token);
 
+    // https://octokit.github.io/rest.js/v20#pulls-create
+    // https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
     await octokit.rest.pulls.create({
       owner,
       repo,
-      head: `heads/feature-${issueTitle.split(' ').join('-')}`,
+      head: `feature-${issueTitle.split(' ').join('-')}`,
       issue: Number(issue_number),
-      base: 'head/development'
+      base: 'development'
     });
   } catch (error) {
     // Fail the workflow run if an error occurs
