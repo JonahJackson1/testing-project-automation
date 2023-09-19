@@ -1,6 +1,37 @@
 # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
 
 #
+# Create a branch
+#
+
+name: 'Create a branch'
+description: "Creates a branch based on an issue ticket's title"
+author: 'jonah jackson'
+
+# Define your inputs here.
+inputs:
+  owner:
+    description: 'The owner of the repository'
+    required: true
+  repo:
+    description: 'The name of the repository'
+    required: true
+  # issue_number:
+  #   description: 'The number of the issue'
+  #   required: true
+  token:
+    description: 'The token to use to access the GitHub API'
+    required: true
+
+# Define your outputs here.
+outputs:
+  success:
+    description: 'branch was successfully created'
+
+runs:
+  using: node20
+  main: dist/index.js
+#
 # Label an issue
 #
 
@@ -48,37 +79,6 @@
 #   using: node20
 #   main: dist/index.js
 
-#
-# Create a branch
-#
-
-name: 'Create a branch'
-description: "Creates a branch based on an issue ticket's title"
-author: 'jonah jackson'
-
-# Define your inputs here.
-inputs:
-  owner:
-    description: 'The owner of the repository'
-    required: true
-  repo:
-    description: 'The name of the repository'
-    required: true
-  # issue_number:
-  #   description: 'The number of the issue'
-  #   required: true
-  token:
-    description: 'The token to use to access the GitHub API'
-    required: true
-
-# Define your outputs here.
-outputs:
-  success:
-    description: 'branch was successfully created'
-
-runs:
-  using: node20
-  main: dist/index.js
 #
 # Move an issue in a project
 # --- might not be possible in this format, will probably need to use a webhook
