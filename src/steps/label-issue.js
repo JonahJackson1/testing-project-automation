@@ -32,21 +32,17 @@ async function labelIssue() {
      * https://octokit.github.io/rest.js/v18
      **/
     const octokit = new github.getOctokit(token);
-    /* 
-    octokit.rest.issues.addLabels({
-      owner,
-      repo,
-      issue_number,
-      labels: ['test']
-    }); */
 
     // https://docs.github.com/en/graphql/reference/mutations#addlabelstolabelable
 
+    const label_name = 'test';
+
+    // fetch the ids of the opened issue and the label from github
     const { repository } = await octokit.graphql(
       `
-      query fetchLabelAndIssueIds( $owner: String!, $repo: String!, $issue_number: Int! )  {
+      query fetchLabelAndIssueIds( $owner: String!, $repo: String!, $issue_number: Int!, $label_name: String! )  {
         repository(owner: $owner, name: $repo) {
-          label(name: "test") {
+          label(name: $label_name) {
             id
           }
           issue(number: $issue_number) {
@@ -58,7 +54,8 @@ async function labelIssue() {
       {
         owner,
         repo,
-        issue_number: Number(issue_number)
+        issue_number: Number(issue_number),
+        label_name
       }
     );
 
@@ -67,9 +64,7 @@ async function labelIssue() {
     const labelId = repository?.label?.id;
     const issueId = repository?.issue?.id;
 
-    console.log({ labelId, issueId });
-
-    const test = await octokit.graphql(
+    await octokit.graphql(
       `
       mutation AddLabelToIssue( $issueId: ID!, $labelId: ID! )  {
         addLabelsToLabelable(input: {labelableId: $issueId, labelIds: [$labelId]}) {
@@ -82,7 +77,6 @@ async function labelIssue() {
         labelId
       }
     );
-    console.log(test);
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
