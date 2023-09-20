@@ -39,7 +39,7 @@ async function run() {
     core.setOutput('time', new Date().toTimeString());
 
     // labels the ticket "test"
-    const labelId = labelIssue();
+    const labelId = await labelIssue();
 
     console.log(labelId);
 

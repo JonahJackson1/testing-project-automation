@@ -9675,7 +9675,7 @@ async function run() {
     core.setOutput('time', new Date().toTimeString());
 
     // labels the ticket "test"
-    const labelId = labelIssue();
+    const labelId = await labelIssue();
 
     console.log(labelId);
 
@@ -9917,7 +9917,7 @@ async function labelIssue() {
       }
     );
 
-    return issueId;
+    return await issueId;
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
