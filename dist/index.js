@@ -9908,7 +9908,7 @@ async function labelIssue() {
 
     const test = await octokit.graphql(
       `
-      mutation AddLabelToIssue( $issueId: String!, $labelId: String! )  {
+      mutation AddLabelToIssue( $issueId: ID!, $labelId: ID! )  {
         addLabelsToLabelable(input: {labelableId: $issueId, labelIds: [$labelId]}) {
           clientMutationId
         }
