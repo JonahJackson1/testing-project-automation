@@ -86,6 +86,7 @@ async function createBranch() {
 
     const branch = `refs/heads/${issueTitle.split(' ').join('-')}`;
 
+    console.log(repository);
     console.log({
       repositoryId: repoId,
       oid: lastDevCommitSHA,
