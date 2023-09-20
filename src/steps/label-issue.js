@@ -46,7 +46,7 @@ async function labelIssue() {
       `
       query {
         repository(owner: $owner, name: $repo) {
-          label(name: "Ready") {
+          label(name: "test") {
             id
           }
           issue(number: 76) {
