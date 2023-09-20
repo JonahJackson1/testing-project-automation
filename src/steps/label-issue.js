@@ -42,9 +42,9 @@ async function labelIssue() {
 
     // https://docs.github.com/en/graphql/reference/mutations#addlabelstolabelable
 
-    const test = await octokit.graphql(
+    const { repository } = await octokit.graphql(
       `
-      query fetchLabelAndIssueIds( $owner: String!, $repo: String!, $issue_number: Int!)  {
+      query fetchLabelAndIssueIds( $owner: String!, $repo: String!, $issue_number: Int! )  {
         repository(owner: $owner, name: $repo) {
           label(name: "test") {
             id
@@ -62,22 +62,24 @@ async function labelIssue() {
       }
     );
 
-    console.log(test);
+    if (!repository) return;
 
-    /* await octokit.graphql(
+    const labelId = repository?.label?.id;
+    const issueId = repository?.issue?.id;
+
+    await octokit.graphql(
       `
-      mutation AddLabelToIssue {
-        addLabelsToLabelable(input: {labelableId: $issue_number, labelIds: ["Test"]}) {
+      mutation AddLabelToIssue( $issueId: String!, $labelId: String! )  {
+        addLabelsToLabelable(input: {labelableId: $issueId, labelIds: [$labelId]}) {
           clientMutationId
         }
       }
       `,
       {
-        owner,
-        repo,
-        issue_number
+        issueId,
+        labelId
       }
-    ); */
+    );
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
