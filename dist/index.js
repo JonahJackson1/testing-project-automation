@@ -9904,7 +9904,9 @@ async function labelIssue() {
     const labelId = repository?.label?.id;
     const issueId = repository?.issue?.id;
 
-    await octokit.graphql(
+    console.log({ labelId, issueId });
+
+    const test = await octokit.graphql(
       `
       mutation AddLabelToIssue( $issueId: String!, $labelId: String! )  {
         addLabelsToLabelable(input: {labelableId: $issueId, labelIds: [$labelId]}) {
@@ -9917,6 +9919,7 @@ async function labelIssue() {
         labelId
       }
     );
+    console.log(test);
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
