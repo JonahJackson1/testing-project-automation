@@ -32,13 +32,35 @@ async function labelIssue() {
      * https://octokit.github.io/rest.js/v18
      **/
     const octokit = new github.getOctokit(token);
-
+    /* 
     octokit.rest.issues.addLabels({
       owner,
       repo,
       issue_number,
       labels: ['test']
-    });
+    }); */
+
+    const { lastIssues } = await octokit.graphql(
+      `
+        query lastIssues($owner: String!, $repo: String!, $num: Int = 3) {
+          repository(owner: $owner, name: $repo) {
+            issues(last: $num) {
+              edges {
+                node {
+                  title
+                }
+              }
+            }
+          }
+        }
+      `,
+      {
+        owner,
+        repo
+      }
+    );
+
+    console.log(lastIssues);
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);

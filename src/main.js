@@ -42,10 +42,10 @@ async function run() {
     labelIssue();
 
     // creates a branch from the most recent commit to the development branch
-    await createBranch();
+    // await createBranch();
 
     // creates a pull request from the most recent commit and links it to the newly created branch
-    await createPR();
+    // await createPR();
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
