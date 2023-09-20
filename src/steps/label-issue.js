@@ -40,25 +40,44 @@ async function labelIssue() {
       labels: ['test']
     }); */
 
-    const { lastIssues } = await octokit.graphql(
+    // https://docs.github.com/en/graphql/reference/mutations#addlabelstolabelable
+
+    const test = await octokit.graphql(
       `
-        query lastIssues($owner: String!, $repo: String!, $num: Int = 3) {
-          repository(owner: $owner, name: $repo) {
-            issues(last: $num) {
-              edges {
-                node {
-                  title
-                }
-              }
-            }
+      query {
+        repository(owner: $owner, name: $repo) {
+          label(name: "Ready") {
+            id
+          }
+          issue(number: 76) {
+            id
           }
         }
+      }
+    `,
+      {
+        owner,
+        repo,
+        issue_number
+      }
+    );
+
+    console.log(test);
+
+    /* await octokit.graphql(
+      `
+      mutation AddLabelToIssue {
+        addLabelsToLabelable(input: {labelableId: $issue_number, labelIds: ["Test"]}) {
+          clientMutationId
+        }
+      }
       `,
       {
         owner,
-        repo
+        repo,
+        issue_number
       }
-    );
+    ); */
 
     console.log(lastIssues);
   } catch (error) {

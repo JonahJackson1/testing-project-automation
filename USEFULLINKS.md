@@ -40,6 +40,8 @@ https://github.com/actions/toolkit/blob/master/README.md
 
 <!-- Graph QL -->
 
+https://docs.github.com/en/graphql/overview/explorer
+
 https://medium.com/swlh/introduction-to-graphql-with-github-api-64ee8bb11630
 
 https://docs.github.com/graphql
