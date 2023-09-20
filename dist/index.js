@@ -9782,11 +9782,11 @@ async function createBranch() {
 
     const repoId = await repository?.id;
     const lastDevCommitSHA =
-      await repository?.ref?.target?.history?.edges.slice(-1)?.node?.oid;
+      await repository?.ref?.target?.history?.edges[0]?.node?.oid;
 
     const branch = `refs/heads/${issueTitle.split(' ').join('-')}`;
 
-    const test = await repository?.ref?.target;
+    const test = await repository?.ref?.target?.history?.edges;
 
     console.log(test);
 
