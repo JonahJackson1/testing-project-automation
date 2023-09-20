@@ -99,7 +99,7 @@ async function createBranch() {
       {
         repoId,
         sha: lastDevCommitSHA,
-        branchName: branch
+        branchName: 'refs/heads/feature-ABCDEFG'
       }
     );
 
