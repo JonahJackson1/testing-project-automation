@@ -86,30 +86,20 @@ async function createBranch() {
 
     const branch = `refs/heads/${issueTitle.split(' ').join('-')}`;
 
-    const test = await repository?.ref?.target?.history?.edges;
-
-    console.log(test);
-
-    console.log({
-      repositoryId: repoId,
-      oid: lastDevCommitSHA,
-      name: branch
-    });
-
     await octokit.graphql(
       `
-      mutation createNewBranch (name: String!, oid: GitObjectID!, repositoryId: ID!) {
+      mutation createNewBranch (branchName: String!, sha: GitObjectID!, repoId: ID!) {
         createRef(
-          input: {name: $name, oid: $oid, repositoryId: $repositoryId}
+          input: {name: $branchName, oid: $sha, repositoryId: $repoId}
         ) {
           clientMutationId 
         }
       }
       `,
       {
-        repositoryId: repoId,
-        oid: lastDevCommitSHA,
-        name: String(branch)
+        repoId,
+        sha: lastDevCommitSHA,
+        branchName: branch
       }
     );
 
