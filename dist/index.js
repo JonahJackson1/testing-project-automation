@@ -9788,9 +9788,9 @@ async function createBranch() {
 
     await octokit.graphql(
       `
-      mutation createNewBranch (branchName: String!, sha: GitObjectID!, repoId: ID!) {
+      mutation createNewBranch ($branch: String!, $sha: GitObjectID!, $repoId: ID!) {
         createRef(
-          input: {name: $branchName, oid: $sha, repositoryId: $repoId}
+          input: {name: $branch, oid: $sha, repositoryId: $repoId}
         ) {
           clientMutationId 
         }
@@ -9799,7 +9799,7 @@ async function createBranch() {
       {
         repoId,
         sha: lastDevCommitSHA,
-        branchName: 'refs/heads/feature-ABCDEFG'
+        branch
       }
     );
 
