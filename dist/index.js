@@ -9881,12 +9881,12 @@ async function labelIssue() {
 
     const test = await octokit.graphql(
       `
-      query {
+      query fetchLabelAndIssueIds( $owner: String!, $repo: String!, $issue_number: Int!)  {
         repository(owner: $owner, name: $repo) {
           label(name: "test") {
             id
           }
-          issue(number: 76) {
+          issue(number: $issue_number) {
             id
           }
         }

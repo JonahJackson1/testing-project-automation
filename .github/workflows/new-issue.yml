@@ -60,7 +60,7 @@ jobs:
           repo: ${{ github.event.repository.name }}
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           issue_number: ${{ github.event.issue.number }}
-          issue_title: ${{ github.event.issue.title }}
+          # issue_title: ${{ github.event.issue.title }}
 
       - name: Print Output
         id: output
