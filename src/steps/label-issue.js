@@ -58,7 +58,7 @@ async function labelIssue() {
       {
         owner,
         repo,
-        issue_number
+        issue_number: Number(issue_number)
       }
     );
 
