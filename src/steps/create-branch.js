@@ -38,24 +38,78 @@ async function createBranch() {
     const octokit = new github.getOctokit(token);
 
     // The :ref in the URL must be formatted as heads/<branch name>
-    const ref = 'heads/development';
+    // const ref = 'heads/development';
 
     // https://octokit.github.io/rest.js/v20#git-get-ref
-    const devBranch = await octokit.rest.git.getRef({
-      owner,
-      repo,
-      ref
-    });
+    // const devBranch = await octokit.rest.git.getRef({
+    //   owner,
+    //   repo,
+    //   ref
+    // });
 
-    const sha = await devBranch?.data?.object?.sha;
+    // const sha = await devBranch?.data?.object?.sha;
+
+    const { repository } = await octokit.graphql(
+      `
+        query fetchRefAndId($owner: String!, $repo: String!) {
+          repository(owner: $owner, name: $repo) {
+            id
+            ref(qualifiedName: "refs/heads/development") {
+              name
+              target {
+                id
+                ... on Commit {
+                  history(first: 1) {
+                    edges {
+                      node {
+                        oid
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+    `,
+      {
+        owner,
+        repo
+      }
+    );
+
+    if (!repository) return;
+
+    const repoId = await repository?.id;
+    const lastDevCommitSHA =
+      await repository?.target?.history?.edges[0]?.node?.oid;
+
+    const branch = `refs/heads/${issueTitle.split(' ').join('-')}`;
+
+    await octokit.graphql(
+      `
+      mutation createNewBranch (name: String!, oid: GitObjectID!, repositoryId: ID!) {
+        createRef(
+          input: {name: $name, oid: $oid, repositoryId: $repositoryId}
+        ) {
+          clientMutationId 
+        }
+      }
+      `,
+      {
+        repositoryId: repoId,
+        oid: lastDevCommitSHA,
+        name: branch
+      }
+    );
 
     // https://octokit.github.io/rest.js/v20#git-create-ref
-    await octokit.rest.git.createRef({
-      owner,
-      repo,
-      ref: `refs/heads/feature-${issueTitle.split(' ').join('-')}`,
-      sha
-    });
+    // await octokit.rest.git.createRef({
+    //   owner,
+    //   repo,
+    //   ref: `refs/heads/feature-${issueTitle.split(' ').join('-')}`,
+    //   sha
+    // });
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);

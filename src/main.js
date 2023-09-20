@@ -7,7 +7,7 @@ const core = require('@actions/core');
 const { wait } = require('./wait');
 const { labelIssue } = require('./steps/label-issue');
 const { createBranch } = require('./steps/create-branch');
-const { createPR } = require('./steps/create-pr');
+// const { createPR } = require('./steps/create-pr');
 
 /* TODO: */
 /* 
@@ -39,12 +39,10 @@ async function run() {
     core.setOutput('time', new Date().toTimeString());
 
     // labels the ticket "test"
-    const labelId = await labelIssue();
-
-    console.log(labelId);
+    await labelIssue();
 
     // creates a branch from the most recent commit to the development branch
-    // await createBranch();
+    await createBranch();
 
     // creates a pull request from the most recent commit and links it to the newly created branch
     // await createPR();

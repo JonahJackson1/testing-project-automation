@@ -77,8 +77,6 @@ async function labelIssue() {
         labelId
       }
     );
-
-    return await issueId;
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);

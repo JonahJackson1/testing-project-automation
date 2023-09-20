@@ -9643,7 +9643,7 @@ const core = __nccwpck_require__(2186);
 const { wait } = __nccwpck_require__(1312);
 const { labelIssue } = __nccwpck_require__(3184);
 const { createBranch } = __nccwpck_require__(343);
-const { createPR } = __nccwpck_require__(4011);
+// const { createPR } = require('./steps/create-pr');
 
 /* TODO: */
 /* 
@@ -9675,12 +9675,10 @@ async function run() {
     core.setOutput('time', new Date().toTimeString());
 
     // labels the ticket "test"
-    const labelId = await labelIssue();
-
-    console.log(labelId);
+    await labelIssue();
 
     // creates a branch from the most recent commit to the development branch
-    // await createBranch();
+    await createBranch();
 
     // creates a pull request from the most recent commit and links it to the newly created branch
     // await createPR();
@@ -9740,24 +9738,78 @@ async function createBranch() {
     const octokit = new github.getOctokit(token);
 
     // The :ref in the URL must be formatted as heads/<branch name>
-    const ref = 'heads/development';
+    // const ref = 'heads/development';
 
     // https://octokit.github.io/rest.js/v20#git-get-ref
-    const devBranch = await octokit.rest.git.getRef({
-      owner,
-      repo,
-      ref
-    });
+    // const devBranch = await octokit.rest.git.getRef({
+    //   owner,
+    //   repo,
+    //   ref
+    // });
 
-    const sha = await devBranch?.data?.object?.sha;
+    // const sha = await devBranch?.data?.object?.sha;
+
+    const { repository } = await octokit.graphql(
+      `
+        query fetchRefAndId($owner: String!, $repo: String!) {
+          repository(owner: $owner, name: $repo) {
+            id
+            ref(qualifiedName: "refs/heads/development") {
+              name
+              target {
+                id
+                ... on Commit {
+                  history(first: 1) {
+                    edges {
+                      node {
+                        oid
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+    `,
+      {
+        owner,
+        repo
+      }
+    );
+
+    if (!repository) return;
+
+    const repoId = await repository?.id;
+    const lastDevCommitSHA =
+      await repository?.target?.history?.edges[0]?.node?.oid;
+
+    const branch = `refs/heads/${issueTitle.split(' ').join('-')}`;
+
+    await octokit.graphql(
+      `
+      mutation createNewBranch (name: String!, oid: GitObjectID!, repositoryId: ID!) {
+        createRef(
+          input: {name: $name, oid: $oid, repositoryId: $repositoryId}
+        ) {
+          clientMutationId 
+        }
+      }
+      `,
+      {
+        repositoryId: repoId,
+        oid: lastDevCommitSHA,
+        name: branch
+      }
+    );
 
     // https://octokit.github.io/rest.js/v20#git-create-ref
-    await octokit.rest.git.createRef({
-      owner,
-      repo,
-      ref: `refs/heads/feature-${issueTitle.split(' ').join('-')}`,
-      sha
-    });
+    // await octokit.rest.git.createRef({
+    //   owner,
+    //   repo,
+    //   ref: `refs/heads/feature-${issueTitle.split(' ').join('-')}`,
+    //   sha
+    // });
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
@@ -9765,71 +9817,6 @@ async function createBranch() {
 }
 
 module.exports = { createBranch };
-
-
-/***/ }),
-
-/***/ 4011:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-// create a pull request
-// https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
-// update a pull request's branch
-// https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#update-a-pull-request-branch
-
-// https://docs.github.com/en/graphql/reference/objects#pullrequest
-// https://docs.github.com/en/graphql/reference/mutations#createpullrequest
-
-const core = __nccwpck_require__(2186);
-const github = __nccwpck_require__(5438);
-
-/* TODO:
-
-- figure out a way to immediately open a pull request w/o any changes being made (staging branch?)
-- figure out a way to link the pull request and original issue ticket to one another
-
-*/
-
-/**
- * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
- */
-async function createPR() {
-  try {
-    /**
-     * We need to fetch all the inputs that were provided to our action
-     * and store them in variables for us to use.
-     **/
-    const owner = core.getInput('owner', { required: true });
-    const repo = core.getInput('repo', { required: true });
-    const issueTitle = core.getInput('issue_title', { required: true });
-    const token = core.getInput('token', { required: true });
-    /**
-     * Now we need to create an instance of Octokit which will use to call
-     * GitHub's REST API endpoints.
-     * We will pass the token as an argument to the constructor. This token
-     * will be used to authenticate our requests.
-     * You can find all the information about how to use Octokit here:
-     * https://octokit.github.io/rest.js/v18
-     **/
-    const octokit = new github.getOctokit(token);
-
-    // https://octokit.github.io/rest.js/v20#pulls-create
-    // https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
-    await octokit.rest.pulls.create({
-      owner,
-      repo,
-      head: `feature-${issueTitle.split(' ').join('-')}`,
-      title: `Feature ${issueTitle}`,
-      base: 'staging'
-    });
-  } catch (error) {
-    // Fail the workflow run if an error occurs
-    core.setFailed(error.message);
-  }
-}
-
-module.exports = { createPR };
 
 
 /***/ }),
@@ -9916,8 +9903,6 @@ async function labelIssue() {
         labelId
       }
     );
-
-    return await issueId;
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
