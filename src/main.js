@@ -39,7 +39,9 @@ async function run() {
     core.setOutput('time', new Date().toTimeString());
 
     // labels the ticket "test"
-    labelIssue();
+    const labelId = labelIssue();
+
+    console.log(labelId);
 
     // creates a branch from the most recent commit to the development branch
     // await createBranch();

@@ -9675,7 +9675,9 @@ async function run() {
     core.setOutput('time', new Date().toTimeString());
 
     // labels the ticket "test"
-    labelIssue();
+    const labelId = labelIssue();
+
+    console.log(labelId);
 
     // creates a branch from the most recent commit to the development branch
     // await createBranch();
@@ -9914,6 +9916,8 @@ async function labelIssue() {
         labelId
       }
     );
+
+    return issueId;
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
