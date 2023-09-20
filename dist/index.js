@@ -9634,6 +9634,8 @@ function wrappy (fn, cb) {
 /***/ 1713:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
+// https://docs.github.com/graphql
+
 // packages
 const core = __nccwpck_require__(2186);
 
@@ -9643,6 +9645,16 @@ const { labelIssue } = __nccwpck_require__(3184);
 const { createBranch } = __nccwpck_require__(343);
 const { createPR } = __nccwpck_require__(4011);
 
+/* TODO: */
+/* 
+- read up on graphQL in order to do the more advanced automations not possible with the REST api
+
+  - should be able:
+    - to move items/issues in a project
+    - assign a pull request to an issue ticket
+    - assign an issue ticket to a pull request / repo
+    - 
+*/
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -9666,10 +9678,10 @@ async function run() {
     labelIssue();
 
     // creates a branch from the most recent commit to the development branch
-    await createBranch();
+    // await createBranch();
 
     // creates a pull request from the most recent commit and links it to the newly created branch
-    await createPR();
+    // await createPR();
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
@@ -9688,6 +9700,8 @@ module.exports = {
 
 // create a branch
 // https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28
+
+// https://docs.github.com/en/graphql/reference/objects#ref
 
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
@@ -9760,12 +9774,16 @@ module.exports = { createBranch };
 // https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
 // update a pull request's branch
 // https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#update-a-pull-request-branch
+
+// https://docs.github.com/en/graphql/reference/objects#pullrequest
+// https://docs.github.com/en/graphql/reference/mutations#createpullrequest
+
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 
 /* TODO:
 
-- figure out a way to immediately open a pull request w/o any changes being made
+- figure out a way to immediately open a pull request w/o any changes being made (staging branch?)
 - figure out a way to link the pull request and original issue ticket to one another
 
 */
@@ -9821,6 +9839,9 @@ module.exports = { createPR };
 // https://octokit.github.io/rest.js/v20#usage
 // https://github.com/actions/toolkit/blob/master/README.md
 
+// https://docs.github.com/en/graphql/reference/objects#issue
+// https://docs.github.com/en/graphql/reference/mutations#createissue
+
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 
@@ -9848,13 +9869,52 @@ async function labelIssue() {
      * https://octokit.github.io/rest.js/v18
      **/
     const octokit = new github.getOctokit(token);
-
+    /* 
     octokit.rest.issues.addLabels({
       owner,
       repo,
       issue_number,
       labels: ['test']
-    });
+    }); */
+
+    // https://docs.github.com/en/graphql/reference/mutations#addlabelstolabelable
+
+    const test = await octokit.graphql(
+      `
+      query {
+        repository(owner: $owner, name: $repo) {
+          label(name: "Ready") {
+            id
+          }
+          issue(number: 76) {
+            id
+          }
+        }
+      }
+    `,
+      {
+        owner,
+        repo,
+        issue_number
+      }
+    );
+
+    console.log(test);
+
+    /* await octokit.graphql(
+      `
+      mutation AddLabelToIssue {
+        addLabelsToLabelable(input: {labelableId: $issue_number, labelIds: ["Test"]}) {
+          clientMutationId
+        }
+      }
+      `,
+      {
+        owner,
+        repo,
+        issue_number
+      }
+    ); */
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
