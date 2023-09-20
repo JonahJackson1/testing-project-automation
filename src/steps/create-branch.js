@@ -109,7 +109,7 @@ async function createBranch() {
       {
         repositoryId: repoId,
         oid: lastDevCommitSHA,
-        name: branch
+        name: String(branch)
       }
     );
 
