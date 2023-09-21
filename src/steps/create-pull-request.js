@@ -27,8 +27,8 @@ async function createPullRequest() {
      * We need to fetch all the inputs that were provided to our action
      * and store them in variables for us to use.
      **/
-    const owner = core.getInput('owner', { required: true });
-    const repo = core.getInput('repo', { required: true });
+    // const owner = core.getInput('owner', { required: true });
+    // const repo = core.getInput('repo', { required: true });
     const issueTitle = core.getInput('issue_title', { required: true });
     const token = core.getInput('token', { required: true });
     /**
@@ -41,16 +41,29 @@ async function createPullRequest() {
      **/
     const octokit = new github.getOctokit(token);
 
-    // https://octokit.github.io/rest.js/v20#pulls-create
-    // https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
+    const headRef = 'development';
+    const baseRef = 'staging';
+    const repoId = 'R_kgDOKTr8Nw';
 
-    await octokit.rest.pulls.create({
-      owner,
-      repo,
-      head: `feature-${issueTitle.split(' ').join('-')}`,
-      title: `Feature ${issueTitle}`,
-      base: 'staging'
-    });
+    await octokit.graphql(
+      `
+      mutation createNewPulLRequest ($branchName: String!, $headRef: String!, $baseRef: String!, $repoId: ID!) {
+        createPullRequest(
+          input: {baseRefName: $baseRef, headRefName: $headRef, title: $branchName, repositoryId: $repoId}
+        ) {
+          pullRequest {
+            title 
+          }
+        }
+      }
+      `,
+      {
+        repoId,
+        headRef,
+        baseRef,
+        branchName: `feature-${issueTitle.split(' ').join('-')}`
+      }
+    );
 
     console.log('successfully created the new pull request');
   } catch (error) {

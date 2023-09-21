@@ -9643,6 +9643,7 @@ const core = __nccwpck_require__(2186);
 const { wait } = __nccwpck_require__(1312);
 const { labelIssue } = __nccwpck_require__(3184);
 const { createBranch } = __nccwpck_require__(343);
+const { createPullRequest } = __nccwpck_require__(6917);
 
 /* TODO: */
 /* 
@@ -9680,7 +9681,7 @@ async function run() {
     createBranch();
 
     // creates a pull request from the most recent commit and links it to the newly created branch
-    // await createPullRequest();
+    createPullRequest();
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
@@ -9806,6 +9807,88 @@ async function createBranch() {
 }
 
 module.exports = { createBranch };
+
+
+/***/ }),
+
+/***/ 6917:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+// create a pull request
+// https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
+// update a pull request's branch
+// https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#update-a-pull-request-branch
+
+// https://docs.github.com/en/graphql/reference/objects#pullrequest
+// https://docs.github.com/en/graphql/reference/mutations#createpullrequest
+
+const core = __nccwpck_require__(2186);
+const github = __nccwpck_require__(5438);
+
+/* TODO:
+
+- convert to graphQL - then the rest is ez
+- figure out a way to immediately open a pull request w/o any changes being made (staging branch?)
+- figure out a way to link the pull request and original issue ticket to one another
+
+*/
+
+/**
+ * The main function for the action.
+ * @returns {Promise<void>} Resolves when the action is complete.
+ */
+async function createPullRequest() {
+  try {
+    /**
+     * We need to fetch all the inputs that were provided to our action
+     * and store them in variables for us to use.
+     **/
+    // const owner = core.getInput('owner', { required: true });
+    // const repo = core.getInput('repo', { required: true });
+    const issueTitle = core.getInput('issue_title', { required: true });
+    const token = core.getInput('token', { required: true });
+    /**
+     * Now we need to create an instance of Octokit which will use to call
+     * GitHub's REST API endpoints.
+     * We will pass the token as an argument to the constructor. This token
+     * will be used to authenticate our requests.
+     * You can find all the information about how to use Octokit here:
+     * https://octokit.github.io/rest.js/v18
+     **/
+    const octokit = new github.getOctokit(token);
+
+    const headRef = 'development';
+    const baseRef = 'staging';
+    const repoId = 'R_kgDOKTr8Nw';
+
+    await octokit.graphql(
+      `
+      mutation createNewPulLRequest ($branchName: String!, $headRef: String!, $baseRef: String!, $repoId: ID!) {
+        createPullRequest(
+          input: {baseRefName: $baseRef, headRefName: $headRef, title: $branchName, repositoryId: $repoId}
+        ) {
+          pullRequest {
+            title 
+          }
+        }
+      }
+      `,
+      {
+        repoId,
+        headRef,
+        baseRef,
+        branchName: `feature-${issueTitle.split(' ').join('-')}`
+      }
+    );
+
+    console.log('successfully created the new pull request');
+  } catch (error) {
+    // Fail the workflow run if an error occurs
+    core.setFailed(error.message);
+  }
+}
+
+module.exports = { createPullRequest };
 
 
 /***/ }),
