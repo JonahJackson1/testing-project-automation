@@ -42,7 +42,7 @@ async function run() {
     labelIssue();
 
     // creates a branch from the most recent commit to the development branch
-    createBranch();
+    await createBranch();
 
     // creates a pull request from the most recent commit and links it to the newly created branch
     createPullRequest();
