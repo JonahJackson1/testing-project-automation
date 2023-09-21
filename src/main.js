@@ -8,6 +8,7 @@ const { wait } = require('./wait');
 const { labelIssue } = require('./steps/label-issue');
 const { createBranch } = require('./steps/create-branch');
 const { createPullRequest } = require('./steps/create-pull-request');
+const { addComment } = require('./steps/add-comment');
 
 /* TODO: */
 /* 
@@ -40,6 +41,9 @@ async function run() {
 
     // labels the ticket "test"
     labelIssue();
+
+    // add "test message" to the new issue
+    addComment();
 
     // creates a branch from the most recent commit to the development branch
     await createBranch();
