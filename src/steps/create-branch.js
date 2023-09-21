@@ -1,12 +1,16 @@
 // create a branch
 // https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28
 
+// https://docs.github.com/en/graphql/reference/objects#ref
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 
 /* TODO: 
 
 - Attach the branch to the issue ticket
+- do a check on the issue names so they know if a branch was made 
+- error handle probably with a label
 
 */
 
@@ -35,25 +39,65 @@ async function createBranch() {
      **/
     const octokit = new github.getOctokit(token);
 
-    // The :ref in the URL must be formatted as heads/<branch name>
-    const ref = 'heads/development';
+    // The branch name must be formatted as refs/heads/<branch-name>
+    const getThisBranch = 'refs/heads/development';
 
-    // https://octokit.github.io/rest.js/v20#git-get-ref
-    const devBranch = await octokit.rest.git.getRef({
-      owner,
-      repo,
-      ref
-    });
+    // this fetches the id of the repository, the id of the development branch
+    const { repository } = await octokit.graphql(
+      `
+        query fetchRefAndId($owner: String!, $repo: String!, $branchName: String!) {
+          repository(owner: $owner, name: $repo) {
+            id
+            ref(qualifiedName: $branchName) {
+              target {
+                id
+                ... on Commit {
+                  history(first: 1) {
+                    edges {
+                      node {
+                        oid
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+    `,
+      {
+        owner,
+        repo,
+        branchName: getThisBranch
+      }
+    );
 
-    const sha = await devBranch?.data?.object?.sha;
+    if (!repository) return;
 
-    // https://octokit.github.io/rest.js/v20#git-create-ref
-    await octokit.rest.git.createRef({
-      owner,
-      repo,
-      ref: `refs/heads/feature-${issueTitle.split(' ').join('-')}`,
-      sha
-    });
+    const repoId = repository?.id;
+    // prettier-ignore
+    const lastDevCommitSHA = repository?.ref?.target?.history?.edges[0]?.node?.oid;
+
+    // The name must be formatted as refs/heads/<branch-name>
+    // it also cant take in weird characters but i dont want to do that rn
+    const newBranchName = `refs/heads/${issueTitle.split(' ').join('-')}`;
+
+    await octokit.graphql(
+      `
+      mutation createNewBranch ($branch: String!, $sha: GitObjectID!, $repoId: ID!) {
+        createRef(
+          input: {name: $branch, oid: $sha, repositoryId: $repoId}
+        ) {
+          clientMutationId 
+        }
+      }
+      `,
+      {
+        repoId,
+        sha: lastDevCommitSHA,
+        branch: newBranchName
+      }
+    );
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);

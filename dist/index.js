@@ -9634,6 +9634,8 @@ function wrappy (fn, cb) {
 /***/ 1713:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
+// https://docs.github.com/graphql
+
 // packages
 const core = __nccwpck_require__(2186);
 
@@ -9641,8 +9643,18 @@ const core = __nccwpck_require__(2186);
 const { wait } = __nccwpck_require__(1312);
 const { labelIssue } = __nccwpck_require__(3184);
 const { createBranch } = __nccwpck_require__(343);
-const { createPR } = __nccwpck_require__(4011);
+// const { createPR } = require('./steps/create-pr');
 
+/* TODO: */
+/* 
+- read up on graphQL in order to do the more advanced automations not possible with the REST api
+
+  - should be able:
+    - to move items/issues in a project
+    - assign a pull request to an issue ticket
+    - assign an issue ticket to a pull request / repo
+    - 
+*/
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
@@ -9663,13 +9675,13 @@ async function run() {
     core.setOutput('time', new Date().toTimeString());
 
     // labels the ticket "test"
-    labelIssue();
+    await labelIssue();
 
     // creates a branch from the most recent commit to the development branch
     await createBranch();
 
     // creates a pull request from the most recent commit and links it to the newly created branch
-    await createPR();
+    // await createPR();
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
@@ -9688,6 +9700,8 @@ module.exports = {
 
 // create a branch
 // https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28
+
+// https://docs.github.com/en/graphql/reference/objects#ref
 
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
@@ -9723,25 +9737,66 @@ async function createBranch() {
      **/
     const octokit = new github.getOctokit(token);
 
-    // The :ref in the URL must be formatted as heads/<branch name>
-    const ref = 'heads/development';
+    // The branch name must be formatted as refs/heads/<branch-name>
+    const getThisBranch = 'refs/heads/development';
 
-    // https://octokit.github.io/rest.js/v20#git-get-ref
-    const devBranch = await octokit.rest.git.getRef({
-      owner,
-      repo,
-      ref
-    });
+    // this fetches the id of the repository, the id of the development branch
+    const { repository } = await octokit.graphql(
+      `
+        query fetchRefAndId($owner: String!, $repo: String!, $branchName: String!) {
+          repository(owner: $owner, name: $repo) {
+            id
+            ref(qualifiedName: $branchName) {
+              target {
+                id
+                ... on Commit {
+                  history(first: 1) {
+                    edges {
+                      node {
+                        oid
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+    `,
+      {
+        owner,
+        repo,
+        branchName: getThisBranch
+      }
+    );
 
-    const sha = await devBranch?.data?.object?.sha;
+    if (!repository) return;
 
-    // https://octokit.github.io/rest.js/v20#git-create-ref
-    await octokit.rest.git.createRef({
-      owner,
-      repo,
-      ref: `refs/heads/feature-${issueTitle.split(' ').join('-')}`,
-      sha
-    });
+    const repoId = await repository?.id;
+    const lastDevCommitSHA =
+      await repository?.ref?.target?.history?.edges[0]?.node?.oid;
+
+    // The name must be formatted as refs/heads/<branch-name>
+    // it also cant take in weird characters but i dont want to do that atm
+    // 9.21.2023
+    const newBranchName = `refs/heads/${issueTitle.split(' ').join('-')}`;
+
+    await octokit.graphql(
+      `
+      mutation createNewBranch ($branch: String!, $sha: GitObjectID!, $repoId: ID!) {
+        createRef(
+          input: {name: $branch, oid: $sha, repositoryId: $repoId}
+        ) {
+          clientMutationId 
+        }
+      }
+      `,
+      {
+        repoId,
+        sha: lastDevCommitSHA,
+        branch: newBranchName
+      }
+    );
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
@@ -9753,72 +9808,22 @@ module.exports = { createBranch };
 
 /***/ }),
 
-/***/ 4011:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-// create a pull request
-// https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
-
-const core = __nccwpck_require__(2186);
-const github = __nccwpck_require__(5438);
-
-/* TODO:
-
-- figure out a way to immediately open a pull request w/o any changes being made
-
-*/
-
-/**
- * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
- */
-async function createPR() {
-  try {
-    /**
-     * We need to fetch all the inputs that were provided to our action
-     * and store them in variables for us to use.
-     **/
-    const owner = core.getInput('owner', { required: true });
-    const repo = core.getInput('repo', { required: true });
-    const issue_number = core.getInput('issue_number', { required: true });
-    const issueTitle = core.getInput('issue_title', { required: true });
-    const token = core.getInput('token', { required: true });
-    /**
-     * Now we need to create an instance of Octokit which will use to call
-     * GitHub's REST API endpoints.
-     * We will pass the token as an argument to the constructor. This token
-     * will be used to authenticate our requests.
-     * You can find all the information about how to use Octokit here:
-     * https://octokit.github.io/rest.js/v18
-     **/
-    const octokit = new github.getOctokit(token);
-
-    // https://octokit.github.io/rest.js/v20#pulls-create
-    // https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
-    await octokit.rest.pulls.create({
-      owner,
-      repo,
-      head: `feature-${issueTitle.split(' ').join('-')}`,
-      issue: Number(issue_number),
-      base: 'staging'
-    });
-  } catch (error) {
-    // Fail the workflow run if an error occurs
-    core.setFailed(error.message);
-  }
-}
-
-module.exports = { createPR };
-
-
-/***/ }),
-
 /***/ 3184:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // https://github.com/actions/javascript-action
 // https://octokit.github.io/rest.js/v20#usage
 // https://github.com/actions/toolkit/blob/master/README.md
+
+// https://docs.github.com/en/graphql/reference/objects#issue
+// https://docs.github.com/en/graphql/reference/mutations#createissue
+
+/** TODO: 
+
+  - put in some error handling
+  - convert the requires to imports
+
+*/
 
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
@@ -9835,7 +9840,7 @@ async function labelIssue() {
      **/
     const owner = core.getInput('owner', { required: true });
     const repo = core.getInput('repo', { required: true });
-    const issue_number = core.getInput('issue_number', { required: true });
+    const issueNumber = core.getInput('issue_number', { required: true });
     const token = core.getInput('token', { required: true });
 
     /**
@@ -9848,12 +9853,55 @@ async function labelIssue() {
      **/
     const octokit = new github.getOctokit(token);
 
-    octokit.rest.issues.addLabels({
-      owner,
-      repo,
-      issue_number,
-      labels: ['test']
-    });
+    // https://docs.github.com/en/graphql/reference/mutations#addlabelstolabelable
+
+    // just using this for now, there is a way to store all a repos labels in a json file but i haven't looked into it
+    const labelName = 'test';
+
+    // fetch the ids of the opened issue
+    const { repository } = await octokit.graphql(
+      `
+      query fetchLabelAndIssueIds( $owner: String!, $repo: String!, $issueNumber: Int!, $labelName: String! )  {
+        repository(owner: $owner, name: $repo) {
+          label(name: $labelName) {
+            id
+          }
+          issue(number: $issueNumber) {
+            id
+          }
+        }
+      }
+    `,
+      {
+        owner,
+        repo,
+        issueNumber: Number(issueNumber),
+        labelName
+      }
+    );
+
+    if (!repository) return;
+
+    // grab the ids
+    const labelId = repository?.label?.id;
+    const issueId = repository?.issue?.id;
+
+    // return if no ids found
+    if (!labelId || !issueId) return;
+
+    await octokit.graphql(
+      `
+      mutation AddLabelToIssue( $issueId: ID!, $labelId: ID! )  {
+        addLabelsToLabelable(input: {labelableId: $issueId, labelIds: [$labelId]}) {
+          clientMutationId
+        }
+      }
+      `,
+      {
+        issueId,
+        labelId
+      }
+    );
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
