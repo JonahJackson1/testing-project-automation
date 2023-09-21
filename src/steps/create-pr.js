@@ -11,6 +11,7 @@ const github = require('@actions/github');
 
 /* TODO:
 
+- convert to graphQL - then the rest is ez
 - figure out a way to immediately open a pull request w/o any changes being made (staging branch?)
 - figure out a way to link the pull request and original issue ticket to one another
 
@@ -42,6 +43,7 @@ async function createPR() {
 
     // https://octokit.github.io/rest.js/v20#pulls-create
     // https://docs.github.com/en/rest/pulls/pulls?apiVersion=2022-11-28#create-a-pull-request
+
     await octokit.rest.pulls.create({
       owner,
       repo,

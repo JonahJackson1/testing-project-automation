@@ -5,6 +5,13 @@
 // https://docs.github.com/en/graphql/reference/objects#issue
 // https://docs.github.com/en/graphql/reference/mutations#createissue
 
+/** TODO: 
+
+  - put in some error handling
+  - convert the requires to imports
+
+*/
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 
@@ -20,7 +27,7 @@ async function labelIssue() {
      **/
     const owner = core.getInput('owner', { required: true });
     const repo = core.getInput('repo', { required: true });
-    const issue_number = core.getInput('issue_number', { required: true });
+    const issueNumber = core.getInput('issue_number', { required: true });
     const token = core.getInput('token', { required: true });
 
     /**
@@ -35,14 +42,15 @@ async function labelIssue() {
 
     // https://docs.github.com/en/graphql/reference/mutations#addlabelstolabelable
 
-    const label_name = 'test';
+    // just using this for now, there is a way to store all a repos labels in a json file but i haven't looked into it
+    const labelName = 'test';
 
-    // fetch the ids of the opened issue and the label from github
+    // fetch the ids of the opened issue
     const { repository } = await octokit.graphql(
       `
-      query fetchLabelAndIssueIds( $owner: String!, $repo: String!, $issue_number: Int!, $label_name: String! )  {
+      query fetchLabelAndIssueIds( $owner: String!, $repo: String!, $issueNumber: Int!, $labelName: String! )  {
         repository(owner: $owner, name: $repo) {
-          label(name: $label_name) {
+          label(name: $labelName) {
             id
           }
           issue(number: $issue_number) {
@@ -54,15 +62,19 @@ async function labelIssue() {
       {
         owner,
         repo,
-        issue_number: Number(issue_number),
-        label_name
+        issueNumber: Number(issueNumber),
+        labelName
       }
     );
 
     if (!repository) return;
 
+    // grab the ids
     const labelId = repository?.label?.id;
     const issueId = repository?.issue?.id;
+
+    // return if no ids found
+    if (!labelId || !issueId) return;
 
     await octokit.graphql(
       `
