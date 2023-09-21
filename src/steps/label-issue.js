@@ -18,7 +18,7 @@ const core = require('@actions/core');
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function labelIssue({ issueId, labelId }) {
+async function labelIssue({ issueId, labelId, octokit }) {
   try {
     // return if no ids found
     if (!labelId || !issueId) return;

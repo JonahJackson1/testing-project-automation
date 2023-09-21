@@ -9713,21 +9713,24 @@ async function run() {
     // creates a pull request from the most recent commit and links it to the newly created branch
     const pullStatus = await createPullRequest({ issueTitle, octokit });
 
-    const issueId = await fetchIssueId({ issueNumber, owner, repo });
+    const issueId = await fetchIssueId({ issueNumber, owner, repo, octokit });
 
     const labelToFetch = 'test';
 
     const labelId = await fetchLabelId({
       labelName: labelToFetch,
       owner,
-      repo
+      repo,
+      octokit
     });
 
     // labels the ticket "test"
-    labelIssue({ issueId, labelId });
+    labelIssue({ issueId, labelId, octokit });
+
+    const message = 'test message';
 
     // add "test message" to the new issue
-    addComment({ issueId, octokit });
+    addComment({ issueId, octokit, message });
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
@@ -9765,14 +9768,12 @@ const core = __nccwpck_require__(2186);
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function addComment(issueId, octokit) {
+async function addComment({ issueId, octokit, message }) {
   try {
     // https://docs.github.com/en/graphql/reference/mutations#addlabelstolabelable
 
     // return if no ids found
     if (!issueId) return;
-
-    const message = 'test message';
 
     await octokit.graphql(
       `
@@ -9984,7 +9985,7 @@ const core = __nccwpck_require__(2186);
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function fetchIssueId({ issueNumber, owner, repo }) {
+async function fetchIssueId({ issueNumber, owner, repo, octokit }) {
   try {
     // fetch the parse issue number
     const { repository } = await octokit.graphql(
@@ -10021,7 +10022,7 @@ async function fetchIssueId({ issueNumber, owner, repo }) {
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function fetchLabelId({ labelName, owner, repo }) {
+async function fetchLabelId({ labelName, owner, repo, octokit }) {
   try {
     // fetch the ids of the parsed label
     const { repository } = await octokit.graphql(
@@ -10083,7 +10084,7 @@ const core = __nccwpck_require__(2186);
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function labelIssue({ issueId, labelId }) {
+async function labelIssue({ issueId, labelId, octokit }) {
   try {
     // return if no ids found
     if (!labelId || !issueId) return;

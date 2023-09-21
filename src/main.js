@@ -77,21 +77,24 @@ async function run() {
     // creates a pull request from the most recent commit and links it to the newly created branch
     const pullStatus = await createPullRequest({ issueTitle, octokit });
 
-    const issueId = await fetchIssueId({ issueNumber, owner, repo });
+    const issueId = await fetchIssueId({ issueNumber, owner, repo, octokit });
 
     const labelToFetch = 'test';
 
     const labelId = await fetchLabelId({
       labelName: labelToFetch,
       owner,
-      repo
+      repo,
+      octokit
     });
 
     // labels the ticket "test"
-    labelIssue({ issueId, labelId });
+    labelIssue({ issueId, labelId, octokit });
+
+    const message = 'test message';
 
     // add "test message" to the new issue
-    addComment({ issueId, octokit });
+    addComment({ issueId, octokit, message });
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);

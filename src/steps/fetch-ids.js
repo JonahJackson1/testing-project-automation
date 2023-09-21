@@ -18,7 +18,7 @@ const core = require('@actions/core');
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function fetchIssueId({ issueNumber, owner, repo }) {
+async function fetchIssueId({ issueNumber, owner, repo, octokit }) {
   try {
     // fetch the parse issue number
     const { repository } = await octokit.graphql(
@@ -55,7 +55,7 @@ async function fetchIssueId({ issueNumber, owner, repo }) {
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function fetchLabelId({ labelName, owner, repo }) {
+async function fetchLabelId({ labelName, owner, repo, octokit }) {
   try {
     // fetch the ids of the parsed label
     const { repository } = await octokit.graphql(

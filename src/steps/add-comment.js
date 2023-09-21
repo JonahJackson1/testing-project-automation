@@ -19,14 +19,12 @@ const core = require('@actions/core');
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function addComment(issueId, octokit) {
+async function addComment({ issueId, octokit, message }) {
   try {
     // https://docs.github.com/en/graphql/reference/mutations#addlabelstolabelable
 
     // return if no ids found
     if (!issueId) return;
-
-    const message = 'test message';
 
     await octokit.graphql(
       `
