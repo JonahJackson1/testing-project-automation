@@ -9737,25 +9737,16 @@ async function createBranch() {
      **/
     const octokit = new github.getOctokit(token);
 
-    // The :ref in the URL must be formatted as heads/<branch name>
-    // const ref = 'heads/development';
+    // The branch name must be formatted as refs/heads/<branch-name>
+    const getThisBranch = 'refs/heads/development';
 
-    // https://octokit.github.io/rest.js/v20#git-get-ref
-    // const devBranch = await octokit.rest.git.getRef({
-    //   owner,
-    //   repo,
-    //   ref
-    // });
-
-    // const sha = await devBranch?.data?.object?.sha;
-
+    // this fetches the id of the repository, the id of the development branch
     const { repository } = await octokit.graphql(
       `
-        query fetchRefAndId($owner: String!, $repo: String!) {
+        query fetchRefAndId($owner: String!, $repo: String!, $branchName: String!) {
           repository(owner: $owner, name: $repo) {
             id
-            ref(qualifiedName: "refs/heads/development") {
-              name
+            ref(qualifiedName: $branchName) {
               target {
                 id
                 ... on Commit {
@@ -9774,7 +9765,8 @@ async function createBranch() {
     `,
       {
         owner,
-        repo
+        repo,
+        branchName: getThisBranch
       }
     );
 
@@ -9784,7 +9776,10 @@ async function createBranch() {
     const lastDevCommitSHA =
       await repository?.ref?.target?.history?.edges[0]?.node?.oid;
 
-    const branch = `refs/heads/${issueTitle.split(' ').join('-')}`;
+    // The name must be formatted as refs/heads/<branch-name>
+    // it also cant take in weird characters but i dont want to do that atm
+    // 9.21.2023
+    const newBranchName = `refs/heads/${issueTitle.split(' ').join('-')}`;
 
     await octokit.graphql(
       `
@@ -9799,17 +9794,9 @@ async function createBranch() {
       {
         repoId,
         sha: lastDevCommitSHA,
-        branch
+        branch: newBranchName
       }
     );
-
-    // https://octokit.github.io/rest.js/v20#git-create-ref
-    // await octokit.rest.git.createRef({
-    //   owner,
-    //   repo,
-    //   ref: `refs/heads/feature-${issueTitle.split(' ').join('-')}`,
-    //   sha
-    // });
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
@@ -9831,6 +9818,13 @@ module.exports = { createBranch };
 // https://docs.github.com/en/graphql/reference/objects#issue
 // https://docs.github.com/en/graphql/reference/mutations#createissue
 
+/** TODO: 
+
+  - put in some error handling
+  - convert the requires to imports
+
+*/
+
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 
@@ -9846,7 +9840,7 @@ async function labelIssue() {
      **/
     const owner = core.getInput('owner', { required: true });
     const repo = core.getInput('repo', { required: true });
-    const issue_number = core.getInput('issue_number', { required: true });
+    const issueNumber = core.getInput('issue_number', { required: true });
     const token = core.getInput('token', { required: true });
 
     /**
@@ -9861,14 +9855,15 @@ async function labelIssue() {
 
     // https://docs.github.com/en/graphql/reference/mutations#addlabelstolabelable
 
-    const label_name = 'test';
+    // just using this for now, there is a way to store all a repos labels in a json file but i haven't looked into it
+    const labelName = 'test';
 
-    // fetch the ids of the opened issue and the label from github
+    // fetch the ids of the opened issue
     const { repository } = await octokit.graphql(
       `
-      query fetchLabelAndIssueIds( $owner: String!, $repo: String!, $issue_number: Int!, $label_name: String! )  {
+      query fetchLabelAndIssueIds( $owner: String!, $repo: String!, $issueNumber: Int!, $labelName: String! )  {
         repository(owner: $owner, name: $repo) {
-          label(name: $label_name) {
+          label(name: $labelName) {
             id
           }
           issue(number: $issue_number) {
@@ -9880,15 +9875,19 @@ async function labelIssue() {
       {
         owner,
         repo,
-        issue_number: Number(issue_number),
-        label_name
+        issueNumber: Number(issueNumber),
+        labelName
       }
     );
 
     if (!repository) return;
 
+    // grab the ids
     const labelId = repository?.label?.id;
     const issueId = repository?.issue?.id;
+
+    // return if no ids found
+    if (!labelId || !issueId) return;
 
     await octokit.graphql(
       `
