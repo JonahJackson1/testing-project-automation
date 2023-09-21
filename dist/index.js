@@ -9641,9 +9641,8 @@ const core = __nccwpck_require__(2186);
 
 // files
 const { wait } = __nccwpck_require__(1312);
-const { labelIssue } = __nccwpck_require__(4945);
-const { createBranch } = __nccwpck_require__(4348);
-// const { createPullRequest } = require('./steps/createPullRequest');
+const { labelIssue } = __nccwpck_require__(3184);
+const { createBranch } = __nccwpck_require__(343);
 
 /* TODO: */
 /* 
@@ -9695,7 +9694,7 @@ module.exports = {
 
 /***/ }),
 
-/***/ 4348:
+/***/ 343:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // create a branch
@@ -9811,7 +9810,7 @@ module.exports = { createBranch };
 
 /***/ }),
 
-/***/ 4945:
+/***/ 3184:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 // https://github.com/actions/javascript-action

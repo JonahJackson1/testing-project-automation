@@ -5,9 +5,8 @@ const core = require('@actions/core');
 
 // files
 const { wait } = require('./wait');
-const { labelIssue } = require('./steps/labelIssue');
-const { createBranch } = require('./steps/createBranch');
-// const { createPullRequest } = require('./steps/createPullRequest');
+const { labelIssue } = require('./steps/label-issue');
+const { createBranch } = require('./steps/create-branch');
 
 /* TODO: */
 /* 
