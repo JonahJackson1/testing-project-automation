@@ -2,6 +2,7 @@
 
 // packages
 const core = require('@actions/core');
+const github = require('@actions/github');
 
 // files
 const { wait } = require('./wait');
