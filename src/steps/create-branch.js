@@ -17,7 +17,8 @@ const core = require('@actions/core');
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function createBranch({ branchToCopy, owner, repo, octokit }) {
+// prettier-ignore
+async function createBranch({ issueTitle, branchToCopy, owner, repo, octokit }) {
   try {
     // this fetches the id of the repository, the id of the development branch
     const { repository } = await octokit.graphql(

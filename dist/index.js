@@ -9708,7 +9708,7 @@ async function run() {
 
     // creates a branch from the most recent commit to the development branch
     // prettier-ignore
-    const branchStatus = await createBranch({ branchToCopy, owner, repo, octokit });
+    const branchStatus = await createBranch({ issueTitle, branchToCopy, owner, repo, octokit });
 
     // creates a pull request from the most recent commit and links it to the newly created branch
     const pullStatus = await createPullRequest({ issueTitle, octokit });
@@ -9827,7 +9827,8 @@ const core = __nccwpck_require__(2186);
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function createBranch({ branchToCopy, owner, repo, octokit }) {
+// prettier-ignore
+async function createBranch({ issueTitle, branchToCopy, owner, repo, octokit }) {
   try {
     // this fetches the id of the repository, the id of the development branch
     const { repository } = await octokit.graphql(
