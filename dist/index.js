@@ -9709,6 +9709,8 @@ const github = __nccwpck_require__(5438);
 /* TODO: 
 
 - Attach the branch to the issue ticket
+- do a check on the issue names so they know if a branch was made 
+- error handle probably with a label
 
 */
 
@@ -9772,13 +9774,12 @@ async function createBranch() {
 
     if (!repository) return;
 
-    const repoId = await repository?.id;
-    const lastDevCommitSHA =
-      await repository?.ref?.target?.history?.edges[0]?.node?.oid;
+    const repoId = repository?.id;
+    // prettier-ignore
+    const lastDevCommitSHA = repository?.ref?.target?.history?.edges[0]?.node?.oid;
 
     // The name must be formatted as refs/heads/<branch-name>
-    // it also cant take in weird characters but i dont want to do that atm
-    // 9.21.2023
+    // it also cant take in weird characters but i dont want to do that rn
     const newBranchName = `refs/heads/${issueTitle.split(' ').join('-')}`;
 
     await octokit.graphql(
