@@ -42,14 +42,14 @@ async function createPullRequest() {
     const octokit = new github.getOctokit(token);
 
     const headRef = 'staging';
-    const baseRef = issueTitle.split(' ').join('-');
+    const baseRef = `${issueTitle.split(' ').join('-')}`;
     const repoId = 'R_kgDOKTr8Nw';
 
     await octokit.graphql(
       `
-      mutation createNewPulLRequest ($branchName: String!, $headRef: String!, $baseRef: String!, $repoId: ID!) {
+      mutation createNewPulLRequest ($pullName: String!, $headRef: String!, $baseRef: String!, $repoId: ID!) {
         createPullRequest(
-          input: {baseRefName: $baseRef, headRefName: $headRef, title: $branchName, repositoryId: $repoId}
+          input: {baseRefName: $baseRef, headRefName: $headRef, title: $pullName, repositoryId: $repoId}
         ) {
           pullRequest {
             title 
@@ -61,7 +61,7 @@ async function createPullRequest() {
         repoId,
         headRef,
         baseRef,
-        branchName: `New feature - ${issueTitle}`
+        pullName: `New feature - ${issueTitle}`
       }
     );
 

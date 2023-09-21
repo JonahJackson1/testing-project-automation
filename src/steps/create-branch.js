@@ -40,7 +40,7 @@ async function createBranch() {
     const octokit = new github.getOctokit(token);
 
     // The branch name must be formatted as refs/heads/<branch-name>
-    const getThisBranch = 'refs/heads/development';
+    const getThisBranch = 'refs/heads/master';
 
     // this fetches the id of the repository, the id of the development branch
     const { repository } = await octokit.graphql(
