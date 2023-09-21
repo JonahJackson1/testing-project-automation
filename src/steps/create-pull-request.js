@@ -41,7 +41,7 @@ async function createPullRequest() {
      **/
     const octokit = new github.getOctokit(token);
 
-    const headRef = 'development';
+    const headRef = 'staging';
     const baseRef = issueTitle.split(' ').join('-');
     const repoId = 'R_kgDOKTr8Nw';
 
