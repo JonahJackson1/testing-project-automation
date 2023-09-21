@@ -9866,7 +9866,7 @@ async function labelIssue() {
           label(name: $labelName) {
             id
           }
-          issue(number: $issue_number) {
+          issue(number: $issueNumber) {
             id
           }
         }
