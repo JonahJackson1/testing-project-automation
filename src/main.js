@@ -7,7 +7,7 @@ const core = require('@actions/core');
 const { wait } = require('./wait');
 const { labelIssue } = require('./steps/labelIssue');
 const { createBranch } = require('./steps/createBranch');
-// const { createPR } = require('./steps/createPR');
+// const { createPullRequest } = require('./steps/createPullRequest');
 
 /* TODO: */
 /* 
@@ -39,13 +39,13 @@ async function run() {
     core.setOutput('time', new Date().toTimeString());
 
     // labels the ticket "test"
-    await labelIssue();
+    labelIssue();
 
     // creates a branch from the most recent commit to the development branch
-    await createBranch();
+    createBranch();
 
     // creates a pull request from the most recent commit and links it to the newly created branch
-    // await createPR();
+    // await createPullRequest();
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);

@@ -9643,7 +9643,7 @@ const core = __nccwpck_require__(2186);
 const { wait } = __nccwpck_require__(1312);
 const { labelIssue } = __nccwpck_require__(4945);
 const { createBranch } = __nccwpck_require__(4348);
-// const { createPR } = require('./steps/createPR');
+// const { createPullRequest } = require('./steps/createPullRequest');
 
 /* TODO: */
 /* 
@@ -9675,13 +9675,13 @@ async function run() {
     core.setOutput('time', new Date().toTimeString());
 
     // labels the ticket "test"
-    await labelIssue();
+    labelIssue();
 
     // creates a branch from the most recent commit to the development branch
-    await createBranch();
+    createBranch();
 
     // creates a pull request from the most recent commit and links it to the newly created branch
-    // await createPR();
+    // await createPullRequest();
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
@@ -9798,6 +9798,8 @@ async function createBranch() {
         branch: newBranchName
       }
     );
+
+    console.log('successfully created the new branch');
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
@@ -9903,6 +9905,7 @@ async function labelIssue() {
         labelId
       }
     );
+    console.log('successfully labeled the issue');
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);

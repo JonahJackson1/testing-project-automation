@@ -21,7 +21,7 @@ const github = require('@actions/github');
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function createPR() {
+async function createPullRequest() {
   try {
     /**
      * We need to fetch all the inputs that were provided to our action
@@ -51,10 +51,12 @@ async function createPR() {
       title: `Feature ${issueTitle}`,
       base: 'staging'
     });
+
+    console.log('successfully created the new pull request');
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
   }
 }
 
-module.exports = { createPR };
+module.exports = { createPullRequest };

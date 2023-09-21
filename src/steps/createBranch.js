@@ -98,6 +98,8 @@ async function createBranch() {
         branch: newBranchName
       }
     );
+
+    console.log('successfully created the new branch');
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
