@@ -9877,7 +9877,7 @@ async function createPullRequest() {
         repoId,
         headRef,
         baseRef,
-        branchName: `feature-${issueTitle.split(' ').join('-')}`
+        branchName: `New feature - ${issueTitle}`
       }
     );
 
