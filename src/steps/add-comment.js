@@ -45,9 +45,11 @@ async function addComment({ issueId, octokit, message }) {
     );
 
     console.log('successfully added the comment');
+    return { success: true };
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
+    return { success: false };
   }
 }
 

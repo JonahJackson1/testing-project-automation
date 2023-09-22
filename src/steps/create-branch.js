@@ -44,9 +44,11 @@ async function createBranch({ issueTitle, repoId, latestCommitSHA, octokit }) {
     );
 
     console.log('successfully created the new branch');
+    return { success: true };
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
+    return { success: false };
   }
 }
 

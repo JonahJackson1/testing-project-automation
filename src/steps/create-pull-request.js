@@ -50,9 +50,11 @@ async function createPullRequest({
     );
 
     console.log('successfully created the new pull request');
+    return { success: true };
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
+    return { success: false };
   }
 }
 

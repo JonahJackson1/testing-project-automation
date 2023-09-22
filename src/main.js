@@ -95,9 +95,15 @@ async function run() {
     });
 
     // labels the ticket "test"
-    labelIssue({ issueId, labelId, octokit });
+    const labelStatus = labelIssue({ issueId, labelId, octokit });
 
-    const message = 'test message';
+    let message = 'this is a test </br>';
+
+    if (branchStatus.success)
+      message += 'branch was successfully created </br>';
+    if (pullStatus.success)
+      message += 'pull request was successfully created </br>';
+    if (labelStatus.success) message += 'label was successfully added </br>';
 
     // add "test message" to the new issue
     addComment({ issueId, octokit, message });
