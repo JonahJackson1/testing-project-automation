@@ -29,13 +29,6 @@ async function createPullRequest({
   try {
     const baseRef = `${issueTitle.split(' ').join('-')}`;
 
-    console.log({
-      pushToBranch,
-      issueTitle,
-      repoId,
-      octokit
-    });
-
     await octokit.graphql(
       `
       mutation createNewPulLRequest ($pullName: String!, $headRef: String!, $baseRef: String!, $repoId: ID!) {
