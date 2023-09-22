@@ -9717,6 +9717,8 @@ async function run() {
       octokit
     });
 
+    console.log({ latestCommitSHA, repoId, labelId, issueId });
+
     // creates a branch from the most recent commit to the development branch
     // prettier-ignore
     const branchStatus = await createBranch({ issueTitle, repoId, latestCommitSHA, octokit });
