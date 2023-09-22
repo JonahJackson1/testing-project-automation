@@ -9708,7 +9708,7 @@ async function run() {
     const labelToFetch = 'test';
 
     // fetch the ids for the the below
-    const { latestCommitSHA, repoId, labelId, issueId } = fetchIds({
+    const { latestCommitSHA, repoId, labelId, issueId } = await fetchIds({
       branchToCopy,
       issueNumber,
       labelName: labelToFetch,
