@@ -95,7 +95,7 @@ async function run() {
     });
 
     // labels the ticket "test"
-    const labelStatus = labelIssue({ issueId, labelId, octokit });
+    const labelStatus = await labelIssue({ issueId, labelId, octokit });
 
     let message = 'this is a test </br>';
 
