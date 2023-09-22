@@ -37,9 +37,11 @@ async function labelIssue({ issueId, labelId, octokit }) {
       }
     );
     console.log('successfully labeled the issue');
+    return { success: true };
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
+    return { success: false };
   }
 }
 

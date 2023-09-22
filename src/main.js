@@ -99,11 +99,17 @@ async function run() {
 
     let message = 'this is a test </br>';
 
-    if (branchStatus?.success)
-      message += 'branch was successfully created </br>';
-    if (pullStatus?.success)
-      message += 'pull request was successfully created </br>';
-    if (labelStatus?.success) message += 'label was successfully added </br>';
+    branchStatus?.success
+      ? (message += 'branch was successfully created </br>')
+      : (message += 'branch was not created </br>');
+
+    pullStatus?.success
+      ? (message += 'pull request was successfully created </br>')
+      : (message += 'pull request was not created </br>');
+
+    labelStatus?.success
+      ? (message += 'label was successfully added </br>')
+      : (message += 'label was not added </br>');
 
     // add "test message" to the new issue
     addComment({ issueId, octokit, message });
