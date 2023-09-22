@@ -9733,7 +9733,7 @@ async function run() {
     // labels the ticket "test"
     const labelStatus = await labelIssue({ issueId, labelId, octokit });
 
-    let message = 'this is a test </br>';
+    let message = '';
 
     branchStatus?.success
       ? (message += 'branch was successfully created </br>')
