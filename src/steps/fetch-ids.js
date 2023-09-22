@@ -18,7 +18,80 @@ const core = require('@actions/core');
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function fetchIssueId({ issueNumber, owner, repo, octokit }) {
+async function fetchIds({
+  branchToCopy,
+  issueNumber,
+  labelName,
+  owner,
+  repo,
+  octokit
+}) {
+  try {
+    // fetch the ids of the parsed label
+    const { repository } = await octokit.graphql(
+      `
+      query fetchIssueId($owner: String!, $repo: String!, $labelName: String!, $issueNumber: Int!, $branchName: String!) {
+        repository(owner: $owner, name: $repo) {
+          id
+          label(name: $labelName) {
+            id
+          }
+          issue(number: $issueNumber) {
+            id
+          }
+          ref(qualifiedName: $branchName) {
+            target {
+              ... on Commit {
+                history(first: 1) {
+                  edges {
+                    node {
+                      oid
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+      {
+        owner,
+        repo,
+        labelName,
+        issueNumber: Number(issueNumber),
+        branchName: branchToCopy
+      }
+    );
+
+    if (!repository) return;
+
+    // grab the ids
+    const repoId = repository?.id;
+    const labelId = repository?.label?.id;
+    const issueId = repository?.issue?.id;
+
+    // grab the specified branch's last commit
+    // prettier-ignore
+    const latestCommitSHA = repository?.ref?.target?.history?.edges[0]?.node?.oid;
+
+    // return if no ids found
+    if (!repoId || !labelId || !issueId || !latestCommitSHA) return;
+
+    return { latestCommitSHA, repoId, labelId, issueId };
+  } catch (error) {
+    // Fail the workflow run if an error occurs
+    core.setFailed(error.message);
+  }
+}
+
+module.exports = { fetchIds };
+
+/**
+ * The main function for the action.
+ * @returns {Promise<void>} Resolves when the action is complete.
+ */
+/* async function fetchIssueId({ issueNumber, owner, repo, octokit }) {
   try {
     // fetch the parse issue number
     const { repository } = await octokit.graphql(
@@ -49,13 +122,13 @@ async function fetchIssueId({ issueNumber, owner, repo, octokit }) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
   }
-}
+} */
 
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function fetchLabelId({ labelName, owner, repo, octokit }) {
+/* async function fetchLabelId({ labelName, owner, repo, octokit }) {
   try {
     // fetch the ids of the parsed label
     const { repository } = await octokit.graphql(
@@ -87,6 +160,42 @@ async function fetchLabelId({ labelName, owner, repo, octokit }) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
   }
-}
+} */
 
-module.exports = { fetchIssueId, fetchLabelId };
+/* // this fetches the id of the repository, the id of the development branch
+    const { repository } = await octokit.graphql(
+      `
+        query fetchRefAndId($owner: String!, $repo: String!, $branchName: String!) {
+          repository(owner: $owner, name: $repo) {
+            id
+            ref(qualifiedName: $branchName) {
+              target {
+                id
+                ... on Commit {
+                  history(first: 1) {
+                    edges {
+                      node {
+                        oid
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+    `,
+      {
+        owner,
+        repo,
+        branchName: branchToCopy
+      }
+    );
+
+    if (!repository) return;
+
+    const repoId = repository?.id;
+
+    // prettier-ignore
+    const lastDevCommitSHA = repository?.ref?.target?.history?.edges[0]?.node?.oid;
+*/

@@ -8,7 +8,7 @@ const github = require('@actions/github');
 const { wait } = require('./wait');
 
 // query
-const { fetchIssueId, fetchLabelId } = require('./steps/fetch-ids');
+const { fetchIds } = require('./steps/fetch-ids');
 
 // mutate
 const { createBranch } = require('./steps/create-branch');
@@ -18,6 +18,7 @@ const { addComment } = require('./steps/add-comment');
 
 /* TODO: */
 /* 
+- add a comment onto the issue that tells show the user whether the specific fields were successful or not (branch, pull, etc.)
 - read up on graphQL in order to do the more advanced automations not possible with the REST api
 
   - should be able:
@@ -67,24 +68,28 @@ async function run() {
     const octokit = new github.getOctokit(token);
 
     // this is the branch that is copied for each new issue branch when it is opened
-    // The branch name must be formatted as refs/heads/<branch-name>
     const branchToCopy = 'refs/heads/master';
-
-    // creates a branch from the most recent commit to the development branch
-    // prettier-ignore
-    const branchStatus = await createBranch({ issueTitle, branchToCopy, owner, repo, octokit });
-
-    // creates a pull request from the most recent commit and links it to the newly created branch
-    const pullStatus = await createPullRequest({ issueTitle, octokit });
-
-    const issueId = await fetchIssueId({ issueNumber, owner, repo, octokit });
-
     const labelToFetch = 'test';
 
-    const labelId = await fetchLabelId({
+    // fetch the ids for the the below
+    const { latestCommitSHA, repoId, labelId, issueId } = fetchIds({
+      branchToCopy,
+      issueNumber,
       labelName: labelToFetch,
       owner,
       repo,
+      octokit
+    });
+
+    // creates a branch from the most recent commit to the development branch
+    // prettier-ignore
+    const branchStatus = await createBranch({ issueTitle, repoId, latestCommitSHA, octokit });
+
+    // creates a pull request from the most recent commit and links it to the newly created branch
+    const pushToBranch = 'staging';
+    const pullStatus = await createPullRequest({
+      pushToBranch,
+      issueTitle,
       octokit
     });
 

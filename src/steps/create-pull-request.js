@@ -20,11 +20,14 @@ const core = require('@actions/core');
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function createPullRequest({ issueTitle, octokit }) {
+async function createPullRequest({
+  pushToBranch,
+  issueTitle,
+  repoId,
+  octokit
+}) {
   try {
-    const headRef = 'staging';
     const baseRef = `${issueTitle.split(' ').join('-')}`;
-    const repoId = 'R_kgDOKTr8Nw';
 
     await octokit.graphql(
       `
@@ -40,7 +43,7 @@ async function createPullRequest({ issueTitle, octokit }) {
       `,
       {
         repoId,
-        headRef,
+        headRef: pushToBranch,
         baseRef,
         pullName: `New feature - ${issueTitle}`
       }

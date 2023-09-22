@@ -18,44 +18,9 @@ const core = require('@actions/core');
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 // prettier-ignore
-async function createBranch({ issueTitle, branchToCopy, owner, repo, octokit }) {
+async function createBranch({ issueTitle, repoId, latestCommitSHA, octokit }) {
   try {
-    // this fetches the id of the repository, the id of the development branch
-    const { repository } = await octokit.graphql(
-      `
-        query fetchRefAndId($owner: String!, $repo: String!, $branchName: String!) {
-          repository(owner: $owner, name: $repo) {
-            id
-            ref(qualifiedName: $branchName) {
-              target {
-                id
-                ... on Commit {
-                  history(first: 1) {
-                    edges {
-                      node {
-                        oid
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-    `,
-      {
-        owner,
-        repo,
-        branchName: branchToCopy
-      }
-    );
 
-    if (!repository) return;
-
-    const repoId = repository?.id;
-
-    // prettier-ignore
-    const lastDevCommitSHA = repository?.ref?.target?.history?.edges[0]?.node?.oid;
 
     // The name must be formatted as refs/heads/<branch-name>
     // it also cant take in weird characters but i dont want to do that rn
@@ -73,7 +38,7 @@ async function createBranch({ issueTitle, branchToCopy, owner, repo, octokit }) 
       `,
       {
         repoId,
-        sha: lastDevCommitSHA,
+        sha: latestCommitSHA,
         branch: newBranchName
       }
     );

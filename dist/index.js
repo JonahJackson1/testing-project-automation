@@ -9644,7 +9644,7 @@ const github = __nccwpck_require__(5438);
 const { wait } = __nccwpck_require__(1312);
 
 // query
-const { fetchIssueId, fetchLabelId } = __nccwpck_require__(1653);
+const { fetchIds } = __nccwpck_require__(1653);
 
 // mutate
 const { createBranch } = __nccwpck_require__(343);
@@ -9654,6 +9654,7 @@ const { addComment } = __nccwpck_require__(7065);
 
 /* TODO: */
 /* 
+- add a comment onto the issue that tells show the user whether the specific fields were successful or not (branch, pull, etc.)
 - read up on graphQL in order to do the more advanced automations not possible with the REST api
 
   - should be able:
@@ -9703,24 +9704,28 @@ async function run() {
     const octokit = new github.getOctokit(token);
 
     // this is the branch that is copied for each new issue branch when it is opened
-    // The branch name must be formatted as refs/heads/<branch-name>
     const branchToCopy = 'refs/heads/master';
-
-    // creates a branch from the most recent commit to the development branch
-    // prettier-ignore
-    const branchStatus = await createBranch({ issueTitle, branchToCopy, owner, repo, octokit });
-
-    // creates a pull request from the most recent commit and links it to the newly created branch
-    const pullStatus = await createPullRequest({ issueTitle, octokit });
-
-    const issueId = await fetchIssueId({ issueNumber, owner, repo, octokit });
-
     const labelToFetch = 'test';
 
-    const labelId = await fetchLabelId({
+    // fetch the ids for the the below
+    const { latestCommitSHA, repoId, labelId, issueId } = fetchIds({
+      branchToCopy,
+      issueNumber,
       labelName: labelToFetch,
       owner,
       repo,
+      octokit
+    });
+
+    // creates a branch from the most recent commit to the development branch
+    // prettier-ignore
+    const branchStatus = await createBranch({ issueTitle, repoId, latestCommitSHA, octokit });
+
+    // creates a pull request from the most recent commit and links it to the newly created branch
+    const pushToBranch = 'staging';
+    const pullStatus = await createPullRequest({
+      pushToBranch,
+      issueTitle,
       octokit
     });
 
@@ -9828,44 +9833,9 @@ const core = __nccwpck_require__(2186);
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 // prettier-ignore
-async function createBranch({ issueTitle, branchToCopy, owner, repo, octokit }) {
+async function createBranch({ issueTitle, repoId, latestCommitSHA, octokit }) {
   try {
-    // this fetches the id of the repository, the id of the development branch
-    const { repository } = await octokit.graphql(
-      `
-        query fetchRefAndId($owner: String!, $repo: String!, $branchName: String!) {
-          repository(owner: $owner, name: $repo) {
-            id
-            ref(qualifiedName: $branchName) {
-              target {
-                id
-                ... on Commit {
-                  history(first: 1) {
-                    edges {
-                      node {
-                        oid
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-    `,
-      {
-        owner,
-        repo,
-        branchName: branchToCopy
-      }
-    );
 
-    if (!repository) return;
-
-    const repoId = repository?.id;
-
-    // prettier-ignore
-    const lastDevCommitSHA = repository?.ref?.target?.history?.edges[0]?.node?.oid;
 
     // The name must be formatted as refs/heads/<branch-name>
     // it also cant take in weird characters but i dont want to do that rn
@@ -9883,7 +9853,7 @@ async function createBranch({ issueTitle, branchToCopy, owner, repo, octokit }) 
       `,
       {
         repoId,
-        sha: lastDevCommitSHA,
+        sha: latestCommitSHA,
         branch: newBranchName
       }
     );
@@ -9925,11 +9895,14 @@ const core = __nccwpck_require__(2186);
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function createPullRequest({ issueTitle, octokit }) {
+async function createPullRequest({
+  pushToBranch,
+  issueTitle,
+  repoId,
+  octokit
+}) {
   try {
-    const headRef = 'staging';
     const baseRef = `${issueTitle.split(' ').join('-')}`;
-    const repoId = 'R_kgDOKTr8Nw';
 
     await octokit.graphql(
       `
@@ -9945,7 +9918,7 @@ async function createPullRequest({ issueTitle, octokit }) {
       `,
       {
         repoId,
-        headRef,
+        headRef: pushToBranch,
         baseRef,
         pullName: `New feature - ${issueTitle}`
       }
@@ -9986,7 +9959,80 @@ const core = __nccwpck_require__(2186);
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function fetchIssueId({ issueNumber, owner, repo, octokit }) {
+async function fetchIds({
+  branchToCopy,
+  issueNumber,
+  labelName,
+  owner,
+  repo,
+  octokit
+}) {
+  try {
+    // fetch the ids of the parsed label
+    const { repository } = await octokit.graphql(
+      `
+      query fetchIssueId($owner: String!, $repo: String!, $labelName: String!, $issueNumber: Int!, $branchName: String!) {
+        repository(owner: $owner, name: $repo) {
+          id
+          label(name: $labelName) {
+            id
+          }
+          issue(number: $issueNumber) {
+            id
+          }
+          ref(qualifiedName: $branchName) {
+            target {
+              ... on Commit {
+                history(first: 1) {
+                  edges {
+                    node {
+                      oid
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+      {
+        owner,
+        repo,
+        labelName,
+        issueNumber: Number(issueNumber),
+        branchName: branchToCopy
+      }
+    );
+
+    if (!repository) return;
+
+    // grab the ids
+    const repoId = repository?.id;
+    const labelId = repository?.label?.id;
+    const issueId = repository?.issue?.id;
+
+    // grab the specified branch's last commit
+    // prettier-ignore
+    const latestCommitSHA = repository?.ref?.target?.history?.edges[0]?.node?.oid;
+
+    // return if no ids found
+    if (!repoId || !labelId || !issueId || !latestCommitSHA) return;
+
+    return { latestCommitSHA, repoId, labelId, issueId };
+  } catch (error) {
+    // Fail the workflow run if an error occurs
+    core.setFailed(error.message);
+  }
+}
+
+module.exports = { fetchIds };
+
+/**
+ * The main function for the action.
+ * @returns {Promise<void>} Resolves when the action is complete.
+ */
+/* async function fetchIssueId({ issueNumber, owner, repo, octokit }) {
   try {
     // fetch the parse issue number
     const { repository } = await octokit.graphql(
@@ -10017,13 +10063,13 @@ async function fetchIssueId({ issueNumber, owner, repo, octokit }) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
   }
-}
+} */
 
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function fetchLabelId({ labelName, owner, repo, octokit }) {
+/* async function fetchLabelId({ labelName, owner, repo, octokit }) {
   try {
     // fetch the ids of the parsed label
     const { repository } = await octokit.graphql(
@@ -10055,9 +10101,45 @@ async function fetchLabelId({ labelName, owner, repo, octokit }) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
   }
-}
+} */
 
-module.exports = { fetchIssueId, fetchLabelId };
+/* // this fetches the id of the repository, the id of the development branch
+    const { repository } = await octokit.graphql(
+      `
+        query fetchRefAndId($owner: String!, $repo: String!, $branchName: String!) {
+          repository(owner: $owner, name: $repo) {
+            id
+            ref(qualifiedName: $branchName) {
+              target {
+                id
+                ... on Commit {
+                  history(first: 1) {
+                    edges {
+                      node {
+                        oid
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+    `,
+      {
+        owner,
+        repo,
+        branchName: branchToCopy
+      }
+    );
+
+    if (!repository) return;
+
+    const repoId = repository?.id;
+
+    // prettier-ignore
+    const lastDevCommitSHA = repository?.ref?.target?.history?.edges[0]?.node?.oid;
+*/
 
 
 /***/ }),
