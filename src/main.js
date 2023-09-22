@@ -81,7 +81,7 @@ async function run() {
       octokit
     });
 
-    console.log({ latestCommitSHA, repoId, labelId, issueId });
+    // console.log({ latestCommitSHA, repoId, labelId, issueId });
 
     // creates a branch from the most recent commit to the development branch
     // prettier-ignore
