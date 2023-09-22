@@ -9704,6 +9704,7 @@ async function run() {
     const octokit = new github.getOctokit(token);
 
     // this is the branch that is copied for each new issue branch when it is opened
+    // has to be formatted as refs/heads/<branch-name>
     const branchToCopy = 'refs/heads/master';
     const labelToFetch = 'test';
 
@@ -9722,6 +9723,7 @@ async function run() {
     const branchStatus = await createBranch({ issueTitle, repoId, latestCommitSHA, octokit });
 
     // creates a pull request from the most recent commit and links it to the newly created branch
+    // has to be formatted as <branch-name>
     const pushToBranch = 'staging';
     const pullStatus = await createPullRequest({
       repoId,
