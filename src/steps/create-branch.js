@@ -28,7 +28,7 @@ async function createBranch({ issueTitle, repoId, latestCommitSHA, octokit }) {
 
     await octokit.graphql(
       `
-      mutation createNewBranch ($branch: String!, $sha: GitObjectID!, $repoId: ID!) {
+      mutation CreateNewBranch ($branch: String!, $sha: GitObjectID!, $repoId: ID!) {
         createRef(
           input: {name: $branch, oid: $sha, repositoryId: $repoId}
         ) {

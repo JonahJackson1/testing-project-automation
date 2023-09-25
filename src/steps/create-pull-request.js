@@ -31,7 +31,7 @@ async function createPullRequest({
 
     await octokit.graphql(
       `
-      mutation createNewPulLRequest ($pullName: String!, $headRef: String!, $baseRef: String!, $repoId: ID!) {
+      mutation CreateNewPullRequest ($pullName: String!, $headRef: String!, $baseRef: String!, $repoId: ID!) {
         createPullRequest(
           input: {baseRefName: $baseRef, headRefName: $headRef, title: $pullName, repositoryId: $repoId}
         ) {
