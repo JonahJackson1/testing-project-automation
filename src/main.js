@@ -106,7 +106,7 @@ async function run() {
       : (message += 'branch was not created </br>');
 
     pullStatus?.success
-      ? (message += 'pull request was successfully created </br>')
+      ? (message += `pull request was successfully created </br> ${pullStatus.pullRequestURL} </br>`)
       : (message += 'pull request was not created </br>');
 
     labelStatus?.success

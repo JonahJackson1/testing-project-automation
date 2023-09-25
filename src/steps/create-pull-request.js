@@ -50,10 +50,11 @@ async function createPullRequest({
       }
     );
 
-    console.log(res);
+    const pullRequestURL = res?.createPullRequest?.pullRequest?.permalink;
+    console.log(pullRequestURL);
 
     console.log('successfully created the new pull request');
-    return { success: true };
+    return { success: true, pullRequestURL };
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
