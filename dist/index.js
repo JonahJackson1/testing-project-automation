@@ -9735,6 +9735,12 @@ async function run() {
     // labels the ticket "test"
     const labelStatus = await labelIssue({ issueId, labelId, octokit });
 
+    addComment({
+      nodeId: pullStatus.pullRequestId,
+      message: `Linked to issue #${issueNumber}`,
+      octokit
+    });
+
     let message = '';
 
     branchStatus?.success
@@ -9903,8 +9909,6 @@ module.exports = { createBranch };
 
 const core = __nccwpck_require__(2186);
 
-// const { addComment } = require('./add-comment');
-
 /* TODO:
 
 - convert to graphQL - then the rest is ez
@@ -9952,12 +9956,9 @@ async function createPullRequest({
     const pullRequestURL = res?.createPullRequest?.pullRequest?.permalink;
     const pullRequestNum = res?.createPullRequest?.pullRequest?.number;
     const pullRequestId = res?.createPullRequest?.pullRequest?.id;
-    console.log(pullRequestURL, pullRequestNum, pullRequestId);
-
-    // addComment({nodeId: })
 
     console.log('successfully created the new pull request');
-    return { success: true, pullRequestURL };
+    return { success: true, pullRequestURL, pullRequestId, pullRequestNum };
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);

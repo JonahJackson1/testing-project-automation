@@ -99,6 +99,12 @@ async function run() {
     // labels the ticket "test"
     const labelStatus = await labelIssue({ issueId, labelId, octokit });
 
+    addComment({
+      nodeId: pullStatus.pullRequestId,
+      message: `Linked to issue #${issueNumber}`,
+      octokit
+    });
+
     let message = '';
 
     branchStatus?.success
