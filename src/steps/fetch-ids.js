@@ -33,6 +33,13 @@ async function fetchIds({
       query FetchIssueId($owner: String!, $repo: String!, $labelName: String!, $issueNumber: Int!, $branchName: String!) {
         repository(owner: $owner, name: $repo) {
           id
+          projectsV2 (first: 1) { # Assuming you want the first project; adjust as needed
+            nodes {
+              title
+              number
+              id
+            }
+          }
           label(name: $labelName) {
             id
           }
@@ -70,15 +77,18 @@ async function fetchIds({
     const repoId = repository?.id;
     const labelId = repository?.label?.id;
     const issueId = repository?.issue?.id;
+    const projectId = repository?.projectsV2?.nodes[0].id;
+    console.log(repository?.projectsV2);
 
     // grab the specified branch's last commit
     // prettier-ignore
     const latestCommitSHA = repository?.ref?.target?.history?.edges[0]?.node?.oid;
 
     // return if no ids found
-    if (!repoId || !labelId || !issueId || !latestCommitSHA) return;
+    if (!repoId || !labelId || !issueId || !projectId || !latestCommitSHA)
+      return;
 
-    return { latestCommitSHA, repoId, labelId, issueId };
+    return { latestCommitSHA, repoId, labelId, issueId, projectId };
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);

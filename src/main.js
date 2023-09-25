@@ -73,15 +73,17 @@ async function run() {
     const labelToFetch = 'test';
 
     // fetch the ids for the the below
-    const { latestCommitSHA, repoId, labelId, issueId } = await fetchIds({
-      branchToCopy,
-      issueNumber,
-      labelName: labelToFetch,
-      owner,
-      repo,
-      octokit
-    });
+    const { latestCommitSHA, repoId, labelId, issueId, projectId } =
+      await fetchIds({
+        branchToCopy,
+        issueNumber,
+        labelName: labelToFetch,
+        owner,
+        repo,
+        octokit
+      });
 
+    console.log(projectId);
     // creates a branch from the most recent commit to the development branch
     // prettier-ignore
     const branchStatus = await createBranch({ issueTitle, repoId, latestCommitSHA, assignToIssue: issueId, octokit });
