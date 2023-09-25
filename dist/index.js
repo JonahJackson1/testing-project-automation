@@ -9736,7 +9736,6 @@ async function run() {
     const labelStatus = await labelIssue({ issueId, labelId, octokit });
 
     // there doesn't seem to be a good way of linking issues and pull requests but mentioning them in comments seems to be a good alternative
-
     // this links the pull request to the issue
     addComment({
       nodeId: pullStatus.pullRequestId,
@@ -9750,24 +9749,13 @@ async function run() {
       octokit,
       message: `Linked to PR #${pullStatus.pullRequestNum}`
     });
-
-    // let message = '';
-
-    // branchStatus?.success
-    //   ? (message += 'branch was successfully created </br>')
-    //   : (message += 'branch was not created </br>');
-
-    // pullStatus?.success
-    //   ? (message += `pull request - ${pullStatus.pullRequestURL} was successfully created  </br>`)
-    //   : (message += 'pull request was not created </br>');
-
-    // labelStatus?.success
-    //   ? (message += 'label was successfully added </br>')
-    //   : (message += 'label was not added </br>');
-
-    // // add "test message" to the new issue
-    // addComment({ nodeId: issueId, octokit, message });
   } catch (error) {
+    let message =
+      "Something went wrong in the ticket's automation, please check the workflow logs";
+
+    // add the above message to the issue
+    await addComment({ nodeId: issueId, octokit, message });
+
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
   }
