@@ -8,6 +8,8 @@
 
 const core = require('@actions/core');
 
+const { addComment } = require('./steps/add-comment');
+
 /* TODO:
 
 - convert to graphQL - then the rest is ez
@@ -38,6 +40,8 @@ async function createPullRequest({
           pullRequest {
             title 
             permalink
+            number
+            id
           }
         }
       }
@@ -51,7 +55,11 @@ async function createPullRequest({
     );
 
     const pullRequestURL = res?.createPullRequest?.pullRequest?.permalink;
-    console.log(pullRequestURL);
+    const pullRequestNum = res?.createPullRequest?.pullRequest?.number;
+    const pullRequestId = res?.createPullRequest?.pullRequest?.id;
+    console.log(pullRequestURL, pullRequestNum, pullRequestId);
+
+    // addComment({nodeId: })
 
     console.log('successfully created the new pull request');
     return { success: true, pullRequestURL };

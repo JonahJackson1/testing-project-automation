@@ -114,7 +114,7 @@ async function run() {
       : (message += 'label was not added </br>');
 
     // add "test message" to the new issue
-    addComment({ issueId, octokit, message });
+    addComment({ nodeId: issueId, octokit, message });
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);

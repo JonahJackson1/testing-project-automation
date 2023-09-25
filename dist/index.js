@@ -9750,7 +9750,7 @@ async function run() {
       : (message += 'label was not added </br>');
 
     // add "test message" to the new issue
-    addComment({ issueId, octokit, message });
+    addComment({ nodeId: issueId, octokit, message });
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
@@ -9788,18 +9788,18 @@ const core = __nccwpck_require__(2186);
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function addComment({ issueId, octokit, message }) {
+async function addComment({ nodeId, octokit, message }) {
   try {
     // https://docs.github.com/en/graphql/reference/mutations#addlabelstolabelable
 
     // return if no ids found
-    if (!issueId) return;
+    if (!nodeId) return;
 
     await octokit.graphql(
       `
-      mutation AddCommentToIssue ($issueId: ID!, $message: String!){
+      mutation AddCommentToIssue ($nodeId: ID!, $message: String!){
         addComment(
-          input: {subjectId: $issueId, body: $message}
+          input: {subjectId: $nodeId, body: $message}
         ) {
           subject {
             id
@@ -9808,7 +9808,7 @@ async function addComment({ issueId, octokit, message }) {
       }
       `,
       {
-        issueId,
+        nodeId,
         message
       }
     );
@@ -9903,6 +9903,8 @@ module.exports = { createBranch };
 
 const core = __nccwpck_require__(2186);
 
+const { addComment } = __nccwpck_require__(9639);
+
 /* TODO:
 
 - convert to graphQL - then the rest is ez
@@ -9933,6 +9935,8 @@ async function createPullRequest({
           pullRequest {
             title 
             permalink
+            number
+            id
           }
         }
       }
@@ -9946,7 +9950,11 @@ async function createPullRequest({
     );
 
     const pullRequestURL = res?.createPullRequest?.pullRequest?.permalink;
-    console.log(pullRequestURL);
+    const pullRequestNum = res?.createPullRequest?.pullRequest?.number;
+    const pullRequestId = res?.createPullRequest?.pullRequest?.id;
+    console.log(pullRequestURL, pullRequestNum, pullRequestId);
+
+    // addComment({nodeId: })
 
     console.log('successfully created the new pull request');
     return { success: true, pullRequestURL };
@@ -10245,6 +10253,14 @@ async function wait(milliseconds) {
 }
 
 module.exports = { wait };
+
+
+/***/ }),
+
+/***/ 9639:
+/***/ ((module) => {
+
+module.exports = eval("require")("./steps/add-comment");
 
 
 /***/ }),

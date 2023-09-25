@@ -19,18 +19,18 @@ const core = require('@actions/core');
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function addComment({ issueId, octokit, message }) {
+async function addComment({ nodeId, octokit, message }) {
   try {
     // https://docs.github.com/en/graphql/reference/mutations#addlabelstolabelable
 
     // return if no ids found
-    if (!issueId) return;
+    if (!nodeId) return;
 
     await octokit.graphql(
       `
-      mutation AddCommentToIssue ($issueId: ID!, $message: String!){
+      mutation AddCommentToIssue ($nodeId: ID!, $message: String!){
         addComment(
-          input: {subjectId: $issueId, body: $message}
+          input: {subjectId: $nodeId, body: $message}
         ) {
           subject {
             id
@@ -39,7 +39,7 @@ async function addComment({ issueId, octokit, message }) {
       }
       `,
       {
-        issueId,
+        nodeId,
         message
       }
     );
