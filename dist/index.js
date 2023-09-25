@@ -9720,7 +9720,7 @@ async function run() {
 
     // creates a branch from the most recent commit to the development branch
     // prettier-ignore
-    const branchStatus = await createBranch({ issueTitle, repoId, latestCommitSHA, octokit });
+    const branchStatus = await createBranch({ issueTitle, repoId, latestCommitSHA, assignToIssue: issueId, octokit });
 
     // creates a pull request from the most recent commit and links it to the newly created branch
     // has to be formatted as <branch-name>
@@ -9850,7 +9850,7 @@ const core = __nccwpck_require__(2186);
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 // prettier-ignore
-async function createBranch({ issueTitle, repoId, latestCommitSHA, octokit }) {
+async function createBranch({ issueTitle, repoId, latestCommitSHA, assignToIssue, octokit }) {
   try {
 
 
@@ -9860,9 +9860,9 @@ async function createBranch({ issueTitle, repoId, latestCommitSHA, octokit }) {
 
     await octokit.graphql(
       `
-      mutation createNewBranch ($branch: String!, $sha: GitObjectID!, $repoId: ID!) {
-        createRef(
-          input: {name: $branch, oid: $sha, repositoryId: $repoId}
+      mutation CreateNewBranch ($branch: String!, $sha: GitObjectID!, $assignToIssue: ID!, $repoId: ID!) {
+        createLinkedBranch(
+          input: {name: $branch, oid: $sha, repositoryId: $repoId, issueId: $assignToIssue}
         ) {
           clientMutationId 
         }
@@ -9871,7 +9871,8 @@ async function createBranch({ issueTitle, repoId, latestCommitSHA, octokit }) {
       {
         repoId,
         sha: latestCommitSHA,
-        branch: newBranchName
+        branch: newBranchName,
+        assignToIssue
       }
     );
 
@@ -9925,7 +9926,7 @@ async function createPullRequest({
 
     await octokit.graphql(
       `
-      mutation createNewPulLRequest ($pullName: String!, $headRef: String!, $baseRef: String!, $repoId: ID!) {
+      mutation CreateNewPullRequest ($pullName: String!, $headRef: String!, $baseRef: String!, $repoId: ID!) {
         createPullRequest(
           input: {baseRefName: $baseRef, headRefName: $headRef, title: $pullName, repositoryId: $repoId}
         ) {
@@ -9992,7 +9993,7 @@ async function fetchIds({
     // fetch the ids of the parsed label
     const { repository } = await octokit.graphql(
       `
-      query fetchIssueId($owner: String!, $repo: String!, $labelName: String!, $issueNumber: Int!, $branchName: String!) {
+      query FetchIssueId($owner: String!, $repo: String!, $labelName: String!, $issueNumber: Int!, $branchName: String!) {
         repository(owner: $owner, name: $repo) {
           id
           label(name: $labelName) {

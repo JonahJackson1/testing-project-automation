@@ -84,7 +84,7 @@ async function run() {
 
     // creates a branch from the most recent commit to the development branch
     // prettier-ignore
-    const branchStatus = await createBranch({ issueTitle, repoId, latestCommitSHA, octokit });
+    const branchStatus = await createBranch({ issueTitle, repoId, latestCommitSHA, assignToIssue: issueId, octokit });
 
     // creates a pull request from the most recent commit and links it to the newly created branch
     // has to be formatted as <branch-name>

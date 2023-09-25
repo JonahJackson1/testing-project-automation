@@ -18,7 +18,7 @@ const core = require('@actions/core');
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 // prettier-ignore
-async function createBranch({ issueTitle, repoId, latestCommitSHA, octokit }) {
+async function createBranch({ issueTitle, repoId, latestCommitSHA, assignToIssue, octokit }) {
   try {
 
 
@@ -28,9 +28,9 @@ async function createBranch({ issueTitle, repoId, latestCommitSHA, octokit }) {
 
     await octokit.graphql(
       `
-      mutation CreateNewBranch ($branch: String!, $sha: GitObjectID!, $repoId: ID!) {
-        createRef(
-          input: {name: $branch, oid: $sha, repositoryId: $repoId}
+      mutation CreateNewBranch ($branch: String!, $sha: GitObjectID!, $assignToIssue: ID!, $repoId: ID!) {
+        createLinkedBranch(
+          input: {name: $branch, oid: $sha, repositoryId: $repoId, issueId: $assignToIssue}
         ) {
           clientMutationId 
         }
@@ -39,7 +39,8 @@ async function createBranch({ issueTitle, repoId, latestCommitSHA, octokit }) {
       {
         repoId,
         sha: latestCommitSHA,
-        branch: newBranchName
+        branch: newBranchName,
+        assignToIssue
       }
     );
 
