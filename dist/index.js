@@ -9750,12 +9750,6 @@ async function run() {
       message: `Linked to PR #${pullStatus.pullRequestNum}`
     });
   } catch (error) {
-    let message =
-      "Something went wrong in the ticket's automation, please check the workflow logs";
-
-    // add the above message to the issue
-    await addComment({ nodeId: issueId, octokit, message });
-
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
   }
