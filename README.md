@@ -1,3 +1,22 @@
+```mermaid
+  flowchart TD
+    A[User opens an issue from a project]
+    B[Create the linked branch]
+    C[Create the pull request]
+    D1[Add a comment to the pull request with the issue #]
+    D2[Add a comment to the issue with the pull request #]
+    E[Label issue as ready]
+    F[Move to 'ready for development' column in the project]
+
+    A --> B
+    B --> C
+    C --> D1
+    C --> D2
+    D1 --> E
+    D2 --> E
+    E --> F
+```
+
 # Create a JavaScript Action
 
 [![GitHub Super-Linter](https://github.com/actions/javascript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
