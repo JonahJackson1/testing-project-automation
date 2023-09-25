@@ -9903,7 +9903,7 @@ module.exports = { createBranch };
 
 const core = __nccwpck_require__(2186);
 
-const { addComment } = __nccwpck_require__(9639);
+// const { addComment } = require('./add-comment');
 
 /* TODO:
 
@@ -10253,14 +10253,6 @@ async function wait(milliseconds) {
 }
 
 module.exports = { wait };
-
-
-/***/ }),
-
-/***/ 9639:
-/***/ ((module) => {
-
-module.exports = eval("require")("./steps/add-comment");
 
 
 /***/ }),

@@ -8,7 +8,7 @@
 
 const core = require('@actions/core');
 
-const { addComment } = require('./steps/add-comment');
+// const { addComment } = require('./add-comment');
 
 /* TODO:
 
