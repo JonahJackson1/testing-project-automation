@@ -29,7 +29,7 @@ async function createPullRequest({
   try {
     const baseRef = `${issueTitle.split(' ').join('-')}`;
 
-    await octokit.graphql(
+    const res = await octokit.graphql(
       `
       mutation CreateNewPullRequest ($pullName: String!, $headRef: String!, $baseRef: String!, $repoId: ID!) {
         createPullRequest(
@@ -37,6 +37,7 @@ async function createPullRequest({
         ) {
           pullRequest {
             title 
+            permalink
           }
         }
       }
@@ -48,6 +49,8 @@ async function createPullRequest({
         pullName: `New feature - ${issueTitle}`
       }
     );
+
+    console.log(res);
 
     console.log('successfully created the new pull request');
     return { success: true };
