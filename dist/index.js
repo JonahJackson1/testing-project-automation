@@ -10287,7 +10287,7 @@ async function doProjectStuff({
       }
       `,
       {
-        field: fieldId || 'PVTF_lAHOBk645c4AVbXfzgNsVfk',
+        field: fieldId || 'PVTSSF_lAHOBk645c4AVbXfzgNsVfc',
         item: cardId || 'PVTI_lAHOBk645c4AVbXfzgJgFoE',
         project: projectId || 'PVT_kwHOBk645c4AVbXf',
         payload: payloadObj || { iterationId: '4b2fdd91' }
