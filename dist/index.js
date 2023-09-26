@@ -10274,7 +10274,7 @@ async function doProjectStuff({
   octokit
 }) {
   try {
-    await octokit.graphql(
+    const res = await octokit.graphql(
       `
       mutation UpdateStatusOfProjCard($item: ID!, $project: ID!, $field: ID!, $payload: ProjectV2FieldValue!) {
         updateProjectV2ItemFieldValue(
@@ -10293,10 +10293,13 @@ async function doProjectStuff({
         payload: payloadObj || { iterationId: '4b2fdd91' }
       }
     );
+    console.log(res);
 
     console.log('successfully did the project stuff');
     return { success: true };
   } catch (error) {
+    console.log('failed to do project stuff');
+
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
     return { success: false };
