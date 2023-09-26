@@ -9735,7 +9735,7 @@ async function run() {
     });
 
     const test = await doProjectStuff({
-      // issueId,
+      cardId: issueId,
       projectId,
       // pullRequestId: pullStatus.pullRequestId,
       octokit
