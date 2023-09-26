@@ -10299,7 +10299,7 @@ async function doProjectStuff({
     return { success: true };
   } catch (error) {
     console.log('failed to do project stuff');
-
+    console.log(error);
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
     return { success: false };
