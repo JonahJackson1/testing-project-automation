@@ -17,7 +17,7 @@ const core = require('@actions/core');
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 // prettier-ignore
-async function createBranch({ issueTitle, repoId, latestCommitSHA, assignToIssue, octokit }) {
+async function createLinkedBranch({ issueTitle, repoId, latestCommitSHA, assignToIssue, octokit }) {
   try {
 
 
@@ -52,4 +52,4 @@ async function createBranch({ issueTitle, repoId, latestCommitSHA, assignToIssue
   }
 }
 
-module.exports = { createBranch };
+module.exports = { createLinkedBranch };

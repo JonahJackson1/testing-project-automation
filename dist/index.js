@@ -9647,7 +9647,7 @@ const { wait } = __nccwpck_require__(1312);
 const { fetchIds } = __nccwpck_require__(1653);
 
 // mutate
-const { createBranch } = __nccwpck_require__(343);
+const { createLinkedBranch } = __nccwpck_require__(343);
 const { createPullRequest } = __nccwpck_require__(6917);
 const { labelIssue } = __nccwpck_require__(3184);
 const { addComment } = __nccwpck_require__(7065);
@@ -9722,7 +9722,7 @@ async function run() {
     console.log(projectId);
     // creates a branch from the most recent commit to the development branch
     // prettier-ignore
-    const branchStatus = await createBranch({ issueTitle, repoId, latestCommitSHA, assignToIssue: issueId, octokit });
+    const branchStatus = await createLinkedBranch({ issueTitle, repoId, latestCommitSHA, assignToIssue: issueId, octokit });
 
     // creates a pull request from the most recent commit and links it to the newly created branch
     // has to be formatted as <branch-name>
@@ -9734,9 +9734,6 @@ async function run() {
       octokit
     });
 
-    // labels the ticket "test"
-    const labelStatus = await labelIssue({ issueId, labelId, octokit });
-
     // const test = await doProjectStuff({
     //   issueId,
     //   projectId,
@@ -9745,19 +9742,22 @@ async function run() {
     // });
 
     // there doesn't seem to be a good way of linking issues and pull requests but mentioning them in comments seems to be a good alternative
-    // this links the pull request to the issue
-    addComment({
+    // this "links" the pull request to the issue with a comment
+    await addComment({
       nodeId: pullStatus.pullRequestId,
       message: `Linked to issue #${issueNumber}`,
       octokit
     });
 
-    // this links the issue to the pull request
-    addComment({
+    // this "links" the issue to the pull request with a comment
+    await addComment({
       nodeId: issueId,
       octokit,
       message: `Linked to PR #${pullStatus.pullRequestNum}`
     });
+
+    // labels the ticket "test"
+    const labelStatus = await labelIssue({ issueId, labelId, octokit });
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
@@ -9854,7 +9854,7 @@ const core = __nccwpck_require__(2186);
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 // prettier-ignore
-async function createBranch({ issueTitle, repoId, latestCommitSHA, assignToIssue, octokit }) {
+async function createLinkedBranch({ issueTitle, repoId, latestCommitSHA, assignToIssue, octokit }) {
   try {
 
 
@@ -9889,7 +9889,7 @@ async function createBranch({ issueTitle, repoId, latestCommitSHA, assignToIssue
   }
 }
 
-module.exports = { createBranch };
+module.exports = { createLinkedBranch };
 
 
 /***/ }),
