@@ -37,7 +37,7 @@ async function fetchIds({
               title
               number
               id
-              items(last: 1) {
+              items(last: 1) { # need to update this to find the specific card/issue not the latest one
                 nodes {
                   id
                 }

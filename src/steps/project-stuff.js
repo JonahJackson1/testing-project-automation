@@ -14,7 +14,7 @@ const core = require('@actions/core');
 - [x] get the field id of the status column
 - [x] find the id of status "ready"
 - [ ] link the pull request to the project card / issue
-- [ ] update the status to "ready"
+- [x] update the status to "ready"
 
 */
 
