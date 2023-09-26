@@ -73,7 +73,7 @@ async function run() {
     const labelToFetch = 'test';
 
     // fetch the ids for the the below
-    const { latestCommitSHA, repoId, labelId, issueId, projectId } =
+    const { latestCommitSHA, repoId, labelId, issueId, cardId, projectId } =
       await fetchIds({
         branchToCopy,
         issueNumber,
@@ -99,7 +99,7 @@ async function run() {
     });
 
     const test = await doProjectStuff({
-      // cardId: issueId,
+      cardId,
       projectId,
       // pullRequestId: pullStatus.pullRequestId,
       octokit

@@ -9709,7 +9709,7 @@ async function run() {
     const labelToFetch = 'test';
 
     // fetch the ids for the the below
-    const { latestCommitSHA, repoId, labelId, issueId, projectId } =
+    const { latestCommitSHA, repoId, labelId, issueId, cardId, projectId } =
       await fetchIds({
         branchToCopy,
         issueNumber,
@@ -9735,7 +9735,7 @@ async function run() {
     });
 
     const test = await doProjectStuff({
-      // cardId: issueId,
+      cardId,
       projectId,
       // pullRequestId: pullStatus.pullRequestId,
       octokit
@@ -10057,7 +10057,6 @@ async function fetchIds({
     const issueId = repository?.issue?.id;
     const projectId = repository?.projectsV2?.nodes[0].id;
     const cardId = repository?.projectsV2?.nodes[0].items?.nodes[0].id;
-    console.log(repository?.projectsV2?.nodes[0].items);
 
     // grab the specified branch's last commit
     // prettier-ignore
