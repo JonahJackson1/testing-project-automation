@@ -9735,7 +9735,7 @@ async function run() {
     });
 
     const test = await doProjectStuff({
-      cardId: issueId,
+      // cardId: issueId,
       projectId,
       // pullRequestId: pullStatus.pullRequestId,
       octokit
@@ -10288,7 +10288,7 @@ async function doProjectStuff({
       `,
       {
         field: fieldId || 'PVTF_lAHOBk645c4AVbXfzgNsVfk',
-        item: cardId || 'I_kwDOKTr8N85xsHeU',
+        item: cardId || 'PVTI_lAHOBk645c4AVbXfzgJgFoE',
         project: projectId || 'PVT_kwHOBk645c4AVbXf',
         payload: payloadObj || { iterationId: '4b2fdd91' }
       }
