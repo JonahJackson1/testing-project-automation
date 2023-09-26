@@ -15,16 +15,16 @@ const { createBranch } = require('./steps/create-branch');
 const { createPullRequest } = require('./steps/create-pull-request');
 const { labelIssue } = require('./steps/label-issue');
 const { addComment } = require('./steps/add-comment');
+// const { doProjectStuff } = require('./steps/project-stuff');
 
 /* TODO: */
 /* 
-- add a comment onto the issue that tells show the user whether the specific fields were successful or not (branch, pull, etc.)
-- read up on graphQL in order to do the more advanced automations not possible with the REST api
 
-  - should be able:
-    - to move items/issues in a project
-    - assign a pull request to an issue ticket
-    - assign an issue ticket to a pull request / repo
+- [x] add a comment onto the issue that tells show the user whether the specific fields were successful or not (branch, pull, etc.)
+- [x] assign an issue ticket to a branch (used comments, could not find a way to do it the same way a user can in github)
+- ?[x] assign an issue ticket to a pull request
+- [ ] to move items/issues in a project
+- [ ] assign a pull request to an issue ticket
     - 
 */
 /**
@@ -100,6 +100,13 @@ async function run() {
 
     // labels the ticket "test"
     const labelStatus = await labelIssue({ issueId, labelId, octokit });
+
+    // const test = await doProjectStuff({
+    //   issueId,
+    //   projectId,
+    //   pullRequestId: pullStatus.pullRequestId,
+    //   octokit
+    // });
 
     // there doesn't seem to be a good way of linking issues and pull requests but mentioning them in comments seems to be a good alternative
     // this links the pull request to the issue

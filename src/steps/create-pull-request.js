@@ -10,9 +10,7 @@ const core = require('@actions/core');
 
 /* TODO:
 
-- convert to graphQL - then the rest is ez
-- figure out a way to immediately open a pull request w/o any changes being made (staging branch?)
-- figure out a way to link the pull request and original issue ticket to one another
+- figure out a way to actually link the pull request and original issue ticket to one another
 
 */
 

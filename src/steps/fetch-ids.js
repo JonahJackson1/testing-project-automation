@@ -8,7 +8,6 @@
 /** TODO: 
 
   - put in some error handling
-  - convert the requires to imports
 
 */
 
@@ -78,7 +77,6 @@ async function fetchIds({
     const labelId = repository?.label?.id;
     const issueId = repository?.issue?.id;
     const projectId = repository?.projectsV2?.nodes[0].id;
-    console.log(repository?.projectsV2);
 
     // grab the specified branch's last commit
     // prettier-ignore

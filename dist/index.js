@@ -9651,16 +9651,16 @@ const { createBranch } = __nccwpck_require__(343);
 const { createPullRequest } = __nccwpck_require__(6917);
 const { labelIssue } = __nccwpck_require__(3184);
 const { addComment } = __nccwpck_require__(7065);
+// const { doProjectStuff } = require('./steps/project-stuff');
 
 /* TODO: */
 /* 
-- add a comment onto the issue that tells show the user whether the specific fields were successful or not (branch, pull, etc.)
-- read up on graphQL in order to do the more advanced automations not possible with the REST api
 
-  - should be able:
-    - to move items/issues in a project
-    - assign a pull request to an issue ticket
-    - assign an issue ticket to a pull request / repo
+- [x] add a comment onto the issue that tells show the user whether the specific fields were successful or not (branch, pull, etc.)
+- [x] assign an issue ticket to a branch (used comments, could not find a way to do it the same way a user can in github)
+- ?[x] assign an issue ticket to a pull request
+- [ ] to move items/issues in a project
+- [ ] assign a pull request to an issue ticket
     - 
 */
 /**
@@ -9737,6 +9737,13 @@ async function run() {
     // labels the ticket "test"
     const labelStatus = await labelIssue({ issueId, labelId, octokit });
 
+    // const test = await doProjectStuff({
+    //   issueId,
+    //   projectId,
+    //   pullRequestId: pullStatus.pullRequestId,
+    //   octokit
+    // });
+
     // there doesn't seem to be a good way of linking issues and pull requests but mentioning them in comments seems to be a good alternative
     // this links the pull request to the issue
     addComment({
@@ -9777,8 +9784,6 @@ module.exports = {
 /** TODO: 
 
   - put in some error handling
-  - convert the requires to imports
-  - create a comment the tells the user whether or not everything was successful
 
 */
 
@@ -9790,14 +9795,14 @@ const core = __nccwpck_require__(2186);
  */
 async function addComment({ nodeId, octokit, message }) {
   try {
-    // https://docs.github.com/en/graphql/reference/mutations#addlabelstolabelable
+    // https://docs.github.com/en/graphql/reference/mutations#addcomment
 
     // return if no ids found
     if (!nodeId) return;
 
     await octokit.graphql(
       `
-      mutation AddCommentToIssue ($nodeId: ID!, $message: String!){
+      mutation AddCommentToNode ($nodeId: ID!, $message: String!){
         addComment(
           input: {subjectId: $nodeId, body: $message}
         ) {
@@ -9839,7 +9844,6 @@ const core = __nccwpck_require__(2186);
 
 /* TODO: 
 
-- Attach the branch to the issue ticket
 - do a check on the issue names so they know if a branch was made 
 - error handle probably with a label
 
@@ -9905,9 +9909,7 @@ const core = __nccwpck_require__(2186);
 
 /* TODO:
 
-- convert to graphQL - then the rest is ez
-- figure out a way to immediately open a pull request w/o any changes being made (staging branch?)
-- figure out a way to link the pull request and original issue ticket to one another
+- figure out a way to actually link the pull request and original issue ticket to one another
 
 */
 
@@ -9978,7 +9980,6 @@ module.exports = { createPullRequest };
 /** TODO: 
 
   - put in some error handling
-  - convert the requires to imports
 
 */
 
@@ -10048,7 +10049,6 @@ async function fetchIds({
     const labelId = repository?.label?.id;
     const issueId = repository?.issue?.id;
     const projectId = repository?.projectsV2?.nodes[0].id;
-    console.log(repository?.projectsV2);
 
     // grab the specified branch's last commit
     // prettier-ignore
@@ -10196,7 +10196,6 @@ module.exports = { fetchIds };
 /** TODO: 
 
   - put in some error handling
-  - convert the requires to imports
 
 */
 

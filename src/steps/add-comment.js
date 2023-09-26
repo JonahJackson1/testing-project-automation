@@ -8,8 +8,6 @@
 /** TODO: 
 
   - put in some error handling
-  - convert the requires to imports
-  - create a comment the tells the user whether or not everything was successful
 
 */
 
@@ -21,14 +19,14 @@ const core = require('@actions/core');
  */
 async function addComment({ nodeId, octokit, message }) {
   try {
-    // https://docs.github.com/en/graphql/reference/mutations#addlabelstolabelable
+    // https://docs.github.com/en/graphql/reference/mutations#addcomment
 
     // return if no ids found
     if (!nodeId) return;
 
     await octokit.graphql(
       `
-      mutation AddCommentToIssue ($nodeId: ID!, $message: String!){
+      mutation AddCommentToNode ($nodeId: ID!, $message: String!){
         addComment(
           input: {subjectId: $nodeId, body: $message}
         ) {

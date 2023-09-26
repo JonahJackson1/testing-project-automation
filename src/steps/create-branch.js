@@ -7,7 +7,6 @@ const core = require('@actions/core');
 
 /* TODO: 
 
-- Attach the branch to the issue ticket
 - do a check on the issue names so they know if a branch was made 
 - error handle probably with a label
 
