@@ -10290,7 +10290,7 @@ async function doProjectStuff({
         field: fieldId || 'PVTSSF_lAHOBk645c4AVbXfzgNsVfc',
         item: cardId || 'PVTI_lAHOBk645c4AVbXfzgJgFoE',
         project: projectId || 'PVT_kwHOBk645c4AVbXf',
-        payload: payloadObj || { iterationId: '4b2fdd91' }
+        payload: payloadObj || { singleSelectOptionId: '4b2fdd91' }
       }
     );
     console.log(res);
