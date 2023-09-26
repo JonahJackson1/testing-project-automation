@@ -22,28 +22,31 @@ const core = require('@actions/core');
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
-async function doProjectStuff({ issueId, projectId, pullRequestId, octokit }) {
+async function doProjectStuff({
+  cardId,
+  projectId,
+  fieldId,
+  payloadObj,
+  octokit
+}) {
   try {
     await octokit.graphql(
       `
-      mutation CreateNewPullRequest ($pullName: String!, $headRef: String!, $baseRef: String!, $repoId: ID!) {
-        createPullRequest(
-          input: {baseRefName: $baseRef, headRefName: $headRef, title: $pullName, repositoryId: $repoId}
+      mutation UpdateStatusOfProjCard($item: ID!, $project: ID!, $field: ID!, $payload: ProjectV2FieldValue!) {
+        updateProjectV2ItemFieldValue(
+          input: {projectId: $project, itemId: $item, fieldId: $field, value: $payload}
         ) {
-          pullRequest {
-            title 
-            permalink
-            number
+          projectV2Item {
             id
           }
         }
       }
       `,
       {
-        issueId,
-        projectId,
-        pullRequestId,
-        octokit
+        field: fieldId || 'PVTF_lAHOBk645c4AVbXfzgNsVfk',
+        item: cardId || 'I_kwDOKTr8N85xsHeU',
+        project: projectId || 'PVT_kwHOBk645c4AVbXf',
+        payload: payloadObj || { iterationId: '4b2fdd91' }
       }
     );
 

@@ -15,7 +15,7 @@ const { createLinkedBranch } = require('./steps/create-branch');
 const { createPullRequest } = require('./steps/create-pull-request');
 const { labelIssue } = require('./steps/label-issue');
 const { addComment } = require('./steps/add-comment');
-// const { doProjectStuff } = require('./steps/project-stuff');
+const { doProjectStuff } = require('./steps/project-stuff');
 
 /* TODO: */
 /* 
@@ -98,12 +98,14 @@ async function run() {
       octokit
     });
 
-    // const test = await doProjectStuff({
-    //   issueId,
-    //   projectId,
-    //   pullRequestId: pullStatus.pullRequestId,
-    //   octokit
-    // });
+    const test = await doProjectStuff({
+      // issueId,
+      projectId,
+      // pullRequestId: pullStatus.pullRequestId,
+      octokit
+    });
+
+    console.log(test);
 
     // there doesn't seem to be a good way of linking issues and pull requests but mentioning them in comments seems to be a good alternative
     // this "links" the pull request to the issue with a comment
