@@ -1,5 +1,3 @@
----
-
 ## 1. **Idea Drafting**:
 
 - **What**:
@@ -139,5 +137,3 @@
     track changes over time.
   - **Documentation**: Releases in GitHub allow for release notes, providing
     users with information about changes, fixes, and new features.
-
----
