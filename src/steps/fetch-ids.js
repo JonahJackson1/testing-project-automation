@@ -6,9 +6,7 @@
 // https://docs.github.com/en/graphql/reference/mutations#createissue
 
 /** TODO: 
-
   - put in some error handling
-
 */
 
 const core = require('@actions/core');

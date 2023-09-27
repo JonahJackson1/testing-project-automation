@@ -1,6 +1,6 @@
 ```mermaid
 ---
-title: Basic issue workflow
+title: Basic issue flow
 ---
 flowchart TD
   A[User opens an issue from a project]
@@ -83,6 +83,8 @@ gitGraph
 - [ ] check out milestones
 - [x] ? create a workflow chart for a "draft issue" when it is converted to an issue
 - [ ] Mark a branch as stale after after 30 commits behind / needs rebase
+- [ ] Create a flowchart for a branch being created, what happens on commits, when it is ready to merge, etc.
+- [ ] Create a flowchart for a project item from draft to completion
 - [ ] 
 
 
@@ -90,16 +92,16 @@ gitGraph
 
 ## GraphQL
 
-<!-- Main pages -->
+### Main pages 
 - https://docs.github.com/graphql
 - https://docs.github.com/en/graphql/overview/explorer
 - https://docs.github.com/en/graphql/reference
 
-<!-- Random pages -->
+### Random pages 
 - https://medium.com/swlh/introduction-to-graphql-with-github-api-64ee8bb11630
 - https://docs.github.com/en/graphql/guides/forming-calls-with-graphql#working-with-variables
 
-<!-- mutations -->
+### mutations 
 - https://docs.github.com/en/graphql/reference/mutations#createissue
 - https://docs.github.com/en/graphql/reference/mutations#updateissue
 - https://docs.github.com/en/graphql/reference/mutations#linkprojectv2torepository
@@ -107,12 +109,24 @@ gitGraph
 - https://docs.github.com/en/graphql/reference/mutations#updateprojectv2
 - https://docs.github.com/en/graphql/reference/mutations#addpullrequestreview
 
-<!-- objects -->
+### objects 
 - https://docs.github.com/en/graphql/reference/objects#issue
 - https://docs.github.com/en/graphql/reference/objects#projectv2
 - https://docs.github.com/en/graphql/reference/objects#projectv2item
 - https://docs.github.com/en/graphql/reference/objects#pullrequest
 
-<!-- interfaces -->
+### interfaces 
 - https://docs.github.com/en/graphql/reference/interfaces#repositorynode
 
+
+## Learning github and flows
+
+### github flow branching 
+https://nvie.com/posts/a-successful-git-branching-model/
+
+### gitflow 
+https://docs.github.com/en/get-started/quickstart/github-flow
+
+### learning games 
+https://learngitbranching.js.org/
+https://ohmygit.org/
