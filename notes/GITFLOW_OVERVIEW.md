@@ -78,8 +78,10 @@ graph TD
 
 - **What**:
   - An automated label "ready to code" is added to the issue. Developers then
-    begin coding, periodically reviewing and refactoring the codebase. Code is
-    documented and commented, including inline comments and README updates.
+    begin coding, periodically reviewing and refactoring the codebase. Regular
+    commits are made, ideally every 5-10 minutes or after small logical changes.
+    Code is documented and commented, including inline comments and README
+    updates.
 - **Why**:
   - **Status Indication**: Provides a visual status update.
   - **Automation**: Streamlines the process.
@@ -89,6 +91,54 @@ graph TD
   - **Maintainability**: Facilitates future changes and ensures easy future
     updates.
   - **Code Quality**: Enhances code efficiency.
+
+---
+
+### **Branch Monitoring & Labeling**:
+
+- **What**:
+  - An automated process, such as a GitHub Action or bot, periodically checks
+    the state of all feature branches. If a branch is found to be 30 commits (or
+    any other defined threshold) behind its target branch (e.g., main), it's
+    automatically labeled as "Stale" or "Needs Rebase".
+- **Why**:
+  - **Automation**: Streamlines the process of branch management.
+  - **Up-to-date Codebase**: Ensures branches are kept current and reduces merge
+    conflicts.
+  - **Developer Notification**: Keeps developers informed about the state of
+    their branches, prompting them to take necessary actions.
+
+---
+
+### **Pull Request Updates & Changelog Generation**:
+
+- **What**:
+  - Periodically, an automated process compiles all the commits into a summary
+    message and comments on the PR with this summary. Tools or scripts, such as
+    standard-version or auto-changelog, automatically update the changelog based
+    on commit messages or PR titles. Once the feature or fix is ready for
+    review, the draft status of the PR is removed.
+- **Why**:
+  - **Automated Summaries**: Provides a concise overview of changes in the PR
+    for reviewers.
+  - **Changelog Maintenance**: Ensures that the changelog is consistently
+    updated, providing a clear history of changes.
+  - **Clear Communication**: Removing the draft status clearly signals to the
+    team that the PR is ready for review.
+
+---
+
+### **Merge Conflict Resolution**:
+
+- **What**:
+  - If conflicts arise between the PR and the main branch, they are addressed by
+    the developer. This typically entails rebasing the feature branch against
+    the main branch and manually resolving any conflicts.
+- **Why**:
+  - **Code Integrity**: Ensures that the merged code is consistent and free of
+    conflicts.
+  - **Maintainability**: By addressing conflicts promptly, the codebase remains
+    clean and easier to manage.
 
 ---
 

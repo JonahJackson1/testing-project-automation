@@ -1,179 +1,102 @@
-### **Idea Drafting**:
+**Idea Generation & Validation**:
 
-- **Automation**:
-  - Use **GitHub Projects** to manage and visualize the idea drafting process.
-  - Implement **GitHub Actions** to automatically notify team members when a new
-    idea is added to the project board.
-
----
-
-### **Idea Validation**:
-
-- **Automation**:
-  - Use **issue templates** to standardize the information required for idea
-    validation.
-  - Implement **GitHub Actions** to automatically label new ideas as "Awaiting
-    Validation".
+- **Automation**: Use a bot to automatically move ideas from a "suggested"
+  column to a "validated" column on a project board after a certain number of
+  team upvotes or after a set period of time.
+- **Feedback Collection**: Integrate with tools like Typeform or Google Forms to
+  collect user feedback and automatically create a summary in the project board.
 
 ---
 
-### **Issue Creation**:
+**Issue Creation**:
 
-- **Automation**:
-  - Use **issue templates** to ensure all necessary details are provided.
-  - Automatically assign team members to new issues based on predefined criteria
-    using **GitHub Actions**.
-
----
-
-### **Dependency Check**:
-
-- **Automation**:
-  - Use **Dependabot** to automatically check for outdated dependencies and
-    create PRs for updates.
+- **Automation**: Use GitHub Actions to automatically label new issues based on
+  keywords in the title or description. For instance, label as "enhancement" or
+  "bug fix".
+- **Template Utilization**: Implement issue templates to ensure all necessary
+  details are provided when creating an issue.
 
 ---
 
-### **Branch Creation & Feature Branching**:
+**Dependency Check**:
 
-- **Automation**:
-  - Use **GitHub Actions** to enforce naming conventions for branches linked to
-    issues.
-  - Automatically label PRs based on the branch name or linked issue.
+- **Automation**: Use Dependabot or a similar tool to automatically check for
+  outdated dependencies and open PRs to update them.
 
 ---
 
-### **Pull Request Initiation**:
+**Feature Branch Creation & Pull Request Initiation**:
 
-- **Automation**:
-  - Use **GitHub Actions** to automatically run tests upon PR creation or
-    updates.
-  - Automatically request reviews from specific team members based on the type
-    of change or affected code areas.
-
----
-
-### **Automated Labeling - Ready to Code**:
-
-- **Automation**:
-  - Use **GitHub Actions** to automatically add the "ready to code" label once
-    an issue has passed the validation phase.
+- **Automation**: Use GitHub Actions to automatically run tests when a PR is
+  opened or updated and provide immediate feedback.
+- **Branch Naming Convention**: Enforce a branch naming convention using a bot
+  to ensure consistency.
 
 ---
 
-### **Documentation & Commenting**:
+**Automated Labeling & Feature Development**:
 
-- **Automation**:
-  - Use **GitHub Actions** to check for documentation updates in PRs and notify
-    if missing.
-
----
-
-### **Regular Refactoring**:
-
-- **Automation**:
-  - Use tools like **CodeClimate** integrated with GitHub to identify areas in
-    the codebase that may need refactoring.
+- **Automation**: Use a bot to automatically label PRs based on the size of the
+  changes (e.g., "small change", "large change").
+- **Commit Monitoring**: Use GitHub Actions to remind developers to commit after
+  a certain period of inactivity on a PR.
 
 ---
 
-### **Developer Tagging for Review**:
+**Branch Monitoring & Labeling**:
 
-- **Automation**:
-  - Use **GitHub Actions** to send notifications to reviewers once the "ready
-    for review" tag is added.
-
----
-
-### **Code Review**:
-
-- **Automation**:
-  - Use **GitHub's auto-merge feature** to automatically merge PRs once they
-    receive the required number of approvals and pass all checks.
+- **Automation**: Use GitHub Actions or a similar tool to periodically check the
+  state of feature branches and label them accordingly.
 
 ---
 
-### **Merging & Continuous Integration**:
+**Pull Request Updates & Changelog Generation**:
 
-- **Automation**:
-  - Use **GitHub Actions** or other CI/CD tools to automatically build and test
-    the main branch after a merge.
-
----
-
-### **Staging Deployment**:
-
-- **Automation**:
-  - Automate deployment to the staging environment using **GitHub Actions** once
-    changes are merged to the main branch.
+- **Automation**: Automatically generate a changelog entry for each PR based on
+  its title and associated labels.
+- **Summary Compilation**: Use a bot to compile weekly summaries of all PRs and
+  issues for team review.
 
 ---
 
-### **Release Preparation**:
+**Merge Conflict Resolution**:
 
-- **Automation**:
-  - Use **GitHub Actions** to automatically create a release branch at
-    predefined intervals or based on specific triggers.
-
----
-
-### **Documentation Updates**:
-
-- **Automation**:
-  - Use **GitHub Actions** to check if external documentation needs updates
-    based on the changes in the PR.
+- **Notification**: Use a bot to notify developers immediately when merge
+  conflicts arise, prompting quicker resolution.
 
 ---
 
-### **User Acceptance Testing (UAT)**:
+**Developer Tagging & Code Review**:
 
-- **Automation**:
-  - Use **GitHub Actions** to deploy to a UAT environment and notify
-    stakeholders once a release branch is ready for testing.
-
----
-
-### **Backup Before Release**:
-
-- **Automation**:
-  - Integrate with backup tools and use **GitHub Actions** to trigger backups
-    before releases.
+- **Automation**: Implement a bot that automatically assigns code reviewers
+  based on the files changed in the PR.
+- **Review Reminder**: Use GitHub Actions to send reminders if a PR has been
+  awaiting review for more than a set period.
 
 ---
 
-### **Tagging and Release**:
+**Staging Deployment & Backup Before Release**:
 
-- **Automation**:
-  - Use **GitHub Actions** to automatically tag commits, create GitHub releases,
-    and attach relevant binaries or assets.
-
----
-
-### **Feedback Loop**:
-
-- **Automation**:
-  - Integrate feedback tools with GitHub to automatically create issues based on
-    user feedback.
+- **Automation**: Use GitHub Actions or CI/CD tools to automatically deploy
+  changes to a staging environment after PR merge.
+- **Backup Automation**: Integrate with backup tools to automatically backup
+  critical data before any deployment.
 
 ---
 
-### **Rollback Strategy**:
+**Release Preparations & UAT**:
 
-- **Automation**:
-  - Use **GitHub Actions** to automate the rollback process in case of critical
-    issues in production.
-
----
-
-### **Post-Mortem Analysis**:
-
-- **Automation**:
-  - Use **issue templates** to standardize the post-mortem analysis process.
+- **Automation**: Use GitHub Actions to automatically create a release branch
+  when the main branch reaches a certain milestone.
+- **UAT Feedback**: Integrate with feedback tools to automatically collect and
+  categorize UAT feedback.
 
 ---
 
-### **Community Engagement**:
+**Tagging, Release & Post-Release Training**:
 
-- **Automation**:
-  - Use **GitHub Discussions** for community engagement and automatically label
-    or categorize discussions using **GitHub Actions**.
+- **Automation**: Use GitHub Actions to automatically tag a commit and create a
+  GitHub release when certain criteria are met (e.g., all tests pass on the main
+  branch).
+- **Training Notification**: Integrate with communication tools like Slack to
+  notify team members of upcoming training sessions.
