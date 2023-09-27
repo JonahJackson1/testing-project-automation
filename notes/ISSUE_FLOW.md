@@ -75,7 +75,7 @@ graph TD
   B[Feature card is converted to an issue]
   C[Feature branch is created]
   D[Pull request is opened for new feature branch]
-  E[Feature issue is labeled "ready for dev"]
+  E[Feature issue is labeled 'ready for dev']
   F[Feature branch is committed to]
   G[Comment is added to pull request detailing changes on feature branch]
   H[Feature branch is linted]
