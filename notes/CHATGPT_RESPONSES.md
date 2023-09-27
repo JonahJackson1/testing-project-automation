@@ -420,3 +420,402 @@ graph TD
 - **Why**:
   - **Learning**: Turns mistakes into learning opportunities.
   - **Prevention**: Helps in putting measures in place to prevent recurrence.
+
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+
+### **Idea Drafting**:
+
+- **What**:
+  - Ideas for new features, enhancements, or fixes are initially drafted on a
+    project board.
+- **Why**:
+  - **Visualization**: Provides a visual representation of the development
+    pipeline.
+  - **Collaboration**: Enables team discussion, prioritization, and refinement.
+
+---
+
+### **Idea Validation**:
+
+- **What**:
+  - Ideas undergo validation before becoming issues, involving feasibility
+    checks, market analysis, or user feedback.
+- **Why**:
+  - **Feasibility**: Ensures technical implementability.
+  - **Value Proposition**: Validates alignment with product and company goals.
+
+---
+
+### **Issue Creation**:
+
+- **What**:
+  - Ideas are converted into issues once fully detailed, including design and
+    other specifications.
+- **Why**:
+  - **Documentation**: Provides a clear task description.
+  - **Tracking**: Enables assignment, labeling, and progress tracking.
+
+---
+
+### **Dependency Check**:
+
+- **What**:
+  - Check for dependencies, like third-party libraries or other features, before
+    development starts.
+- **Why**:
+  - **Smooth Development**: Ensures all tools and features are available.
+  - **Efficiency**: Minimizes development halts due to missing dependencies.
+
+---
+
+### **Branch Creation, Feature Branching & Pull Request Initiation**:
+
+- **What**:
+  - A new branch is created for each issue, ensuring isolated development. Each
+    feature or fix has its own branch. A pull request (PR) is opened once a
+    branch is created. Tests run automatically when a PR is made or updated.
+- **Why**:
+  - **Isolation**: Allows focused development.
+  - **Traceability**: Links code changes to tasks.
+  - **Stability**: Keeps the main branch deployable.
+  - **Parallel Development**: Enables simultaneous feature development.
+  - **Early Feedback**: Provides continuous feedback.
+  - **Integration**: Ensures smooth code integration.
+  - **Quality Assurance**: Verifies no new bugs are introduced.
+  - **Immediate Feedback**: Notifies developers of test results.
+
+---
+
+### **Automated Labeling - Ready to Code**:
+
+- **What**:
+  - An automated label "ready to code" is added to the issue.
+- **Why**:
+  - **Status Indication**: Provides a visual status update.
+  - **Automation**: Streamlines the process.
+
+---
+
+### **Feature Development**:
+
+- **What**:
+  - Developers begin coding after receiving the "ready to code" label. The
+    codebase is periodically reviewed and refactored. Code is documented and
+    commented, including inline comments and README updates.
+- **Why**:
+  - **Implementation**: Transforms ideas into functional software.
+  - **Progress**: Advances the development process.
+  - **Clarity**: Assists other developers.
+  - **Maintainability**: Facilitates future changes.
+  - **Code Quality**: Enhances code efficiency.
+  - **Maintainability**: Ensures easy future updates.
+
+---
+
+### **Developer Tagging for Review**:
+
+- **What**:
+  - Developers tag PRs for review when they're ready.
+- **Why**:
+  - **Communication**: Notifies code reviewers.
+  - **Efficiency**: Streamlines the review process.
+
+---
+
+### **Code Review**:
+
+- **What**:
+  - PRs are reviewed by one or more team members before merging.
+- **Why**:
+  - **Knowledge Sharing**: Familiarizes the team with changes.
+  - **Mentoring**: Helps junior developers learn.
+  - **Error Detection**: Increases the chance of spotting mistakes.
+
+---
+
+### **Documentation Updates**:
+
+- **What**:
+  - External documentation, like user manuals, is updated alongside code
+    documentation.
+- **Why**:
+  - **User Support**: Assists users with new features.
+  - **Clarity**: Provides a clear resource.
+
+---
+
+### **Merging & Continuous Integration**:
+
+- **What**:
+  - Approved PRs are merged into the main branch, which is then automatically
+    built and tested.
+- **Why**:
+  - **Up-to-date Main Branch**: Keeps the main branch current.
+  - **Ready for Deployment**: Ensures the main branch is deployable.
+
+---
+
+### **Staging Deployment**:
+
+- **What**:
+  - Changes are deployed to a staging environment after merging.
+- **Why**:
+  - **Final Validation**: Allows real-world testing.
+  - **Bug Detection**: Identifies last-minute issues.
+
+---
+
+### **Backup Before Release**:
+
+- **What**:
+  - A recent backup of critical data is ensured before deployment.
+- **Why**:
+  - **Safety Net**: Provides a recovery point.
+  - **Data Integrity**: Ensures data restoration if needed.
+
+---
+
+### **Release Preparation**:
+
+- **What**:
+  - A release branch is created as a release approaches.
+- **Why**:
+  - **Focus**: Enables focus on final testing and documentation.
+  - **Stability**: Ensures a thoroughly tested release.
+
+---
+
+### **User Acceptance Testing (UAT)**:
+
+- **What**:
+  - Selected end-users test new features before release.
+- **Why**:
+  - **Validation**: Confirms changes meet user expectations.
+  - **Quality**: Minimizes post-release issues.
+
+---
+
+### **Tagging and Release**:
+
+- **What**:
+  - The release-ready commit is tagged, and a GitHub release is created.
+- **Why**:
+  - **Versioning**: Provides clear version history.
+  - **Documentation**: Offers release notes for users.
+
+---
+
+### **Post-Release Training**:
+
+- **What**:
+  - Training is provided if significant changes or new features are introduced.
+- **Why**:
+  - **Adoption**: Ensures effective user adoption.
+  - **Support**: Reduces support queries.
+
+---
+
+### **Feedback Loop**:
+
+- **What**:
+  - Post-release, feedback is gathered and the application's performance is
+    monitored.
+- **Why**:
+  - **Continuous Improvement**: Guides future enhancements.
+  - **Monitoring**: Detects unforeseen production issues.
+
+---
+
+### **Rollback Strategy**:
+
+- **What**:
+  - A rollback strategy is defined in case of post-release issues.
+- **Why**:
+  - **Reliability**: Minimizes user inconvenience.
+  - **Safety**: Enables a quick response to issues.
+
+---
+
+### **Community Engagement**:
+
+- **What**:
+  - Engage with the community if the product has one.
+- **Why**:
+  - **Collaboration**: Utilizes community knowledge and skills.
+  - **Feedback**: Direct user feedback guides development.
+
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+
+### **Idea Generation & Validation**:
+
+- **What**:
+  - Ideas for new features, enhancements, or fixes are initially drafted on a
+    project board. These ideas then undergo validation involving feasibility
+    checks, market analysis, or user feedback.
+- **Why**:
+  - **Visualization**: Provides a visual representation of the development
+    pipeline.
+  - **Collaboration**: Enables team discussion, prioritization, and refinement.
+  - **Feasibility**: Ensures technical implementability.
+  - **Value Proposition**: Validates alignment with product and company goals.
+
+---
+
+### **Issue Creation**:
+
+- **What**:
+  - Once the idea is fully fleshed out, including design and other necessary
+    details, it's converted into an issue.
+- **Why**:
+  - **Documentation**: Issues provide a detailed description of the task,
+    ensuring everyone understands the requirements.
+  - **Tracking**: Issues can be assigned, labeled, and tracked, ensuring
+    accountability and progress monitoring.
+
+---
+
+### **Dependency Check**:
+
+- **What**:
+  - Before starting development, check if the feature or fix has any
+    dependencies, like third-party libraries or other features that need to be
+    developed first.
+- **Why**:
+  - **Smooth Development**: Ensures that all required tools and features are
+    available before starting the development.
+  - **Efficiency**: Reduces the chances of development halts due to missing
+    dependencies.
+
+---
+
+### **Feature Branch Creation & Pull Request Initiation**:
+
+- **What**:
+  - A new branch is created for each issue, ensuring isolated development. Each
+    feature or fix has its own branch. A pull request (PR) is opened once a
+    branch is created. Tests run automatically when a PR is made or updated.
+- **Why**:
+  - **Isolation**: Allows focused development.
+  - **Traceability**: Links code changes to tasks.
+  - **Stability**: Keeps the main branch deployable.
+  - **Parallel Development**: Enables simultaneous feature development.
+  - **Early Feedback**: Provides continuous feedback.
+  - **Integration**: Ensures smooth code integration.
+  - **Quality Assurance**: Verifies no new bugs are introduced.
+  - **Immediate Feedback**: Notifies developers of test results.
+
+---
+
+### **Automated Labeling & Feature Development**:
+
+- **What**:
+  - An automated label "ready to code" is added to the issue. Developers then
+    begin coding, periodically reviewing and refactoring the codebase. Code is
+    documented and commented, including inline comments and README updates.
+- **Why**:
+  - **Status Indication**: Provides a visual status update.
+  - **Automation**: Streamlines the process.
+  - **Implementation**: Transforms ideas into functional software.
+  - **Progress**: Advances the development process.
+  - **Clarity**: Assists other developers.
+  - **Maintainability**: Facilitates future changes and ensures easy future
+    updates.
+  - **Code Quality**: Enhances code efficiency.
+
+---
+
+### **Developer Tagging & Code Review**:
+
+- **What**:
+  - Developers tag PRs for review when they're ready. PRs are then reviewed by
+    one or more team members before merging.
+- **Why**:
+  - **Communication**: Notifies code reviewers.
+  - **Efficiency**: Streamlines the review process.
+  - **Knowledge Sharing**: Familiarizes the team with changes.
+  - **Mentoring**: Helps junior developers learn.
+  - **Error Detection**: Increases the chance of spotting mistakes.
+
+---
+
+### **Staging Deployment & Backup Before Release**:
+
+- **What**:
+  - Changes are deployed to a staging environment after merging. A recent backup
+    of critical data is ensured before deployment.
+- **Why**:
+  - **Final Validation**: Allows real-world testing.
+  - **Bug Detection**: Identifies last-minute issues.
+  - **Safety Net**: Provides a recovery point.
+  - **Data Integrity**: Ensures data restoration if needed.
+
+---
+
+### **Release Preparations & UAT**:
+
+- **What**:
+  - A release branch is created as a release approaches. Selected end-users test
+    new features before release.
+- **Why**:
+  - **Focus**: Enables focus on final testing and documentation.
+  - **Stability**: Ensures a thoroughly tested release.
+  - **Validation**: Confirms changes meet user expectations.
+  - **Quality**: Minimizes post-release issues.
+
+---
+
+### **Tagging, Release & Post-Release Training**:
+
+- **What**:
+  - The release-ready commit is tagged, and a GitHub release is created.
+    Training is provided if significant changes or new features are introduced.
+- **Why**:
+  - **Versioning**: Provides clear version history.
+  - **Documentation**: Offers release notes for users.
+  - **Adoption**: Ensures effective user adoption.
+  - **Support**: Reduces support queries.
+
+---
+
+### **Feedback Loop & Rollback Strategy**:
+
+- **What**:
+  - Post-release, feedback is gathered and the application's performance is
+    monitored. A rollback strategy is defined in case of post-release issues.
+- **Why**:
+  - **Continuous Improvement**: Guides future enhancements.
+  - **Monitoring**: Detects unforeseen production issues.
+  - **Reliability**: Minimizes user inconvenience.
+  - **Safety**: Enables a quick response to issues.
+
+---
+
+### **Community Engagement**:
+
+- **What**:
+  - Engage with the community if the product has one.
+- **Why**:
+  - **Collaboration**: Utilizes community knowledge and skills.
+  - **Feedback**: Direct user feedback guides development.
