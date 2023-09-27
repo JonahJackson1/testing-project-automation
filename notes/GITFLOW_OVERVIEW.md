@@ -11,8 +11,6 @@ graph TD
     F --> G["Staging Deployment & Backup Before Release"]
     G --> H["Release Preparations & UAT"]
     H --> I["Tagging, Release & Post-Release Training"]
-    I --> J["Feedback Loop & Rollback Strategy"]
-    J --> K["Community Engagement"]
 
 ```
 
@@ -144,26 +142,3 @@ graph TD
   - **Documentation**: Offers release notes for users.
   - **Adoption**: Ensures effective user adoption.
   - **Support**: Reduces support queries.
-
----
-
-### **Feedback Loop & Rollback Strategy**:
-
-- **What**:
-  - Post-release, feedback is gathered and the application's performance is
-    monitored. A rollback strategy is defined in case of post-release issues.
-- **Why**:
-  - **Continuous Improvement**: Guides future enhancements.
-  - **Monitoring**: Detects unforeseen production issues.
-  - **Reliability**: Minimizes user inconvenience.
-  - **Safety**: Enables a quick response to issues.
-
----
-
-### **Community Engagement**:
-
-- **What**:
-  - Engage with the community if the product has one.
-- **Why**:
-  - **Collaboration**: Utilizes community knowledge and skills.
-  - **Feedback**: Direct user feedback guides development.

@@ -58,13 +58,6 @@
 
 - New feature is deployed to production
 
-- Post-deployment monitoring is initiated to ensure smooth performance
-
-- Users are notified of the new feature
-  - Feedback is gathered from users about the new feature
-  - Any reported issues or feedback from users are addressed in subsequent
-    updates.
-
 ```mermaid
 ---
 title: Issue flow overview - 9.27.2023
@@ -108,10 +101,7 @@ graph TD
   AI[Once all issues are resolved and the feature is stable in staging, preparations for production deployment begin]
   AJ[Backup of critical data is taken before deploying the new feature to production]
   AK[New feature is deployed to production]
-  AL[Post-deployment monitoring is initiated to ensure smooth performance]
-  AM[Users are notified of the new feature]
-  AN[Feedback is gathered from users about the new feature]
-  AO[Any reported issues or feedback from users are addressed in subsequent updates]
+
 
   A --> B
   B --> C
@@ -154,10 +144,5 @@ graph TD
   AH --> AI
   AI --> AJ
   AJ --> AK
-  AK --> AL
-  AL --> AM
-  AM --> AN
-  AN --> AO
-
 
 ```
