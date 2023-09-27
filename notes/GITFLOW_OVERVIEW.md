@@ -1,3 +1,59 @@
+```mermaid
+---
+title: Gitflow overview - 9.27.2023
+---
+graph TD
+
+A[Idea Drafting]
+    -->|Visualization & Collaboration| B[Idea Validation]
+
+B -->|Feasibility & Value Proposition| C[Issue Creation]
+
+C -->|Documentation & Tracking| D[Dependency Check]
+
+D -->|Smooth Development & Efficiency| E[Branch Creation & Feature Branching]
+
+E -->|Isolation, Traceability, Stability, Parallel Development| F[Pull Request Initiation]
+
+F -->|Early Feedback, Integration, Quality Assurance, Immediate Feedback| G[Automated Labeling - Ready to Code]
+
+G -->|Status Indication & Automation| H[Documentation & Commenting]
+
+H -->|Clarity & Maintainability| I[Regular Refactoring]
+
+I -->|Code Quality & Maintainability| J[Developer Tagging for Review]
+
+J -->|Communication & Efficiency| K[Code Review]
+
+K -->|Knowledge Sharing, Mentoring, Error Detection| L[Merging & Continuous Integration]
+
+L -->|Up-to-date Main Branch & Ready for Deployment| M[Staging Deployment]
+
+M -->|Final Validation & Bug Detection| N[Release Preparation]
+
+N -->|Focus & Stability| O[Documentation Updates]
+
+O -->|User Support & Clarity| P[User Acceptance Testing UAT]
+
+P -->|Validation & Quality| Q[Backup Before Release]
+
+Q -->|Safety Net & Data Integrity| R[Tagging and Release]
+
+R -->|Versioning & Documentation| S[Post-Release Training]
+
+S -->|Adoption & Support| T[Feedback Loop]
+
+T -->|Continuous Improvement & Monitoring| U[Rollback Strategy]
+
+U -->|Reliability & Safety| V[Post-Mortem Analysis]
+
+V -->|Learning & Prevention| W[Community Engagement]
+
+W -->|Collaboration & Feedback| X[End of Workflow]
+
+
+```
+
 ### **Idea Drafting**:
 
 - **What**:
