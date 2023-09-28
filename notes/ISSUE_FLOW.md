@@ -28,9 +28,8 @@
 
 - Code reviewers provide feedback on the PR
 
-- Feedback is addressed, and necessary changes are made to the feature branch
-
-- Feature branch is committed to again with changes based on feedback
+- Feedback is addressed, the feature branch is committed to again with changes
+  based on feedback
 
   - Comment is edited on the pull request detailing the changes made based on
     feedback

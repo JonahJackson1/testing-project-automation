@@ -82,10 +82,11 @@ gitGraph
 - [ ] check out https://docs.github.com/en/issues/managing-your-tasks-with-tasklists/about-tasklists
 - [ ] check out milestones
 - [x] ? create a workflow chart for a "draft issue" when it is converted to an issue
-- [ ] Mark a branch as stale after after 30 commits behind / needs rebase
-- [ ] Create a flowchart for a branch being created, what happens on commits, when it is ready to merge, etc.
-- [ ] Create a flowchart for a project item from draft to completion
-- [ ] 
+- [ ] Mark a branch as stale / needs rebase after becoming 30+ commits behind
+- [x] Create a flowchart for a branch being created, what happens on commits, when it is ready to merge, etc.
+- [x] Create a flowchart for a project item from draft to completion
+- [ ] Create a concise list of automations we might want to implement and at what stage
+- [ ] Being implementing the desired automations in the testing repo
 
 
 # Links
