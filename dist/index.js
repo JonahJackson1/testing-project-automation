@@ -10030,7 +10030,9 @@ async function fetchIds({
             projectItems(first: 1) {
               nodes {
                 id
-              }
+                project {
+                  id
+                }
             }
           }
           ref(qualifiedName: $branchName) {
@@ -10059,24 +10061,29 @@ async function fetchIds({
     );
 
     /* 
-     projectItems(first: 1) {
-        totalCount
-        __typename
+      projectItems(first: 1) {
+        # totalCount
+        # __typename
         nodes {
-          fieldValues(first: 30) {
-            totalCount
-            nodes {
-              ... on ProjectV2ItemFieldTextValue {
-                id
-                text
-                field {
-                  __typename
-                }
-              }
-              __typename
-            }
+          id
+          # databaseId
+          project {
+            id
           }
-        }
+          # fieldValues(first: 30) {
+            # totalCount
+            # nodes {
+            #   ... on ProjectV2ItemFieldTextValue {
+            #     id
+                # text
+                # field {
+                #   __typename
+                # }
+              }
+              # __typename
+        #     }
+        #   }
+        # }
       }
     
     */
@@ -10088,12 +10095,18 @@ async function fetchIds({
     const labelId = repository?.label?.id;
     const issueId = repository?.issue?.id;
     const projectCardId = repository?.issue?.projectItems?.nodes[0].id;
+    const projectId = repository?.issue?.projectItems?.nodes[0].project.id;
 
-    const projectId = repository?.projectsV2?.nodes[0].id;
+    const OGprojectId = repository?.projectsV2?.nodes[0].id;
 
     const cardId = repository?.projectsV2?.nodes[0].items?.nodes[0].id;
 
-    console.log(projectCardId);
+    console.log('here');
+    console.log('OGprojectId', OGprojectId);
+    console.log('current cardId', cardId);
+
+    console.log('projectId', projectId);
+    console.log('projectCardId', projectCardId);
 
     // grab the specified branch's last commit
     // prettier-ignore
