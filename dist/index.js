@@ -9709,15 +9709,21 @@ async function run() {
     const labelToFetch = 'test';
 
     // fetch the ids for the the below
-    const { latestCommitSHA, repoId, labelId, issueId, cardId, projectId } =
-      await fetchIds({
-        branchToCopy,
-        issueNumber,
-        labelName: labelToFetch,
-        owner,
-        repo,
-        octokit
-      });
+    const {
+      latestCommitSHA,
+      repoId,
+      labelId,
+      issueId,
+      projectCardId,
+      projectId
+    } = await fetchIds({
+      branchToCopy,
+      issueNumber,
+      labelName: labelToFetch,
+      owner,
+      repo,
+      octokit
+    });
 
     console.log(projectId);
     // creates a branch from the most recent commit to the development branch
@@ -9735,7 +9741,7 @@ async function run() {
     });
 
     const test = await doProjectStuff({
-      cardId,
+      projectCardId,
       projectId,
       // pullRequestId: pullStatus.pullRequestId,
       octokit
@@ -10086,15 +10092,12 @@ async function fetchIds({
     const repoId = repository?.id;
     const labelId = repository?.label?.id;
     const issueId = repository?.issue?.id;
-    const testCardId =
+
+    const projectId = repository?.projectsV2?.nodes[0].id;
+    const projectCardId =
       repository?.issue?.projectItems?.nodes[0]?.fieldValues?.nodes.filter(
         obj => obj.id
       )[0].id;
-    const projectId = repository?.projectsV2?.nodes[0].id;
-    const cardId = repository?.projectsV2?.nodes[0].items?.nodes[0].id;
-    console.log('here');
-    console.log('cardId', cardId);
-    console.log('testCardId', testCardId);
 
     // grab the specified branch's last commit
     // prettier-ignore
@@ -10104,7 +10107,14 @@ async function fetchIds({
     if (!repoId || !labelId || !issueId || !projectId || !latestCommitSHA)
       return;
 
-    return { latestCommitSHA, repoId, labelId, issueId, projectId, cardId };
+    return {
+      latestCommitSHA,
+      repoId,
+      labelId,
+      issueId,
+      projectId,
+      projectCardId
+    };
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);
@@ -10318,7 +10328,7 @@ need to be be able to find a specific project card -- right now we are only find
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 async function doProjectStuff({
-  cardId,
+  projectCardId,
   projectId,
   fieldId,
   payloadObj,
@@ -10339,7 +10349,7 @@ async function doProjectStuff({
       `,
       {
         field: fieldId || 'PVTSSF_lAHOBk645c4AVbXfzgNsVfc',
-        item: cardId || 'PVTI_lAHOBk645c4AVbXfzgJgFoE',
+        item: projectCardId || 'PVTI_lAHOBk645c4AVbXfzgJgFoE',
         project: projectId || 'PVT_kwHOBk645c4AVbXf',
         payload: payloadObj || { singleSelectOptionId: '4b2fdd91' }
       }

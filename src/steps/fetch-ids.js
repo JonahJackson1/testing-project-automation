@@ -112,15 +112,12 @@ async function fetchIds({
     const repoId = repository?.id;
     const labelId = repository?.label?.id;
     const issueId = repository?.issue?.id;
-    const testCardId =
+
+    const projectId = repository?.projectsV2?.nodes[0].id;
+    const projectCardId =
       repository?.issue?.projectItems?.nodes[0]?.fieldValues?.nodes.filter(
         obj => obj.id
       )[0].id;
-    const projectId = repository?.projectsV2?.nodes[0].id;
-    const cardId = repository?.projectsV2?.nodes[0].items?.nodes[0].id;
-    console.log('here');
-    console.log('cardId', cardId);
-    console.log('testCardId', testCardId);
 
     // grab the specified branch's last commit
     // prettier-ignore
@@ -130,7 +127,14 @@ async function fetchIds({
     if (!repoId || !labelId || !issueId || !projectId || !latestCommitSHA)
       return;
 
-    return { latestCommitSHA, repoId, labelId, issueId, projectId, cardId };
+    return {
+      latestCommitSHA,
+      repoId,
+      labelId,
+      issueId,
+      projectId,
+      projectCardId
+    };
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message);

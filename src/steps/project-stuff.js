@@ -30,7 +30,7 @@ need to be be able to find a specific project card -- right now we are only find
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 async function doProjectStuff({
-  cardId,
+  projectCardId,
   projectId,
   fieldId,
   payloadObj,
@@ -51,7 +51,7 @@ async function doProjectStuff({
       `,
       {
         field: fieldId || 'PVTSSF_lAHOBk645c4AVbXfzgNsVfc',
-        item: cardId || 'PVTI_lAHOBk645c4AVbXfzgJgFoE',
+        item: projectCardId || 'PVTI_lAHOBk645c4AVbXfzgJgFoE',
         project: projectId || 'PVT_kwHOBk645c4AVbXf',
         payload: payloadObj || { singleSelectOptionId: '4b2fdd91' }
       }

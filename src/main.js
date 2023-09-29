@@ -73,15 +73,21 @@ async function run() {
     const labelToFetch = 'test';
 
     // fetch the ids for the the below
-    const { latestCommitSHA, repoId, labelId, issueId, cardId, projectId } =
-      await fetchIds({
-        branchToCopy,
-        issueNumber,
-        labelName: labelToFetch,
-        owner,
-        repo,
-        octokit
-      });
+    const {
+      latestCommitSHA,
+      repoId,
+      labelId,
+      issueId,
+      projectCardId,
+      projectId
+    } = await fetchIds({
+      branchToCopy,
+      issueNumber,
+      labelName: labelToFetch,
+      owner,
+      repo,
+      octokit
+    });
 
     console.log(projectId);
     // creates a branch from the most recent commit to the development branch
@@ -99,7 +105,7 @@ async function run() {
     });
 
     const test = await doProjectStuff({
-      cardId,
+      projectCardId,
       projectId,
       // pullRequestId: pullStatus.pullRequestId,
       octokit
