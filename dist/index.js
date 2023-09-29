@@ -10089,6 +10089,7 @@ async function fetchIds({
     const testCardId = repository?.issue?.projectItems?.nodes[0];
     const projectId = repository?.projectsV2?.nodes[0].id;
     const cardId = repository?.projectsV2?.nodes[0].items?.nodes[0].id;
+    console.log('here');
     console.log(testCardId);
 
     // grab the specified branch's last commit
