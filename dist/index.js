@@ -10010,18 +10010,6 @@ async function fetchIds({
       query FetchIssueId($owner: String!, $repo: String!, $labelName: String!, $issueNumber: Int!, $branchName: String!) {
         repository(owner: $owner, name: $repo) {
           id
-          projectsV2 (first: 1) { # Assuming you want the first project; adjust as needed
-            nodes {
-              title
-              number
-              id
-              items(last: 1) { # need to update this to find the specific card/issue not the latest one
-                nodes {
-                  id
-                }
-              }
-            }
-          }
           label(name: $labelName) {
             id
           }
@@ -10098,17 +10086,6 @@ async function fetchIds({
     const projectCardId = repository?.issue?.projectItems?.nodes[0].id;
     const projectId = repository?.issue?.projectItems?.nodes[0].project.id;
 
-    const OGprojectId = repository?.projectsV2?.nodes[0].id;
-
-    const cardId = repository?.projectsV2?.nodes[0].items?.nodes[0].id;
-
-    console.log('here');
-    console.log('OGprojectId', OGprojectId);
-    console.log('current cardId', cardId);
-
-    console.log('projectId', projectId);
-    console.log('projectCardId', projectCardId);
-
     // grab the specified branch's last commit
     // prettier-ignore
     const latestCommitSHA = repository?.ref?.target?.history?.edges[0]?.node?.oid;
@@ -10123,7 +10100,7 @@ async function fetchIds({
       labelId,
       issueId,
       projectId,
-      projectCardId: cardId
+      projectCardId
     };
   } catch (error) {
     // Fail the workflow run if an error occurs
@@ -10364,10 +10341,8 @@ async function doProjectStuff({
         payload: payloadObj || { singleSelectOptionId: '4b2fdd91' }
       }
     );
-    console.log(res);
 
-    // PVTI_lAHOBk645c4AVbXfzgJgH_M
-    // PVTI_lAHOBk645c4AVbXfzgJgH_M
+    console.log(res);
 
     console.log('successfully did the project stuff');
     return { success: true };

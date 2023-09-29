@@ -56,10 +56,8 @@ async function doProjectStuff({
         payload: payloadObj || { singleSelectOptionId: '4b2fdd91' }
       }
     );
-    console.log(res);
 
-    // PVTI_lAHOBk645c4AVbXfzgJgH_M
-    // PVTI_lAHOBk645c4AVbXfzgJgH_M
+    console.log(res);
 
     console.log('successfully did the project stuff');
     return { success: true };
