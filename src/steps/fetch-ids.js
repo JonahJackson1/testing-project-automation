@@ -53,6 +53,7 @@ async function fetchIds({
                 project {
                   id
                 }
+              }
             }
           }
           ref(qualifiedName: $branchName) {
