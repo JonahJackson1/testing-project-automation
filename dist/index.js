@@ -9980,9 +9980,7 @@ module.exports = { createPullRequest };
 // https://docs.github.com/en/graphql/reference/mutations#createissue
 
 /** TODO: 
-
   - put in some error handling
-
 */
 
 const core = __nccwpck_require__(2186);
@@ -10011,7 +10009,7 @@ async function fetchIds({
               title
               number
               id
-              items(last: 1) {
+              items(last: 1) { # need to update this to find the specific card/issue not the latest one
                 nodes {
                   id
                 }
@@ -10023,6 +10021,17 @@ async function fetchIds({
           }
           issue(number: $issueNumber) {
             id
+            projectItems(first: 1) {
+              nodes {
+                fieldValues(first: 30) {
+                  nodes {
+                    ... on ProjectV2ItemFieldTextValue {
+                      id
+                    }
+                  }
+                }
+              }
+            }
           }
           ref(qualifiedName: $branchName) {
             target {
@@ -10049,8 +10058,31 @@ async function fetchIds({
       }
     );
 
-    if (!repository) return;
+    /* 
+     projectItems(first: 1) {
+        totalCount
+        __typename
+        nodes {
+          fieldValues(first: 30) {
+            totalCount
+            nodes {
+              ... on ProjectV2ItemFieldTextValue {
+                id
+                text
+                field {
+                  __typename
+                }
+              }
+              __typename
+            }
+          }
+        }
+      }
+    
+    */
 
+    if (!repository) return;
+    console.log(repository);
     // grab the ids
     const repoId = repository?.id;
     const labelId = repository?.label?.id;
@@ -10264,7 +10296,14 @@ const core = __nccwpck_require__(2186);
 - [x] get the field id of the status column
 - [x] find the id of status "ready"
 - [ ] link the pull request to the project card / issue
-- [ ] update the status to "ready"
+- [x] update the status to "ready"
+
+
+
+need to be be able to find a specific project card -- right now we are only finding the latest project card. 
+
+   - might be able to fix it by going through the project instead
+   - could run two seperate workflows at the same time
 
 */
 
@@ -10300,6 +10339,9 @@ async function doProjectStuff({
       }
     );
     console.log(res);
+
+    // PVTI_lAHOBk645c4AVbXfzgJgH_M
+    // PVTI_lAHOBk645c4AVbXfzgJgH_M
 
     console.log('successfully did the project stuff');
     return { success: true };

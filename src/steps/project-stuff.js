@@ -16,6 +16,13 @@ const core = require('@actions/core');
 - [ ] link the pull request to the project card / issue
 - [x] update the status to "ready"
 
+
+
+need to be be able to find a specific project card -- right now we are only finding the latest project card. 
+
+   - might be able to fix it by going through the project instead
+   - could run two seperate workflows at the same time
+
 */
 
 /**

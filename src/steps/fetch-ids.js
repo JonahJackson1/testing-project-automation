@@ -47,6 +47,17 @@ async function fetchIds({
           }
           issue(number: $issueNumber) {
             id
+            projectItems(first: 1) {
+              nodes {
+                fieldValues(first: 30) {
+                  nodes {
+                    ... on ProjectV2ItemFieldTextValue {
+                      id
+                    }
+                  }
+                }
+              }
+            }
           }
           ref(qualifiedName: $branchName) {
             target {
@@ -73,8 +84,31 @@ async function fetchIds({
       }
     );
 
-    if (!repository) return;
+    /* 
+     projectItems(first: 1) {
+        totalCount
+        __typename
+        nodes {
+          fieldValues(first: 30) {
+            totalCount
+            nodes {
+              ... on ProjectV2ItemFieldTextValue {
+                id
+                text
+                field {
+                  __typename
+                }
+              }
+              __typename
+            }
+          }
+        }
+      }
+    
+    */
 
+    if (!repository) return;
+    console.log(repository);
     // grab the ids
     const repoId = repository?.id;
     const labelId = repository?.label?.id;
