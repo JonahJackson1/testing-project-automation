@@ -49,13 +49,7 @@ async function fetchIds({
             id
             projectItems(first: 1) {
               nodes {
-                fieldValues(first: 30) {
-                  nodes {
-                    ... on ProjectV2ItemFieldTextValue {
-                      id
-                    }
-                  }
-                }
+                id
               }
             }
           }
@@ -108,16 +102,18 @@ async function fetchIds({
     */
 
     if (!repository) return;
+
     // grab the ids
     const repoId = repository?.id;
     const labelId = repository?.label?.id;
     const issueId = repository?.issue?.id;
+    const projectCardId = repository?.issue?.projectItems?.nodes[0].id;
 
     const projectId = repository?.projectsV2?.nodes[0].id;
-    const projectCardId =
-      repository?.issue?.projectItems?.nodes[0]?.fieldValues?.nodes.filter(
-        obj => obj.id
-      )[0].id;
+
+    const cardId = repository?.projectsV2?.nodes[0].items?.nodes[0].id;
+
+    console.log(projectCardId);
 
     // grab the specified branch's last commit
     // prettier-ignore
@@ -133,7 +129,7 @@ async function fetchIds({
       labelId,
       issueId,
       projectId,
-      projectCardId
+      projectCardId: cardId
     };
   } catch (error) {
     // Fail the workflow run if an error occurs
