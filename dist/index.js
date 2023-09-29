@@ -10087,16 +10087,14 @@ async function fetchIds({
     const labelId = repository?.label?.id;
     const issueId = repository?.issue?.id;
     const testCardId =
-      repository?.issue?.projectItems?.nodes[0]?.fieldValues.nodes.filter(
+      repository?.issue?.projectItems?.nodes[0]?.fieldValues?.nodes.filter(
         obj => obj.id
-      )[0];
+      )[0].id;
     const projectId = repository?.projectsV2?.nodes[0].id;
     const cardId = repository?.projectsV2?.nodes[0].items?.nodes[0].id;
     console.log('here');
-    console.log(
-      repository?.issue?.projectItems?.nodes[0]?.fieldValues.nodes[2].id
-    );
-    console.log(testCardId);
+    console.log('cardId', cardId);
+    console.log('testCardId', testCardId);
 
     // grab the specified branch's last commit
     // prettier-ignore
