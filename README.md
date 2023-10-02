@@ -87,6 +87,12 @@ gitGraph
 - [x] Create a flowchart for a project item from draft to completion
 - [ ] Create a concise list of automations we might want to implement and at what stage
 - [ ] Being implementing the desired automations in the testing repo
+- [ ] Create a workflow / mermaid chart for a "Multi-repo with a Master Repository" approach for large apps / projects.
+      - the master repo would serve as the source of truth for all other apps --or-- master repo aggregates issues from other apps
+      - Master repo
+        - buyer repo
+        - flipper repo
+        - admin repo
 
 
 # Links

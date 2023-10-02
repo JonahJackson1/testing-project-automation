@@ -27,19 +27,19 @@ async function fetchIds({
     // fetch the ids of the parsed label
     const { repository } = await octokit.graphql(
       `
-      query FetchIssueId($owner: String!, $repo: String!, $labelName: String!, $issueNumber: Int!, $branchName: String!) {
+      query FetchAllTheIds($owner: String!, $repo: String!, $labelName: String!, $issueNumber: Int!, $branchName: String!) {
         repository(owner: $owner, name: $repo) {
-          id
+          id # repo id
           label(name: $labelName) {
-            id
+            id # label id
           }
           issue(number: $issueNumber) {
-            id
+            id # issue id
             projectItems(first: 1) {
               nodes {
-                id
+                id # card id
                 project {
-                  id
+                  id # project id
                 }
               }
             }
@@ -50,7 +50,7 @@ async function fetchIds({
                 history(first: 1) {
                   edges {
                     node {
-                      oid
+                      oid # id of latest commit on a branch
                     }
                   }
                 }

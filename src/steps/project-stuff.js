@@ -13,6 +13,7 @@ const core = require('@actions/core');
 - [x] get the project id
 - [x] get the field id of the status column
 - [x] find the id of status "ready"
+- [ ] fetch the status id by passing in the name
 - [ ] link the pull request to the project card / issue
 - [x] update the status to "ready"
 
@@ -36,6 +37,9 @@ async function doProjectStuff({
   payloadObj,
   octokit
 }) {
+  // the type & id of status column
+  const tempPayload = { singleSelectOptionId: '4b2fdd91' };
+  
   try {
     const res = await octokit.graphql(
       `
@@ -53,7 +57,7 @@ async function doProjectStuff({
         field: fieldId || 'PVTSSF_lAHOBk645c4AVbXfzgNsVfc',
         item: projectCardId || 'PVTI_lAHOBk645c4AVbXfzgJgFoE',
         project: projectId || 'PVT_kwHOBk645c4AVbXf',
-        payload: payloadObj || { singleSelectOptionId: '4b2fdd91' }
+        payload: payloadObj || tempPayload
       }
     );
 
