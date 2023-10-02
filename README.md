@@ -76,9 +76,9 @@ gitGraph
 - [x] Link an issue and pull request together
   - [x] Add a comment to an issue with the pull #
   - [x] Add a comment to an pull request with the issue #
-  - [ ] Actually link the tickets together
+  - [x] Actually link the tickets together
     - I haven't been able to find a way to link them together the same way a user can manually do it -- this is a work around
-- [ ] fix locating a project card to find the specific issue, not just the newest created draft / issue
+- [x] fix locating a project card to find the specific issue, not just the newest created draft / issue
 - [ ] check out https://docs.github.com/en/issues/managing-your-tasks-with-tasklists/about-tasklists
 - [ ] check out milestones
 - [x] ? create a workflow chart for a "draft issue" when it is converted to an issue
