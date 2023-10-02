@@ -236,3 +236,120 @@ gitGraph
 - **Why**: This integrates the completed feature into the main codebase and
   ensures that the master repository references the stable version of the
   submodule.
+
+---
+
+## Possible automations
+
+### General overview
+
+#### **1. Initialize the Master Repository**
+
+- **Automation**: Use GitHub API or similar to programmatically create new
+  repositories when needed.
+- **Why**: Streamlines the process of setting up new repositories, especially if
+  done frequently.
+
+---
+
+#### **2. Add Submodules to the Master Repository**
+
+- **Automation**: Script the addition of multiple submodules at once if there's
+  a pattern or list to follow.
+- **Why**: Reduces manual steps and potential errors when adding multiple
+  submodules.
+
+---
+
+#### **3. Clone the Master Repository with Submodules**
+
+- **Automation**: Use a post-clone hook to automatically run the `--recursive`
+  flag or remind the developer to do so.
+- **Why**: Ensures that developers always get the complete codebase, including
+  submodules.
+
+---
+
+#### **4. Update Submodules**
+
+- **Automation**: Implement a Git hook or scheduled task to periodically run
+  submodule updates.
+- **Why**: Keeps the submodules updated without manual intervention.
+
+---
+
+#### **5. Work within a Submodule**
+
+- **Automation**: None specific here, as this is a general development step.
+
+---
+
+#### **6. Commit Submodule Changes in the Master Repository**
+
+- **Automation**: Use a post-commit hook in the submodule to remind or
+  automatically commit in the master repo.
+- **Why**: Ensures that submodule updates are reflected in the master repo in
+  real-time.
+
+---
+
+#### **7. Pulling Changes with Updated Submodules**
+
+- **Automation**: Use a post-pull hook to automatically run submodule updates.
+- **Why**: Simplifies the update process for developers.
+
+---
+
+#### **8. Handling Merge Conflicts with Submodules**
+
+- **Automation**: Implement notifications or alerts for merge conflicts,
+  especially if CI/CD detects them.
+- **Why**: Provides immediate feedback and ensures quick resolution.
+
+---
+
+#### **9. Removing a Submodule**
+
+- **Automation**: Script the removal process to ensure all steps are followed
+  correctly.
+- **Why**: Reduces the chance of incomplete submodule removal.
+
+---
+
+#### **10. Regular Maintenance**
+
+- **Automation**: Schedule periodic submodule updates using cron jobs or
+  similar.
+- **Why**: Ensures that submodules are always up-to-date without manual checks.
+
+---
+
+### Creating a new feature
+
+#### **1. Create a New Repository for the Feature**
+
+- **Automation**: Use GitHub API or similar to programmatically create new
+  repositories.
+- **Why**: Streamlines the process of setting up new feature repositories.
+
+---
+
+#### **2. Add the New Repository as a Submodule to the Master Repository**
+
+- **Automation**: As before, script the addition if there's a pattern or list to
+  follow.
+- **Why**: Reduces manual steps when adding the new feature as a submodule.
+
+---
+
+#### **3-10**:
+
+- **Automation**: The steps from 3 to 10 in this flow are similar to the general
+  overview. The same automation strategies can be applied here.
+
+---
+
+**Note**: While automations can greatly enhance the workflow, it's crucial to
+ensure that they are well-documented and that the team is trained on their
+behaviors. This ensures that the team can work efficiently without being caught
+off-guard by automated processes.
