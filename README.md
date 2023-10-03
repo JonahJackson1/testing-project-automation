@@ -128,6 +128,11 @@ gitGraph
 
 ## Learning github and flows
 
+### working with sub-modules
+https://github.blog/2016-02-01-working-with-submodules/
+https://github.blog/2015-06-30-scripts-to-rule-them-all/
+https://github.com/github/scripts-to-rule-them-all
+
 ### github flow branching 
 https://nvie.com/posts/a-successful-git-branching-model/
 
