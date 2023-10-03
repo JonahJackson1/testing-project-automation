@@ -97,74 +97,126 @@ code quality.
 
 ---
 
-## **Master Repository System Flowchart**:
+## General Overview: Master Repository System with Sub-repositories
 
-### **1. Initialize the Master Repository**:
+### **Master Repository Initialization**:
 
-- **What**: Set up the central repository that will oversee all
-  sub-repositories.
-- **Why**: To have a unified point of reference and management for all
-  codebases.
-- **Tools**: GitHub, GitLab, Bitbucket.
+- **What**:
+  - The master repository is set up as the central hub for the entire project.
+    It doesn't contain the actual code but references to specific commits in
+    sub-repositories.
+- **Why**:
+  - **Centralization**: Provides a unified point of reference for the entire
+    project.
+  - **Organization**: Keeps the codebase modular and organized.
 
-### **2. Manage Submodules**:
+---
 
-- **What**: Decide whether to add a new submodule or update an existing one.
-- **Why**: To ensure the master repository is always up-to-date with all its
-  sub-repositories.
-- **Tools**: Git commands (`git submodule add`, `git submodule update`).
+### **Sub-repository Integration**:
 
-### **3. Code Development in Submodules**:
+- **What**:
+  - Sub-repositories (submodules) are integrated into the master repository.
+    Each submodule corresponds to a specific feature, module, or component of
+    the app.
+- **Why**:
+  - **Modularity**: Allows for focused development on individual components.
+  - **Isolation**: Ensures that changes in one submodule don't directly affect
+    others.
 
-- **What**: Developers work on features or fixes within the respective
-  sub-repositories.
-- **Why**: Allows for focused and isolated development in each submodule.
-- **Tools**: Standard Git workflow, IDEs, code review tools like Gerrit or
-  GitHub PRs.
+---
 
-### **4. Integrate Submodule Changes**:
+### **Synchronization & Updates**:
 
-- **What**: After significant progress in a submodule, the changes are
-  integrated into the master repository.
-- **Why**: To keep the master repository updated with the latest changes from
-  all sub-repositories.
-- **Tools**: Git commands (`git commit`, `git push`).
+- **What**:
+  - Periodically, the master repository is updated to point to the latest
+    commits in each submodule, ensuring it references the most recent version of
+    each component.
+- **Why**:
+  - **Consistency**: Ensures the master repository always represents the latest
+    state of the entire project.
+  - **Version Control**: Tracks the state of each submodule at any given point
+    in time.
 
-### **5. Automated Testing & CI/CD**:
+---
 
-- **What**: Run automated tests and continuous integration processes.
-- **Why**: To ensure code quality, functionality, and that no new issues are
-  introduced.
-- **Tools**: Jenkins, Travis CI, GitHub Actions, CircleCI.
+### **Development within Sub-repositories**:
 
-### **6. Prepare for Release**:
+- **What**:
+  - Developers work within individual sub-repositories, making changes, adding
+    features, and fixing bugs. Once work in a submodule is complete, it's
+    committed and pushed to its repository.
+- **Why**:
+  - **Focused Development**: Developers can work on specific components without
+    affecting the entire project.
+  - **Parallelization**: Multiple teams or developers can work on different
+    submodules simultaneously.
 
-- **What**: Compile and integrate code from all submodules, ensuring everything
-  is synchronized and ready.
-- **Why**: To have a consolidated version of the app with all the latest
-  features and fixes.
-- **Tools**: Build tools specific to the app's tech stack, Docker for
-  containerization.
+---
 
-### **7. Release Decision**:
+### **Testing & Quality Assurance**:
 
-- **What**: Decide if the codebase is ready for a release.
-- **Why**: To ensure that only stable and tested versions of the app are
-  released.
-- **Tools**: Manual reviews, user acceptance testing (UAT) platforms.
+- **What**:
+  - Before integrating changes from a submodule into the master repository, the
+    code undergoes rigorous testing. This can include unit tests, integration
+    tests, and other quality assurance processes.
+- **Why**:
+  - **Reliability**: Ensures that changes introduced are stable and don't
+    introduce new issues.
+  - **Quality Control**: Maintains a high standard of code and functionality.
 
-### **8. Deploy & Release**:
+---
 
-- **What**: Deploy the integrated app to production and tag a new release.
-- **Why**: To make the latest version of the app available to users.
-- **Tools**: Deployment platforms like AWS, Azure, Google Cloud, and version
-  control tags in Git.
+### **Master Repository Compilation**:
 
-### **9. Feedback & Iteration**:
+- **What**:
+  - Once all sub-repositories are updated and tested, the master repository
+    compiles or gathers all the code from submodules to prepare for a release or
+    deployment.
+- **Why**:
+  - **Integration**: Combines all components into a cohesive app or software.
+  - **Deployment Readiness**: Prepares the entire project for release or
+    deployment.
 
-- **What**: Gather feedback on the released app and plan for the next
-  development cycle.
-- **Why**: Continuous improvement based on user feedback and evolving
-  requirements.
-- **Tools**: Feedback tools like UserVoice, direct user feedback, analytics
-  platforms like Google Analytics.
+---
+
+### **Release & Deployment**:
+
+- **What**:
+  - After compilation and final testing, the master repository oversees the
+    release process. This can include tagging a release, creating deployment
+    packages, and actual deployment to production.
+- **Why**:
+  - **Versioning**: Tracks releases and provides a history of the project's
+    evolution.
+  - **Distribution**: Makes the final product available to users or clients.
+
+---
+
+### **Feedback & Iteration**:
+
+- **What**:
+  - Post-release, feedback is gathered from users, stakeholders, or automated
+    monitoring tools. This feedback is then used to make improvements, fix bugs,
+    or add features in the respective sub-repositories.
+- **Why**:
+  - **Continuous Improvement**: Ensures the product evolves based on user needs
+    and feedback.
+  - **Adaptability**: Allows the project to adapt to changing requirements or
+    environments.
+
+---
+
+### **Documentation & Training**:
+
+- **What**:
+  - Alongside development, documentation is maintained for both the master
+    repository and individual sub-repositories. This can include user manuals,
+    developer guides, and API references. Training sessions or materials might
+    also be provided for significant updates.
+- **Why**:
+  - **Clarity**: Provides clear instructions and information for both users and
+    developers.
+  - **Onboarding**: Facilitates the onboarding process for new team members or
+    users.
+
+---

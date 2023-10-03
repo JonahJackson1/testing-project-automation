@@ -128,10 +128,24 @@ gitGraph
 
 ## Learning github and flows
 
+### github skills
+https://skills.github.com/
+https://github.com/skills/reusable-workflows
+
+### github project management
+https://github.com/features#features-project-management
+
+### about sub-modules
+https://www.atlassian.com/git/tutorials/git-submodule
+
 ### working with sub-modules
 https://github.blog/2016-02-01-working-with-submodules/
 https://github.blog/2015-06-30-scripts-to-rule-them-all/
 https://github.com/github/scripts-to-rule-them-all
+https://stackoverflow.com/questions/8372625/git-how-to-push-submodule-to-a-remote-repository
+
+### about sub-trees
+https://www.atlassian.com/git/tutorials/git-subtree
 
 ### github flow branching 
 https://nvie.com/posts/a-successful-git-branching-model/
