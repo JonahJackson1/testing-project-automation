@@ -4,8 +4,8 @@
 
 - **What**:
   - Before any development begins, the submodule is initialized and added to the
-    master repository. This involves creating a new repository for the submodule
-    and then adding it to the master repository using git submodule commands.
+    main repository. This involves creating a new repository for the submodule
+    and then adding it to the main repository using git submodule commands.
 - **Why**:
   - **Modularity**: Allows for independent development of different parts of the
     application.
@@ -189,15 +189,15 @@
 
 ---
 
-### **Final Integration into Master Repository**:
+### **Final Integration into main Repository**:
 
 - **What**:
   - Once the PR is approved and merged into the submodule's main branch, the
-    master repository is updated to point to the latest commit of the submodule.
-    This integrates the finalized code from the submodule into the master
+    main repository is updated to point to the latest commit of the submodule.
+    This integrates the finalized code from the submodule into the main
     repository.
 - **Why**:
-  - **Consolidation**: Ensures the master repository always references the
-    latest stable version of each submodule.
-  - **Preparation for Compilation**: Readies the master repository for the
+  - **Consolidation**: Ensures the main repository always references the latest
+    stable version of each submodule.
+  - **Preparation for Compilation**: Readies the main repository for the
     compilation of all submodules into the unified application.
